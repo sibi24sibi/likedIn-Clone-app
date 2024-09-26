@@ -16,7 +16,7 @@ Follow these steps to set up the project on your local machine:
 
 1. Clone the repository:
    ```
-   git clone https://github.com/your-username/linkedin-clone.git
+   git clone https://github.com/Ten-Network/TEN-Socialnetwork.git
    ```
 
 2. Navigate to the project directory:
