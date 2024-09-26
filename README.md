@@ -34,7 +34,7 @@ Follow these steps to set up the project on your local machine:
    npm start
    ```
 
-5. Open your browser and visit `http://localhost:3000` to view the application.
+5. Open your browser and visit `http://localhost:5173` to view the application.
 
 ## How to Contribute
 
