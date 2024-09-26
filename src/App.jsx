@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Route, Routes } from "react-router-dom";
 import Header from "./Components/Header";
 import Footer from "./Components/Footer";
-
+import PostModel from "./Components/PostModel";
 function App() {
   return (
     <>
@@ -18,6 +18,7 @@ function App() {
       </Routes>
       
       */}
+      <PostModel />
 
       <Footer />
     </>
