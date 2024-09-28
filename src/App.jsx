@@ -12,7 +12,7 @@ function App() {
 
       <SigninForm />
 
-      {/* <Footer /> */}
+      <Footer />
     </>
   );
 }
