@@ -4,13 +4,15 @@ import { Route, Routes } from "react-router-dom";
 import Header from "./Components/Header";
 import Footer from "./Components/Footer";
 import SigninForm from "./Components/SigninForm";
+import SignupForm from "./Components/SignupForm";
 
 function App() {
   return (
     <>
       {/* <Header /> */}
 
-      <SigninForm />
+      {/* <SigninForm /> */}
+      <SignupForm />
 
       <Footer />
     </>
