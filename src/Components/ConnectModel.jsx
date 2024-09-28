@@ -1,9 +1,9 @@
-import React from "react"
-import { Link } from "react-router-dom"
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faUserPlus } from "@fortawesome/free-solid-svg-icons/faUserPlus"
+import React from "react";
+import { Link } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faUserPlus } from "@fortawesome/free-solid-svg-icons/faUserPlus";
 
-function ConnectModel({ 
+function ConnectModel({
   name,
   description,
   banner,
@@ -11,11 +11,15 @@ function ConnectModel({
   mutualConnectionImg = "",
   mutualConnections = "",
   profileId,
- }) {
+}) {
   return (
     <div className="max-[400px]:min-w-[150px] max-[400px]:max-w-[150px] min-w-[184px] max-w-[184px] h-72 rounded-md shadow-sm hover:shadow-[0px_3px_4px_1px_#b6b6b6] relative border-[1px] border-gray-300 border-opacity-90 transition-shadow ease-in duration-100">
       <div className="banner-image">
-        <img src={banner} alt="" className="w-full h-16 object-cover rounded-t-md" />
+        <img
+          src={banner}
+          alt=""
+          className="w-full h-16 object-cover rounded-t-md"
+        />
       </div>
       <Link to={`/${profileId}`}>
         <div className="avatar flex justify-center items-center">
@@ -24,7 +28,7 @@ function ConnectModel({
         <div className="names mt-14 px-2 flex items-center justify-center flex-col">
           <h3 className="font-semibold">{name}</h3>
           <div className="font-thin text-center min-h-11 overflow-hidden line-clamp-2 break-words leading-5">
-           {description}
+            {description}
           </div>
         </div>
       </Link>
@@ -32,7 +36,11 @@ function ConnectModel({
         <div className="min-h-11">
           {mutualConnectionImg ? (
             <div className="mutual-img flex items-center">
-              <img src={mutualConnectionImg} alt="" className=" rounded-full h-6 w-6 " />
+              <img
+                src={mutualConnectionImg}
+                alt=""
+                className=" rounded-full h-6 w-6 "
+              />
               <div className="mutual_names font-thin text-[0.8rem] leading-4 line-clamp-2">
                 {mutualConnections}
               </div>
@@ -51,7 +59,7 @@ function ConnectModel({
         </div>
       </div>
     </div>
-  )
+  );
 }
 
-export default ConnectModel
+export default ConnectModel;

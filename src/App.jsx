@@ -3,11 +3,13 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Route, Routes } from "react-router-dom";
 import Header from "./Components/Header";
 import Footer from "./Components/Footer";
+import ConnectModel from "./Components/ConnectModel";
 
 function App() {
   return (
     <>
-      <Header />
+      {/* <Header /> */}
+      <ConnectModel />
 
       {/* 
 
@@ -19,7 +21,7 @@ function App() {
       
       */}
 
-      <Footer />
+      {/* <Footer /> */}
     </>
   );
 }
