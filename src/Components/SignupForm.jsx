@@ -1,8 +1,40 @@
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGoogle } from "@fortawesome/free-brands-svg-icons";
+import { useState} from "react";
+import {getAuth,GoogleAuthProvider, createUserWithEmailAndPassword, signInWithPopup} from "firebase/auth";
+import { app } from "../FIrebase";
 
-function SignupForm() {
+
+
+const auth = getAuth(app);
+const googleprovider = new GoogleAuthProvider();
+
+
+ 
+
+const SignupForm = () => {
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+
+    const createUser = () => {
+        createUserWithEmailAndPassword(auth, email, password)
+          .then(() => alert('Success'))
+          .catch((error) => alert('Error creating user: ' + error.message));
+    };
+
+    const signWithGoogle = () => {
+        signInWithPopup(auth, googleprovider)
+          .then((result) => {
+              alert('Signed in successfully');
+              console.log(result);
+          })
+          .catch((error) => {
+              console.error('Error during sign in: ', error);
+              alert('Error signing in with Google: ' + error.message);
+          });
+    };
+
   return (
     <div>
       <section className="bg-gray-50 dark:bg-gray-900 ">
@@ -13,23 +45,10 @@ function SignupForm() {
           <div className="w-full bg-white rounded-lg shadow dark:border md:mt-10 mb-3 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
             <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
               <form className="space-y-4 md:space-y-6" action="#">
+                
                 <div>
-                  <label
-                    htmlFor="name"
-                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                  >
-                    Name
-                  </label>
-                  <input
-                    type="name"
-                    name="name"
-                    id="name"
-                    className="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    required=""
-                  />
-                </div>
-                <div>
-                  <label
+                  <label onChange={(e) => setEmail(e.target.value)}
+                value={email}
                     htmlFor="email"
                     className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                   >
@@ -44,7 +63,8 @@ function SignupForm() {
                   />
                 </div>
                 <div>
-                  <label
+                  <label  onChange={(e) => setPassword(e.target.value)}
+                value={password}
                     htmlFor="password"
                     className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                   >
@@ -85,14 +105,14 @@ function SignupForm() {
                   LinkedIn <span>User Agreement</span>,
                   <span>Privacy Policy</span> and <span>Cookie Policy</span>.
                 </p>
-                <button
+                <button onClick={createUser}
                   type="submit"
                   className="w-full text-white bg-blue-500  hover:bg-blue-600  rounded-full focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium  text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
                 >
                   Agree & Join
                 </button>
                 <hr />
-                <button
+                <button onClick={signWithGoogle}
                   type="submit"
                   className="w-full   border-2 text-black   rounded-full focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium  text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
                 >
@@ -102,7 +122,7 @@ function SignupForm() {
                 <p className="text-sm font-light text   text-gray-500 dark:text-gray-400 text-center">
                   Create an account
                   <a
-                    href="#"
+                    href="/signin"
                     className="font-medium text-primary-600 mx-1  hover:underline dark:text-primary-500"
                   >
                     Sign In

@@ -1,18 +1,31 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGoogle } from "@fortawesome/free-brands-svg-icons";
+import { useState } from "react";
+import { getAuth,signInWithEmailAndPassword } from "firebase/auth";
+import { app} from "../FIrebase";
+
+const auth = getAuth(app)
+
 function SigninForm() {
+
+  const [email,setEmail] = useState("")
+  const [password,setPassword] = useState("")
+
+  const login =() =>{
+    signInWithEmailAndPassword(auth,email,password).then((value)=> alert("login success").catch((err) => console.log(err))
+)}
   return (
     <div>
       <section className="bg-gray-50 dark:bg-gray-900">
         <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
           <h3 className=" text-3xl  font-normal">
-            Make the most of your professional life
+            Welcome Back
           </h3>
           <div className="w-full bg-white rounded-lg shadow dark:border md:mt-10 mb-3 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
             <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
               <form className="space-y-4 md:space-y-6" action="#">
                 <div>
-                  <label
+                  <label onChange={(e)=> setEmail(e.target.value)} value={email}
                     htmlFor="email"
                     className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                   >
@@ -27,7 +40,7 @@ function SigninForm() {
                   />
                 </div>
                 <div>
-                  <label
+                  <label onChange={(e)=> setPassword(e.target.value)} value={password}
                     htmlFor="password"
                     className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                   >
@@ -67,11 +80,11 @@ function SigninForm() {
                   LinkedIn <span>User Agreement</span>,
                   <span>Privacy Policy</span> and <span>Cookie Policy</span>.
                 </p>
-                <button
+                <button onClick={login}
                   type="submit"
                   className="w-full text-white bg-blue-500  hover:bg-blue-600  rounded-full focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium  text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
                 >
-                  Agree & Join
+                  Login
                 </button>
                 <hr />
                 <button
@@ -84,7 +97,7 @@ function SigninForm() {
                 <p className="text-sm font-light text   text-gray-500 dark:text-gray-400 text-center">
                   Already on LinkedIn?
                   <a
-                    href="#"
+                    href="/signup"
                     className="font-medium text-primary-600 mx-1  hover:underline dark:text-primary-500"
                   >
                     Sign up
