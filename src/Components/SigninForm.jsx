@@ -17,7 +17,7 @@ function SigninForm() {
       .then((value) => {
         alert("Login success");
       })
-      .catch((err) => console.log(err));
+      .catch((err) => alert("Type Email and Password are not same."));
   };
 
   // Google sign-in function
