@@ -1,6 +1,11 @@
 import "./App.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Route, BrowserRouter as Router, Routes, Navigate } from "react-router-dom";
+import {
+  Route,
+  BrowserRouter as Router,
+  Routes,
+  Navigate,
+} from "react-router-dom";
 import Header from "./Components/Header";
 import Footer from "./Components/Footer";
 import SigninForm from "./Components/SigninForm";
@@ -48,7 +53,8 @@ function App() {
             <Routes>
               <Route path="/signup" element={<SignupForm />} />
               <Route path="/signin" element={<SigninForm />} />
-              <Route path="*" element={<Navigate to="/signin" />} /> {/* Redirect to signin if user not authenticated */}
+              <Route path="*" element={<Navigate to="/signin" />} />{" "}
+              {/* Redirect to signin if user not authenticated */}
             </Routes>
           )}
         </div>
