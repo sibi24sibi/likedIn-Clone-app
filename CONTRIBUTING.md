@@ -25,11 +25,11 @@ Here are the recommended prefixes for commit messages and branch names, along wi
 
 We follow a structured approach to branch names. Please use the following format when creating branches:
 
-- **Feature Branches:** `feat/{issue-number}-{short-description}`
+- **Feature Branches:** `feat/{short-description}`
   - Example: `feat/123-add-user-authentication`
   
-- **Bug Branches:** `bug/{issue-number}-{short-description}`
-  - Example: `bug/456-fix-login-issue`
+- **Bug Branches:** `bug/{short-description}`
+  - Example: `bug/fix-login-issue`
 
 ## Commit Message Guidelines
 
