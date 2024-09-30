@@ -1,15 +1,13 @@
-import React from "react";
-import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUserPlus } from "@fortawesome/free-solid-svg-icons/faUserPlus";
 
 function ConnectModel({
-  name,
-  description,
-  banner,
-  avatar,
-  mutualConnectionImg = "",
-  mutualConnections = "",
+  name = "Aproov Gupta",
+  description = "Full Stack Developer | Javascript | ReactJs | NodeJs | (MERN)",
+  banner = "https://media.licdn.com/dms/image/v2/D5616AQHEqmzTB_Eshw/profile-displaybackgroundimage-shrink_200_800/profile-displaybackgroundimage-shrink_200_800/0/1704439613760?e=1732752000&v=beta&t=BtdlcgDlEzP8KD4MZUGirAqGHKOwFzF1OSo83tR8iGM",
+  avatar = "https://media.licdn.com/dms/image/v2/D5603AQFEE7UD-EfGUw/profile-displayphoto-shrink_200_200/profile-displayphoto-shrink_200_200/0/1712843569362?e=1732752000&v=beta&t=aYcrB-8E3RSmYC-b1Ri5by8q-Crb5FD9bn2cUL5O6sw",
+  mutualConnectionImg = "https://media.licdn.com/dms/image/v2/D4E03AQEU2tQ8y-4Ciw/profile-displayphoto-shrink_100_100/profile-displayphoto-shrink_100_100/0/1724431064460?e=1732752000&v=beta&t=tXlhjjMpTWt1lqmtroXi5k3DJh7N-_lxPyyOcvYb95I",
+  mutualConnections = "Anirudha and 8 other mutual connections",
   profileId,
 }) {
   return (
@@ -21,17 +19,17 @@ function ConnectModel({
           className="w-full h-16 object-cover rounded-t-md"
         />
       </div>
-      <Link to={`/${profileId}`}>
-        <div className="avatar flex justify-center items-center">
-          <img src={avatar} alt="" className="rounded-full w-24 absolute" />
+      {/* <Link to={`/${profileId}`}> */}
+      <div className="avatar flex justify-center items-center">
+        <img src={avatar} alt="" className="rounded-full w-24 absolute" />
+      </div>
+      <div className="names mt-14 px-2 flex items-center justify-center flex-col">
+        <h3 className="font-semibold">{name}</h3>
+        <div className="font-thin text-center min-h-11 overflow-hidden line-clamp-2 break-words leading-5">
+          {description}
         </div>
-        <div className="names mt-14 px-2 flex items-center justify-center flex-col">
-          <h3 className="font-semibold">{name}</h3>
-          <div className="font-thin text-center min-h-11 overflow-hidden line-clamp-2 break-words leading-5">
-            {description}
-          </div>
-        </div>
-      </Link>
+      </div>
+      {/* </Link> */}
       <div className="bottom px-2 mt-2">
         <div className="min-h-11">
           {mutualConnectionImg ? (
