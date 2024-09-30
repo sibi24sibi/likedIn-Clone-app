@@ -8,6 +8,7 @@ import SignupForm from "./Components/SignupForm";
 import { app } from "./FIrebase"; // Ensure Firebase config is correct in this file
 import { useEffect, useState } from "react";
 import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
+import ProfileSection from "./Components/ProfileSection";
 
 // Initialize Firebase Authentication
 const auth = getAuth(app);
@@ -48,6 +49,7 @@ function App() {
             <Routes>
               <Route path="/signup" element={<SignupForm />} />
               <Route path="/signin" element={<SigninForm />} />
+              <Route path="/profile" element={<ProfileSection />} />
               <Route path="*" element={<Navigate to="/signin" />} /> {/* Redirect to signin if user not authenticated */}
             </Routes>
           )}
