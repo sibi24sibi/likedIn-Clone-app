@@ -21,7 +21,7 @@ Follow these steps to set up the project on your local machine:
 
 2. Navigate to the project directory:
    ```
-   cd linkedin-clone
+   cd TEN-Socialnetwork
    ```
 
 3. Install dependencies:
