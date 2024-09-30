@@ -1,5 +1,6 @@
 import "./App.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { InfinitySpin } from "react-loader-spinner";
 import {
   Route,
   BrowserRouter as Router,
@@ -14,6 +15,7 @@ import SignupForm from "./Components/SignupForm";
 import { app } from "./FIrebase"; // Ensure Firebase config is correct in this file
 import { useEffect, useState } from "react";
 import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
+import Home from "./Pages/Home";
 
 // Initialize Firebase Authentication
 const auth = getAuth(app);
@@ -37,7 +39,16 @@ function App() {
   }, []);
 
   if (loading) {
-    return <div>Loading...</div>; // Add a loading spinner or message if needed
+    return (
+      <div className=" flex items-center justify-center h-screen">
+        <InfinitySpin
+          visible={true}
+          width="200"
+          color="#4fa94d"
+          ariaLabel="infinity-spin-loading"
+        />
+      </div>
+    ); // Add a loading spinner or message if needed
   }
 
   return (
@@ -46,10 +57,7 @@ function App() {
         <Header />
         <div className="App">
           {user ? (
-            <>
-              <h1>Hello, {user.email}</h1>
-              <button onClick={() => signOut(auth)}>Logout</button>
-            </>
+            <Home user={user} signOut={signOut} auth={auth} />
           ) : (
             <Routes>
               <Route path="/signup" element={<SignupForm />} />
