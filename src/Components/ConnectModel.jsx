@@ -1,9 +1,11 @@
-import React from 'react'
+import React from "react";
 
 function ConnectModel() {
   return (
-    // <div>ConnectModel</div>
-  )
+    <div>
+      <div>ConnectModel</div>
+    </div>
+  );
 }
 
-export default ConnectModel
+export default ConnectModel;

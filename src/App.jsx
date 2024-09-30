@@ -8,7 +8,6 @@ import {
 } from "react-router-dom";
 import Header from "./Components/Header";
 import Footer from "./Components/Footer";
-import ConnectModel from "./Components/ConnectModel";
 import SigninForm from "./Components/SigninForm";
 import SignupForm from "./Components/SignupForm";
 import { app } from "./FIrebase"; // Ensure Firebase config is correct in this file
