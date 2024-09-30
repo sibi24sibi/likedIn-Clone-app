@@ -1,14 +1,19 @@
 import "./App.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Route, BrowserRouter as Router, Routes, Navigate } from "react-router-dom";
+import {
+  Route,
+  BrowserRouter as Router,
+  Routes,
+  Navigate,
+} from "react-router-dom";
 import Header from "./Components/Header";
 import Footer from "./Components/Footer";
+import ConnectModel from "./Components/ConnectModel";
 import SigninForm from "./Components/SigninForm";
 import SignupForm from "./Components/SignupForm";
 import { app } from "./FIrebase"; // Ensure Firebase config is correct in this file
 import { useEffect, useState } from "react";
 import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
-import ProfileSection from "./Components/ProfileSection";
 
 // Initialize Firebase Authentication
 const auth = getAuth(app);
@@ -49,8 +54,8 @@ function App() {
             <Routes>
               <Route path="/signup" element={<SignupForm />} />
               <Route path="/signin" element={<SigninForm />} />
-              <Route path="/profile" element={<ProfileSection />} />
-              <Route path="*" element={<Navigate to="/signin" />} /> {/* Redirect to signin if user not authenticated */}
+              <Route path="*" element={<Navigate to="/signin" />} />{" "}
+              {/* Redirect to signin if user not authenticated */}
             </Routes>
           )}
         </div>
