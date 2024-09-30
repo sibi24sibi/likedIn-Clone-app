@@ -9,11 +9,8 @@ import {
 } from "react-router-dom";
 import Header from "./Components/Header";
 import Footer from "./Components/Footer";
-<<<<<<< HEAD
 import PostModel from "./Components/PostModel";
-=======
 import ConnectModel from "./Components/ConnectModel";
->>>>>>> feat/connect-model
 import SigninForm from "./Components/SigninForm";
 import SignupForm from "./Components/SignupForm";
 import { app } from "./FIrebase"; // Ensure Firebase config is correct in this file
