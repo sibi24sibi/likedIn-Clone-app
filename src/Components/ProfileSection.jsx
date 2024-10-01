@@ -1,5 +1,5 @@
 import React from 'react'
-import { FaPaperPlane } from 'react-icons/fa';
+import { FiPlusCircle } from 'react-icons/fi';
 import { GoDotFill } from 'react-icons/go';
 import { HiOutlineOfficeBuilding } from 'react-icons/hi';
 import { IoNotifications, IoSchoolOutline } from 'react-icons/io5';
@@ -30,9 +30,9 @@ function ProfileSection() {
             </div>
             <a href='/' className='text-[14px] text-sky-600 font-medium'>500+ connections</a>
             <div className='py-3'>
-              <button className='flex gap-1 justify-center items-center bg-blue-500 rounded-xl text-white font-medium p-1.5 w-24 hover:bg-blue-950' type='button'>
-                <FaPaperPlane/>
-                <p>Message</p>
+              <button className='flex gap-1 justify-center items-center bg-blue-500 rounded-lg text-white font-medium p-1.5 w-24 hover:bg-blue-950' type='button'>
+              <FiPlusCircle />
+              <p className='text-sm'>Connect</p>
               </button>
             </div>
           </div>
