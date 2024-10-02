@@ -49,7 +49,7 @@ function App() {
             <Routes>
               <Route path="/signup" element={<SignupForm />} />
               <Route path="/signin" element={<SigninForm />} />
-              <Route path="/profile" element={<ProfileSection />} />
+              <Route path="/user-profile" element={<ProfileSection />} />
               <Route path="*" element={<Navigate to="/signin" />} /> {/* Redirect to signin if user not authenticated */}
             </Routes>
           )}

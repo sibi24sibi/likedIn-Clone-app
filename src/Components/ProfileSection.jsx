@@ -22,7 +22,10 @@ function ProfileSection() {
               <MdVerifiedUser />
               <p className='font-light text-sm text-gray-500'>(He/Him)</p>
             </div>
-            <h1 className='text-[16px] font-normal'>React Js Developer</h1>
+            <div className='flex gap-2'>
+              <h1 className='text-[16px] font-medium'>React Js Developer</h1>
+              <p className='text-[16px] font-normal'>| React js | Typescript | Firebase</p>
+            </div>
             <div className='flex gap-1 justify-start items-center'>
               <p className='text-[14px] text-gray-400 font-normal'>Mumbai, India</p>
               <GoDotFill className='text-[14px] text-gray-400 font-normal' />
@@ -36,7 +39,7 @@ function ProfileSection() {
               </button>
             </div>
           </div>
-          <div className='mr-10 mt-9'>
+          <div className='mr-10 mt-12'>
             <div className='flex justify-start items-center gap-2.5'>
               <HiOutlineOfficeBuilding />
               <p className='text-[14px]'>Anonymous pvt. ltd</p>
