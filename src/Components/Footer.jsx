@@ -1,5 +1,5 @@
 import React from "react";
-import linkedInLogo from "../assets/LinkedIn-Logo.png";
+import { linkedinBigLogo } from "../assets/assets.js";
 
 function Footer() {
   return (
@@ -10,7 +10,7 @@ function Footer() {
           {/* LinkedIn Logo on the top left */}
           <div className="flex flex-col items-start space-y-3">
             <img
-              src={linkedInLogo}
+              src={linkedinBigLogo}
               alt="LinkedIn Logo"
               className="h-20 w-auto"
             />

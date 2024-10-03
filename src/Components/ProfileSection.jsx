@@ -4,19 +4,20 @@ import { GoDotFill } from "react-icons/go";
 import { HiOutlineOfficeBuilding } from "react-icons/hi";
 import { IoNotifications, IoSchoolOutline } from "react-icons/io5";
 import { MdVerifiedUser } from "react-icons/md";
+import { defaultCoverImage, defaultProfile } from "../assets/assets";
 
 function ProfileSection() {
   return (
     <div className="bg-gray-100 h-auto max-w-max rounded-xl my-10 ml-20 flex flex-col border border-grey">
       <img
         className="relative h-[210px] w-[770px] rounded-t-xl object-cover"
-        src="src\assets\images\cover2.webp"
+        src={defaultCoverImage}
         alt="cover-photo"
       />
       <div>
         <img
           className="absolute top-[10rem] left-[7rem] h-[155px] w-[155px] rounded-full border-2 border-white object-cover"
-          src="src\assets\images\anime.webp"
+          src={defaultProfile}
           alt="profile pic"
         />
       </div>

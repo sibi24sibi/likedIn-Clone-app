@@ -16,7 +16,7 @@ import SignupForm from "./Components/SignupForm";
 import { app } from "./FIrebase"; // Ensure Firebase config is correct in this file
 import { useEffect, useState } from "react";
 import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
-import Home from "./Pages/Home";
+import Home from "./Pages/HomePage";
 
 // Initialize Firebase Authentication
 const auth = getAuth(app);
