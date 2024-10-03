@@ -13,25 +13,21 @@ import PostModel from "./Components/PostModel";
 import ConnectModel from "./Components/ConnectModel";
 import SigninForm from "./Components/SigninForm";
 import SignupForm from "./Components/SignupForm";
-import { app } from "./FIrebase"; // Ensure Firebase config is correct in this file
+import { app } from "./Firebase"; // Ensure Firebase config is correct in this file
 import { useEffect, useState } from "react";
 import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
 import Home from "./Pages/HomePage";
+import { AuthProvider } from "./Context/AuthContext";
 
 // Initialize Firebase Authentication
 const auth = getAuth(app);
 
 function App() {
   const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true); // Add loading state
-
+  const [loading, setLoading] = useState(true);
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-      if (currentUser) {
-        setUser(currentUser);
-      } else {
-        setUser(null);
-      }
+      setUser(currentUser); // Simplified setting user
       setLoading(false); // Once auth state is known, set loading to false
     });
 
@@ -41,7 +37,7 @@ function App() {
 
   if (loading) {
     return (
-      <div className=" flex items-center justify-center h-screen">
+      <div className="flex items-center justify-center h-screen">
         <InfinitySpin
           visible={true}
           width="200"
@@ -53,24 +49,23 @@ function App() {
   }
 
   return (
-    <>
-      <Router>
-        <Header />
-        <div className="App">
-          {user ? (
-            <Home user={user} signOut={signOut} auth={auth} />
-          ) : (
+    <Router>
+      <Header />
+      <div className="App">
+        {user ? (
+          <Home path="/" user={user} signOut={signOut} auth={auth} />
+        ) : (
+          <AuthProvider>
             <Routes>
               <Route path="/signup" element={<SignupForm />} />
               <Route path="/signin" element={<SigninForm />} />
-              <Route path="*" element={<Navigate to="/signin" />} />{" "}
-              {/* Redirect to signin if user not authenticated */}
+              <Route path="*" element={<Navigate to="/signin" />} />
             </Routes>
-          )}
-        </div>
-        <Footer />
-      </Router>
-    </>
+          </AuthProvider>
+        )}
+      </div>
+      <Footer />
+    </Router>
   );
 }
 

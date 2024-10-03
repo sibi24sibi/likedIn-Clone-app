@@ -6,8 +6,9 @@ import {
   signInWithEmailAndPassword,
   GoogleAuthProvider,
   signInWithPopup,
+  sendPasswordResetEmail,
 } from "firebase/auth";
-import { app } from "../FIrebase"; // Ensure Firebase is configured correctly
+import { app } from "../Firebase"; // Ensure Firebase is configured correctly
 
 const auth = getAuth(app);
 const googleProvider = new GoogleAuthProvider();
@@ -15,36 +16,69 @@ const googleProvider = new GoogleAuthProvider();
 function SigninForm() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState(""); // State for error messages
+  const [successMessage, setSuccessMessage] = useState(""); // State for success messages
 
   // Regular email/password login
   const login = () => {
     signInWithEmailAndPassword(auth, email, password)
-      .then((value) => {
+      .then(() => {
+        setError(""); // Clear any previous errors
         alert("Login success");
       })
-      .catch((err) => alert("Type Email and Password are not same."));
+      .catch((err) => {
+        setError("Email and Password do not match."); // Set the error message
+      });
   };
 
   // Google sign-in function
   const signInWithGoogle = () => {
     signInWithPopup(auth, googleProvider)
       .then((result) => {
-        // Google access token and user info available here
         console.log("Google sign-in success: ", result.user);
         alert(`Welcome ${result.user.displayName}!`);
+        setError(""); // Clear any previous errors
       })
       .catch((error) => {
         console.error("Error signing in with Google: ", error);
-        alert("Failed to sign in with Google. Try again.");
+        setError("Failed to sign in with Google. Try again."); // Set the error message
+      });
+  };
+
+  // Function to handle password reset
+  const handleForgotPassword = () => {
+    if (!email) {
+      setError("Please enter your email address.");
+      return;
+    }
+
+    sendPasswordResetEmail(auth, email)
+      .then(() => {
+        setSuccessMessage("Password reset email sent! Check your inbox.");
+        setError(""); // Clear any previous errors
+      })
+      .catch((error) => {
+        console.error("Error sending password reset email: ", error);
+        setError("Failed to send password reset email. Please try again.");
       });
   };
 
   return (
-    <section className="bg-gray-50 dark:bg-gray-900">
-      <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
-        <h3 className=" text-3xl  font-normal">Welcome Back</h3>
+    <section className="bg-gray-50 dark:bg-gray-900 md:h-screen ">
+      <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0 my-16">
+        <h3 className="text-3xl font-normal">Welcome Back</h3>
         <div className="w-full bg-white rounded-lg shadow dark:border md:mt-10 mb-3 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
           <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
+            {error && (
+              <div className="mb-4 text-red-600 bg-red-100 border border-red-400 rounded p-2">
+                {error}
+              </div>
+            )}
+            {successMessage && (
+              <div className="mb-4 text-green-600 bg-green-100 border border-green-400 rounded p-2">
+                {successMessage}
+              </div>
+            )}
             <form className="space-y-4 md:space-y-6" action="#">
               <div>
                 <label
@@ -80,32 +114,6 @@ function SigninForm() {
                   required=""
                 />
               </div>
-              <div>
-                <div className="flex items-start">
-                  <div className="flex items-center h-5">
-                    <input
-                      id="remember"
-                      aria-describedby="remember"
-                      type="checkbox"
-                      className="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-primary-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-primary-600 dark:ring-offset-gray-800"
-                      required=""
-                    />
-                  </div>
-                  <div className="ml-3 text-sm">
-                    <label
-                      htmlFor="remember"
-                      className="text-gray-500 dark:text-gray-300"
-                    >
-                      Keep me logged in
-                    </label>
-                  </div>
-                </div>
-              </div>
-              <p className="text-xs text-slate-500">
-                By clicking Agree & Join or Continue, you agree to the LinkedIn{" "}
-                <span>User Agreement</span>, <span>Privacy Policy</span> and{" "}
-                <span>Cookie Policy</span>.
-              </p>
               <button
                 onClick={login}
                 type="button" // Changed to "button" to prevent page reload on click
@@ -117,26 +125,32 @@ function SigninForm() {
               <button
                 onClick={signInWithGoogle}
                 type="button"
-                className="w-full border-2 text-black rounded-full focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
+                className="w-full border2 text-black rounded-full focus:ring4 focus:outline-none focus:ring-primary300 font-medium text-sm px5 py2.5 text-center dark:bg-primary600 dark:hover:bg-primary700 dark:focus:ring-primary800"
               >
-                <FontAwesomeIcon icon={faGoogle} className="mx-2" />
+                <FontAwesomeIcon icon={faGoogle} className="mx2" />
                 Continue with Google
               </button>
-              <p className="text-sm font-light text-gray-500 dark:text-gray-400 text-center">
-                Already on LinkedIn?
-                <a
-                  href="/signup"
-                  className="font-medium text-primary-600 mx-1 hover:underline dark:text-primary-500"
-                >
-                  Sign up
-                </a>
-              </p>
             </form>
+            <p
+              onClick={handleForgotPassword}
+              className="text-sm font-light text-blue-500 cursor-pointer hover:underline text-center mt-4"
+            >
+              Forgot Password?
+            </p>
+            <p className="text-sm font-light text-gray500 dark:text-gray400 text-center">
+              Already on LinkedIn?
+              <a
+                href="/signup"
+                className="font-medium text-primary600 mx1 hover:underline dark:text-primary500"
+              >
+                Sign up
+              </a>
+            </p>
           </div>
         </div>
         <p>
           Looking to create a page for a business?
-          <span className="text-sky-700">Get help</span>
+          <span className="text-sky700">Get help</span>
         </p>
       </div>
     </section>
