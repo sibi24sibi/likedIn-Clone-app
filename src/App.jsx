@@ -21,6 +21,7 @@ import { AuthProvider } from "./Context/AuthContext";
 
 // Initialize Firebase Authentication
 const auth = getAuth(app);
+import JobDetail from "./Components/JobDetail";
 
 function App() {
   const [user, setUser] = useState(null);
