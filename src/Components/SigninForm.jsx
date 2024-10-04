@@ -1,70 +1,48 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGoogle } from "@fortawesome/free-brands-svg-icons";
 import { useState } from "react";
-import {
-  getAuth,
-  signInWithEmailAndPassword,
-  GoogleAuthProvider,
-  signInWithPopup,
-  sendPasswordResetEmail,
-} from "firebase/auth";
-import { app } from "../Firebase"; // Ensure Firebase is configured correctly
-
-const auth = getAuth(app);
-const googleProvider = new GoogleAuthProvider();
+import { useAuth } from "../Api/AuthApi";
+import { Navigate } from "react-router-dom";
 
 function SigninForm() {
+  const { login, signInWithGoogle, sendPasswordResetEmail } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState(""); // State for error messages
-  const [successMessage, setSuccessMessage] = useState(""); // State for success messages
+  const [error, setError] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
+  const [resetMessage, setResetMessage] = useState(""); // New state for reset password message
 
-  // Regular email/password login
-  const login = () => {
-    signInWithEmailAndPassword(auth, email, password)
-      .then(() => {
-        setError(""); // Clear any previous errors
-        alert("Login success");
-      })
-      .catch((err) => {
-        setError("Email and Password do not match."); // Set the error message
-      });
-  };
+  // Handle normal login
+  const handleSignup = async (event) => {
+    event.preventDefault();
 
-  // Google sign-in function
-  const signInWithGoogle = () => {
-    signInWithPopup(auth, googleProvider)
-      .then((result) => {
-        console.log("Google sign-in success: ", result.user);
-        alert(`Welcome ${result.user.displayName}!`);
-        setError(""); // Clear any previous errors
-      })
-      .catch((error) => {
-        console.error("Error signing in with Google: ", error);
-        setError("Failed to sign in with Google. Try again."); // Set the error message
-      });
-  };
-
-  // Function to handle password reset
-  const handleForgotPassword = () => {
-    if (!email) {
-      setError("Please enter your email address.");
-      return;
+    try {
+      await login(email, password);
+      setSuccessMessage("Logged in successfully!");
+      setError("");
+      Navigate("/");
+    } catch (err) {
+      setError("Login failed: " + err.message);
+      setSuccessMessage("");
     }
+  };
 
-    sendPasswordResetEmail(auth, email)
-      .then(() => {
-        setSuccessMessage("Password reset email sent! Check your inbox.");
-        setError(""); // Clear any previous errors
-      })
-      .catch((error) => {
-        console.error("Error sending password reset email: ", error);
-        setError("Failed to send password reset email. Please try again.");
-      });
+  // Handle password reset
+  const handlePasswordReset = async (event) => {
+    event.preventDefault();
+
+    try {
+      await sendPasswordResetEmail(email);
+      setResetMessage("Password reset email sent. Check your inbox.");
+      setError("");
+    } catch (err) {
+      setError("Password reset failed: " + err.message);
+      setResetMessage("");
+    }
   };
 
   return (
-    <section className="bg-gray-50 dark:bg-gray-900 md:h-screen ">
+    <section className="dark:bg-gray-900 md:min-h-screen">
       <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0 my-16">
         <h3 className="text-3xl font-normal">Welcome Back</h3>
         <div className="w-full bg-white rounded-lg shadow dark:border md:mt-10 mb-3 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
@@ -79,22 +57,26 @@ function SigninForm() {
                 {successMessage}
               </div>
             )}
-            <form className="space-y-4 md:space-y-6" action="#">
+            {resetMessage && (
+              <div className="mb-4 text-blue-600 bg-blue-100 border border-blue-400 rounded p-2">
+                {resetMessage}
+              </div>
+            )}
+            <form className="space-y-4 md:space-y-6" onSubmit={handleSignup}>
               <div>
                 <label
                   htmlFor="email"
                   className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                 >
-                  Email or phone number
+                  Email
                 </label>
                 <input
                   type="email"
-                  name="email"
                   id="email"
                   className="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  required=""
+                  required
                 />
               </div>
               <div>
@@ -102,56 +84,56 @@ function SigninForm() {
                   htmlFor="password"
                   className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                 >
-                  Password (6+ characters)
+                  Password
                 </label>
                 <input
                   type="password"
-                  name="password"
                   id="password"
                   className="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  required=""
+                  required
                 />
               </div>
               <button
-                onClick={login}
-                type="button" // Changed to "button" to prevent page reload on click
+                type="submit"
                 className="w-full text-white bg-blue-500 hover:bg-blue-600 rounded-full focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
               >
-                Login
+                Sign In
               </button>
               <hr />
               <button
                 onClick={signInWithGoogle}
                 type="button"
-                className="w-full border2 text-black rounded-full focus:ring4 focus:outline-none focus:ring-primary300 font-medium text-sm px5 py2.5 text-center dark:bg-primary600 dark:hover:bg-primary700 dark:focus:ring-primary800"
+                className="w-full border-2 text-black rounded-full focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
               >
-                <FontAwesomeIcon icon={faGoogle} className="mx2" />
+                <FontAwesomeIcon icon={faGoogle} className="mx-2" />
                 Continue with Google
               </button>
             </form>
-            <p
-              onClick={handleForgotPassword}
-              className="text-sm font-light text-blue-500 cursor-pointer hover:underline text-center mt-4"
-            >
-              Forgot Password?
-            </p>
-            <p className="text-sm font-light text-gray500 dark:text-gray400 text-center">
-              Already on LinkedIn?
-              <a
-                href="/signup"
-                className="font-medium text-primary600 mx1 hover:underline dark:text-primary500"
-              >
-                Sign up
-              </a>
-            </p>
+
+            <div className="text-center mt-4  space-y-2">
+              <p className="text-sm font-light text-gray-500 dark:text-gray-400 ">
+                Forgot your password?
+                <button
+                  onClick={handlePasswordReset}
+                  className="font-medium text-primary-600 mx-1 hover:underline dark:text-primary-500"
+                >
+                  Reset it here
+                </button>
+              </p>
+              <p className="text-sm font-light text-gray-500 dark:text-gray-400">
+                Don't have an account?
+                <a
+                  href="/signup"
+                  className="font-medium text-primary-600 mx-1 hover:underline dark:text-primary-500"
+                >
+                  Sign up
+                </a>
+              </p>
+            </div>
           </div>
         </div>
-        <p>
-          Looking to create a page for a business?
-          <span className="text-sky700">Get help</span>
-        </p>
       </div>
     </section>
   );

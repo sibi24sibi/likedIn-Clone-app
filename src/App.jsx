@@ -7,21 +7,21 @@ import {
   Routes,
   Navigate,
 } from "react-router-dom";
+
 import Header from "./Components/Header";
 import Footer from "./Components/Footer";
 import PostModel from "./Components/PostModel";
 import ConnectModel from "./Components/ConnectModel";
 import SigninForm from "./Components/SigninForm";
 import SignupForm from "./Components/SignupForm";
-import { app } from "./Firebase"; // Ensure Firebase config is correct in this file
+import { auth } from "./Firebase";
 import { useEffect, useState } from "react";
 import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
 import Home from "./Pages/HomePage";
-import { AuthProvider } from "./Context/AuthContext";
+import JobDetail from "./Components/JobDetail";
+import { AuthProvider } from "./Api/AuthApi";
 
 // Initialize Firebase Authentication
-const auth = getAuth(app);
-import JobDetail from "./Components/JobDetail";
 
 function App() {
   const [user, setUser] = useState(null);
@@ -50,23 +50,23 @@ function App() {
   }
 
   return (
-    <Router>
-      <Header />
-      <div className="App">
-        {user ? (
-          <Home path="/" user={user} signOut={signOut} auth={auth} />
-        ) : (
-          <AuthProvider>
+    <AuthProvider>
+      <Router>
+        <Header />
+        <div className="App">
+          {user ? (
+            <Home path="/" user={user} signOut={signOut} auth={auth} />
+          ) : (
             <Routes>
               <Route path="/signup" element={<SignupForm />} />
               <Route path="/signin" element={<SigninForm />} />
               <Route path="*" element={<Navigate to="/signin" />} />
             </Routes>
-          </AuthProvider>
-        )}
-      </div>
-      <Footer />
-    </Router>
+          )}
+        </div>
+        <Footer />
+      </Router>
+    </AuthProvider>
   );
 }
 
