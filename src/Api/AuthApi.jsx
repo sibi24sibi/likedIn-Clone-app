@@ -97,6 +97,7 @@ export const AuthProvider = ({ children }) => {
         signInWithGoogle,
         logout,
         error,
+        setError,
         successMessage,
         sendPasswordResetEmail,
       }}

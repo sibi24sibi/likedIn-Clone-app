@@ -2,7 +2,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGoogle } from "@fortawesome/free-brands-svg-icons";
 import { useState } from "react";
 import { useAuth } from "../Api/AuthApi";
-import { Navigate } from "react-router-dom";
 
 function SigninForm() {
   const { login, signInWithGoogle, sendPasswordResetEmail } = useAuth();
@@ -18,9 +17,8 @@ function SigninForm() {
 
     try {
       await login(email, password);
-      setSuccessMessage("Logged in successfully!");
+      setSuccessMessage("");
       setError("");
-      Navigate("/");
     } catch (err) {
       setError("Login failed: " + err.message);
       setSuccessMessage("");

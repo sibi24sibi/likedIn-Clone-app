@@ -1,7 +1,5 @@
 import { useState } from "react";
 import Modal from "./Modal/Modal";
-import { defaultProfile } from "../assets/assets";
-import { defaultCoverImage } from "../assets/assets";
 
 const ProfileForm = () => {
   const [profileData, setProfileData] = useState({
