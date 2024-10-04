@@ -17,7 +17,7 @@ import SignupForm from "./Components/SignupForm";
 import { auth } from "./Firebase";
 import { useEffect, useState } from "react";
 import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
-import Home from "./Pages/HomePage";
+import HomePage from "./Pages/HomePage";
 import JobDetail from "./Components/JobDetail";
 import { AuthProvider } from "./Api/AuthApi";
 
@@ -55,7 +55,7 @@ function App() {
         <Header />
         <div className="App">
           {user ? (
-            <Home path="/" user={user} signOut={signOut} auth={auth} />
+            <HomePage path="/" user={user} signOut={signOut} auth={auth} />
           ) : (
             <Routes>
               <Route path="/signup" element={<SignupForm />} />
