@@ -20,6 +20,7 @@ import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
 import HomePage from "./Pages/HomePage";
 import JobDetail from "./Components/JobDetail";
 import { AuthProvider } from "./Api/AuthApi";
+import Home from "./Pages/HomePage";
 
 // Initialize Firebase Authentication
 
@@ -55,7 +56,9 @@ function App() {
         <Header />
         <div className="App">
           {user ? (
-            <HomePage path="/" user={user} signOut={signOut} auth={auth} />
+            <Routes>
+              <Route path="/home" element={<HomePage />} />
+            </Routes>
           ) : (
             <Routes>
               <Route path="/signup" element={<SignupForm />} />
