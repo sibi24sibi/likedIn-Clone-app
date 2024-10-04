@@ -5,13 +5,10 @@ import { HiOutlineOfficeBuilding } from "react-icons/hi";
 import { IoNotifications, IoSchoolOutline } from "react-icons/io5";
 import { MdVerifiedUser } from "react-icons/md";
 import { defaultCoverImage, defaultProfile } from "../assets/assets";
-import React, { useState } from "react";
+import { useState } from "react";
 import { FaPencilAlt } from "react-icons/fa";
 import { FiPlusCircle } from "react-icons/fi";
-import { GoDotFill } from "react-icons/go";
-import { HiOutlineOfficeBuilding } from "react-icons/hi";
-import { IoNotifications, IoSchoolOutline } from "react-icons/io5";
-import { MdVerifiedUser } from "react-icons/md";
+
 import Modal from "./Modal/Modal";
 import ProfileForm from "./ProfileForm";
 
