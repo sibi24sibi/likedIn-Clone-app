@@ -21,6 +21,8 @@ import HomePage from "./Pages/HomePage";
 import JobDetail from "./Components/JobDetail";
 import { AuthProvider } from "./Api/AuthApi";
 import Home from "./Pages/HomePage";
+import ProfileSection from "./Components/ProfileSection";
+import ProfileForm from "./Components/ProfileForm";
 
 // Initialize Firebase Authentication
 
@@ -63,7 +65,9 @@ function App() {
             <Routes>
               <Route path="/signup" element={<SignupForm />} />
               <Route path="/signin" element={<SigninForm />} />
-              <Route path="*" element={<Navigate to="/signin" />} />
+              <Route path="/user-profile" element={<ProfileSection />} />
+              <Route path="*" element={<Navigate to="/signin" />} />{" "}
+              {/* Redirect to signin if user not authenticated */}
             </Routes>
           )}
         </div>
