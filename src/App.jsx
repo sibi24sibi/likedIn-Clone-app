@@ -21,6 +21,7 @@ import HomePage from "./Pages/HomePage";
 import ProfileSection from "./Components/ProfileSection";
 import JobModel from "./Components/JobModel";
 import { AuthProvider } from "./Api/AuthApi";
+import JobForm from "./Components/JobForm";
 
 // Initialize Firebase Authentication
 function App() {
@@ -55,16 +56,17 @@ function App() {
     <AuthProvider>
       <Router>
         <Header />
-        <div className="App">
+        <div className="App min-h-screen">
           <Routes>
             {user ? (
               <>
                 {/* Authenticated Routes */}
                 <Route path="/home" element={<HomePage />} />
-                <Route path="/user-profile" element={<ProfileSection />} />
+                <Route path="/profile" element={<ProfileSection />} />
                 <Route path="/jobs" element={<JobModel />} />
+                <Route path="/postJob" element={<JobForm />} />
+                <Route path="/connect" element={<ConnectModel />} />
                 <Route path="*" element={<Navigate to="/home" />} />
-                {/* Add other authenticated routes here */}
               </>
             ) : (
               <>

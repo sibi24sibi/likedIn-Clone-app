@@ -6,6 +6,7 @@ import {
   faHome,
   faUser,
 } from "@fortawesome/free-solid-svg-icons";
+import { NavLink } from "react-router-dom";
 
 function Header() {
   // State to control dropdown visibility
@@ -92,46 +93,56 @@ function Header() {
             id="navbar-user"
           >
             <ul className="flex font-medium flex-col p-4 md:p-0 mt-4 lg:space-x-8 md:space-x-4 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 md:bg-white">
-              <li className="py-1 md:flex flex-col md:text-[#475569] hover:text-[black] hover:border-b-[black] hover:border-b-[3px] duration-100">
-                <FontAwesomeIcon icon={faHome} className="hidden md:block" />
-                <a href="#" className="m-1">
-                  Home
-                </a>
-              </li>
-              <li className="py-1 md:flex flex-col md:text-[#475569] hover:text-[black] hover:border-b-[black] hover:border-b-[3px] duration-100">
-                <FontAwesomeIcon icon={faUser} className="hidden md:block" />
-                <a href="#" className="m-1">
-                  My Network
-                </a>
-              </li>
-              <li className="py-1 md:flex flex-col md:text-[#475569] hover:text-[black] hover:border-b-[black] hover:border-b-[3px] duration-100">
-                <FontAwesomeIcon
-                  icon={faBagShopping}
-                  className="hidden md:block"
-                />
-                <a href="#" className="m-1">
-                  Jobs
-                </a>
-              </li>
-              <li className="py-1 flex flex-col md:text-[#475569] hover:text-[black] hover:border-b-[black] hover:border-b-[3px] duration-100">
-                <img
-                  className="w-6 h-6 rounded-full hidden md:block"
-                  src={defaultProfile}
-                  alt="user photo"
-                />
-                <a href="#" className="m-1 md:mt-2">
-                  Me
-                </a>
-              </li>
-              <li className="md:flex flex-col md:text-[#475569] hover:text-[black] hover:border-b-[black] hover:border-b-[3px] duration-100">
-                <FontAwesomeIcon
-                  icon={faBagShopping}
-                  className="hidden md:block"
-                />
-                <a href="#" className="mt-2">
-                  Post a Job
-                </a>
-              </li>
+              <NavLink to="/home">
+                <li className="py-1 md:flex flex-col md:text-[#475569] hover:text-[black] hover:border-b-[black] hover:border-b-[3px] duration-100">
+                  <FontAwesomeIcon icon={faHome} className="hidden md:block" />
+                  <a href="#" className="m-1">
+                    Home
+                  </a>
+                </li>
+              </NavLink>
+              <NavLink to="/connect">
+                <li className="py-1 md:flex flex-col md:text-[#475569] hover:text-[black] hover:border-b-[black] hover:border-b-[3px] duration-100">
+                  <FontAwesomeIcon icon={faUser} className="hidden md:block" />
+                  <a href="#" className="m-1">
+                    My Network
+                  </a>
+                </li>
+              </NavLink>
+              <NavLink to="/jobs">
+                <li className="py-1 md:flex flex-col md:text-[#475569] hover:text-[black] hover:border-b-[black] hover:border-b-[3px] duration-100">
+                  <FontAwesomeIcon
+                    icon={faBagShopping}
+                    className="hidden md:block"
+                  />
+                  <a href="#" className="m-1">
+                    Jobs
+                  </a>
+                </li>
+              </NavLink>
+              <NavLink to="/profile">
+                <li className="py-1 flex flex-col md:text-[#475569] hover:text-[black] hover:border-b-[black] hover:border-b-[3px] duration-100">
+                  <img
+                    className="w-6 h-6 rounded-full hidden md:block"
+                    src={defaultProfile}
+                    alt="user photo"
+                  />
+                  <a href="#" className="m-1 md:mt-2">
+                    Me
+                  </a>
+                </li>
+              </NavLink>
+              <NavLink to="/postJob">
+                <li className="md:flex flex-col md:text-[#475569] hover:text-[black] hover:border-b-[black] hover:border-b-[3px] duration-100">
+                  <FontAwesomeIcon
+                    icon={faBagShopping}
+                    className="hidden md:block"
+                  />
+                  <a href="#" className="mt-2">
+                    Post a Job
+                  </a>
+                </li>
+              </NavLink>
               {/* this is sign & login button */}
 
               {/* <li className=" flex flex-col">
