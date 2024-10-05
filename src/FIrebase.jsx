@@ -4,13 +4,14 @@ import { getFirestore } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyALwXaBU2kIH9QR09lnvYh9AR05HtHIAOg",
-  authDomain: "app-1083c.firebaseapp.com",
-  projectId: "app-1083c",
-  storageBucket: "app-1083c.appspot.com",
-  messagingSenderId: "799920870606",
-  appId: "1:799920870606:web:82abd443a5a0fc4af92c9f",
-  databaseURL: "https://app-1083c-default-rtdb.firebaseio.com/",
+  apiKey: "AIzaSyBPea5VHJqonN4VIstIatzVeGiIoHtfEt8",
+  authDomain: "social-nttwork-project.firebaseapp.com",
+  databaseURL: "https://social-nttwork-project-default-rtdb.firebaseio.com",
+  projectId: "social-nttwork-project",
+  storageBucket: "social-nttwork-project.appspot.com",
+  messagingSenderId: "1068031897226",
+  appId: "1:1068031897226:web:7b3e204e355cba80b60773",
+  measurementId: "G-LX7P39PHJC",
 };
 
 const app = initializeApp(firebaseConfig);

@@ -13,22 +13,15 @@ const SignupForm = () => {
   const [successMessage, setSuccessMessage] = useState(""); // Handle success messages
 
   const handleLogin = async (event) => {
-    event.preventDefault(); // Prevent default form submission
-
-    if (password !== confPassword) {
-      setError("Passwords do not match");
-      setSuccessMessage(""); // Clear success message
-      return;
-    }
+    event.preventDefault();
 
     try {
-      // Replace this with your actual signup logic
-      await login(email, password); // Assuming login is your signup method
-      setSuccessMessage("Account created successfully!");
-      setError(""); // Clear error message
+      await login(email, password);
+      setSuccessMessage("");
+      setError("");
     } catch (err) {
-      setError("Signup failed: " + err.message); // Capture error message
-      setSuccessMessage(""); // Clear success message
+      setError("Login failed: " + err.message);
+      setSuccessMessage("");
     }
   };
 
