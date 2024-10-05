@@ -4,29 +4,23 @@ import { faGoogle } from "@fortawesome/free-brands-svg-icons";
 import { useAuth } from "../Api/AuthApi";
 
 const SignupForm = () => {
-  const { login, signInWithGoogle } = useAuth(); // Use context
+  const { signup, signInWithGoogle, error, successMessage } = useAuth();
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confPassword, setConfPassword] = useState("");
-  const [name, setName] = useState("");
-  const [error, setError] = useState(""); // Handle error messages
-  const [successMessage, setSuccessMessage] = useState(""); // Handle success messages
 
-  const handleLogin = async (event) => {
-    event.preventDefault();
-
-    try {
-      await login(email, password);
-      setSuccessMessage("");
-      setError("");
-    } catch (err) {
-      setError("Login failed: " + err.message);
-      setSuccessMessage("");
+  const handleSignup = (e) => {
+    e.preventDefault();
+    if (password === confPassword) {
+      signup(email, password);
+    } else {
+      alert("Passwords do not match!");
     }
   };
 
   return (
-    <section className=" dark:bg-gray-900 md:min-h-screen my-32">
+    <section className="dark:bg-gray-900 md:min-h-screen my-32">
       <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0 my-16">
         <h3 className="text-3xl font-normal">Create an Account</h3>
         <div className="w-full bg-white rounded-lg shadow dark:border md:mt-10 mb-3 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
@@ -41,7 +35,7 @@ const SignupForm = () => {
                 {successMessage}
               </div>
             )}
-            <form className="space-y-4 md:space-y-6" onSubmit={handleLogin}>
+            <form className="space-y-4 md:space-y-6" onSubmit={handleSignup}>
               <div>
                 <label
                   htmlFor="name"

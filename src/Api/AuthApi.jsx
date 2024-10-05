@@ -9,20 +9,21 @@ import {
   signInWithPopup,
   sendPasswordResetEmail as firebaseSendPasswordResetEmail,
 } from "firebase/auth";
-import { app } from "../Firebase"; // Make sure to adjust the import according to your file structure
+import { app } from "../Firebase"; // Ensure Firebase is initialized here.
 
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-  const auth = getAuth(app);
   const [user, setUser] = useState(null);
-  const [error, setError] = useState(""); // Handle error messages
-  const [successMessage, setSuccessMessage] = useState(""); // Handle success messages
-  const googleProvider = new GoogleAuthProvider();
+  const [error, setError] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
+  const [resetMessage, setResetMessage] = useState("");
+
+  const auth = getAuth(app);
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      setUser(user);
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      setUser(currentUser);
     });
     return () => unsubscribe();
   }, [auth]);
@@ -30,61 +31,51 @@ export const AuthProvider = ({ children }) => {
   const login = async (email, password) => {
     try {
       await signInWithEmailAndPassword(auth, email, password);
-      setError(""); // Clear previous errors
-      setSuccessMessage("Login successful!"); // Set success message
-    } catch (error) {
-      setError("Email and Password do not match."); // Set the error message
-      setSuccessMessage(""); // Clear success message
+      setSuccessMessage("Logged in successfully!");
+      setError("");
+    } catch (err) {
+      setError(err.message);
     }
   };
 
   const signup = async (email, password) => {
     try {
       await createUserWithEmailAndPassword(auth, email, password);
-      setError(""); // Clear previous errors
-      setSuccessMessage("Account created successfully!"); // Set success message
-    } catch (error) {
-      if (error.code === "auth/email-already-in-use") {
-        setError(
-          "This email is already in use. Please try signing in or use a different email."
-        );
-      } else {
-        setError("Error creating user: " + error.message);
-      }
-      setSuccessMessage(""); // Clear success message
+      setSuccessMessage("Account created successfully!");
+      setError("");
+    } catch (err) {
+      setError(err.message);
     }
   };
 
   const signInWithGoogle = async () => {
+    const provider = new GoogleAuthProvider();
     try {
-      const result = await signInWithPopup(auth, googleProvider);
-      console.log("Google sign-in success: ", result.user);
-      setError(""); // Clear previous errors
-      setSuccessMessage("Google sign-in successful!"); // Set success message
-    } catch (error) {
-      console.error("Error signing in with Google: ", error);
-      setError("Failed to sign in with Google. Try again."); // Set the error message
-      setSuccessMessage(""); // Clear success message
+      await signInWithPopup(auth, provider);
+      setSuccessMessage("Logged in with Google successfully!");
+      setError("");
+    } catch (err) {
+      setError(err.message);
     }
   };
 
   const logout = async () => {
     try {
       await signOut(auth);
-      setSuccessMessage("Logged out successfully!"); // Set success message
-    } catch (error) {
-      console.error("Error logging out: ", error);
+      setSuccessMessage("Logged out successfully!");
+      setError("");
+    } catch (err) {
+      setError(err.message);
     }
   };
 
   const sendPasswordResetEmail = async (email) => {
     try {
       await firebaseSendPasswordResetEmail(auth, email);
-      setSuccessMessage("Password reset email sent. Check your inbox.");
+      setResetMessage("Password reset email sent successfully!");
       setError("");
-    } catch (error) {
-      setError("Failed to send password reset email. Try again.");
-      setSuccessMessage("");
+    } catch (err) {
+      setError(err.message);
     }
   };
 
@@ -99,6 +90,7 @@ export const AuthProvider = ({ children }) => {
         error,
         setError,
         successMessage,
+        resetMessage,
         sendPasswordResetEmail,
       }}
     >
