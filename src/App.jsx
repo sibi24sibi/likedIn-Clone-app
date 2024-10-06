@@ -23,6 +23,7 @@ import JobModel from "./Components/JobModel";
 import { AuthProvider } from "./Api/AuthApi";
 import JobForm from "./Components/JobForm";
 import JobPage from "./Pages/JobPage";
+import { ErorPage } from "./Pages/ErorPage";
 
 // Initialize Firebase Authentication
 function App() {
@@ -56,7 +57,7 @@ function App() {
   return (
     <AuthProvider>
       <Router>
-        <Header />
+        <Header user={user} />
         <div className="App min-h-screen">
           <Routes>
             {user ? (
@@ -67,15 +68,18 @@ function App() {
                 <Route path="/jobs" element={<JobPage />} />
                 <Route path="/postJob" element={<JobForm />} />
                 <Route path="/connect" element={<ConnectModel />} />
-                <Route path="*" element={<Navigate to="/home" />} />
+                <Route path="/signin" element={<Navigate to="/home" />} />
+                <Route path="/error" element={<ErorPage />} />
+                <Route path="*" element={<Navigate to="/error" />} />
               </>
             ) : (
               <>
                 {/* Unauthenticated Routes */}
                 <Route path="/signup" element={<SignupForm />} />
                 <Route path="/signin" element={<SigninForm />} />
-                {/* Redirect to sign-in for any unknown routes */}
-                <Route path="*" element={<Navigate to="/signin" />} />
+                <Route path="/error" element={<ErorPage />} />
+                <Route path="/" element={<Navigate to="/signin" />} />
+                <Route path="*" element={<Navigate to="/error" />} />
               </>
             )}
           </Routes>
