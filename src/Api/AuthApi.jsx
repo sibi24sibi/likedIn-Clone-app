@@ -7,26 +7,43 @@ import {
   signOut,
   GoogleAuthProvider,
   signInWithPopup,
+  updateProfile,
   sendPasswordResetEmail as firebaseSendPasswordResetEmail,
 } from "firebase/auth";
-import { app } from "../Firebase"; // Ensure Firebase is initialized here.
+import { app, firestore } from "../Firebase"; // Ensure Firebase is initialized here.
+import { setDoc, doc } from "firebase/firestore";
 
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
   const [resetMessage, setResetMessage] = useState("");
+  const [currentUserDetails, setCurrentUserDetails] = useState(null);
 
   const auth = getAuth(app);
 
+  const userData = user
+    ? {
+        userID: user.uid,
+        name: user.displayName,
+        email: user.email,
+        role: "unknown", // Default role
+        phone: "unknown", // Default phone
+      }
+    : null;
+
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-      setUser(currentUser);
+      setUser(currentUser); // Set the current user
+      setLoading(false); // Once auth state is known, set loading to false
     });
+
+    // Cleanup subscription on unmount
     return () => unsubscribe();
-  }, [auth]);
+  }, []);
 
   const login = async (email, password) => {
     try {
@@ -38,9 +55,30 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  const signup = async (email, password) => {
+  const signup = async (email, password, displayName) => {
     try {
-      await createUserWithEmailAndPassword(auth, email, password);
+      // Create the user
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+
+      // Get the user object
+      const user = userCredential.user;
+
+      // Update the user's profile with displayName
+      await updateProfile(user, { displayName });
+
+      const userData = {
+        userID: user.uid,
+        name: displayName,
+        email: email,
+      };
+
+      // Save the user data to Firestore
+      await setDoc(doc(firestore, "users", user.uid), userData); // 'users' is the collection name
+
       setSuccessMessage("Account created successfully!");
       setError("");
     } catch (err) {
@@ -84,6 +122,7 @@ export const AuthProvider = ({ children }) => {
       value={{
         user,
         login,
+        loading,
         signup,
         signInWithGoogle,
         logout,
@@ -92,6 +131,7 @@ export const AuthProvider = ({ children }) => {
         successMessage,
         resetMessage,
         sendPasswordResetEmail,
+        userData,
       }}
     >
       {children}

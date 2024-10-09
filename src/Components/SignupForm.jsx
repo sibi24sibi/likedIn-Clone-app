@@ -13,7 +13,7 @@ const SignupForm = () => {
   const handleSignup = (e) => {
     e.preventDefault();
     if (password === confPassword) {
-      signup(email, password);
+      signup(email, password, name);
     } else {
       alert("Passwords do not match!");
     }

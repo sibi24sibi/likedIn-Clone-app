@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { linkedinSmallLogo, defaultProfile } from "../assets/assets.js";
 import { linkedinBigLogo } from "../assets/assets.js";
 
+import { auth } from "../Firebase.js";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faBagShopping,
@@ -11,11 +12,15 @@ import {
   faBars,
 } from "@fortawesome/free-solid-svg-icons";
 import { NavLink } from "react-router-dom";
+import { useAuth } from "../Api/AuthApi.jsx";
+import { signOut } from "firebase/auth";
 
-function Header({ user }) {
+function Header() {
   // State to control dropdown visibility
+  const { user } = useAuth();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
+  console.log(user);
   // Function to toggle the menu
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -138,6 +143,14 @@ function Header({ user }) {
                     </a>
                   </li>
                 </NavLink>
+                <li className="">
+                  <button
+                    className="bg-blue-500 text-slate-50 rounded-lg text-base font-normal uppercase py-2 px-4 md:mt-2"
+                    onClick={() => signOut(auth)}
+                  >
+                    Logout
+                  </button>
+                </li>
               </ul>
             ) : (
               <div className="flex">

@@ -26,8 +26,6 @@ const ProfileForm = () => {
     }));
   };
 
-  console.log(profileData);
-
   return (
     <>
       {/* {
