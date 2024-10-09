@@ -15,21 +15,25 @@ This project is the result of hard work and collaboration from many talented ind
 Follow these steps to set up the project on your local machine:
 
 1. Clone the repository:
+
    ```
-   git clone https://github.com/Ten-Network/TEN-Socialnetwork.git
+   git clone https://github.com/sibi24sibi/likedIn-Clone-app.git
    ```
 
 2. Navigate to the project directory:
+
    ```
-   cd TEN-Socialnetwork
+   cd likedIn-Clone-app
    ```
 
 3. Install dependencies:
+
    ```
    npm install
    ```
 
 4. Start the development server:
+
    ```
    npm start
    ```
