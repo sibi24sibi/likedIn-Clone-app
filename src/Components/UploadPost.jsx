@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faImage, faSpinner } from "@fortawesome/free-solid-svg-icons";
-import { addPost, handleDeletePost } from "../Api/UploadApi"; // Ensure the path is correct
+import { addPost } from "../Api/UploadApi";
 import { defaultProfile } from "../assets/assets";
 import { useAuth } from "../Api/AuthApi";
+import { Modal } from "flowbite-react"; // Importing Flowbite Modal
 
 function UploadPost() {
   const { userData, user } = useAuth();
@@ -80,110 +81,69 @@ function UploadPost() {
         </div>
       </div>
 
-      {isModalOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center h-screen w-screen">
-          <div className="bg-white p-6 md:p-6 rounded-lg shadow-lg max-w-2xl w-full h-fit relative overflow-auto">
-            {/* Modal Header */}
-            <div className="bg-white p-4 rounded-lg shadow-md flex items-center space-x-4">
-              <img
-                alt="Profile picture of a person"
-                className="w-12 h-12 rounded-full"
-                src={defaultProfile}
-              />
-              <div className="flex flex-col items-start">
-                <h2 className="text-xl font-bold mb-1">{userData.name}</h2>
-                <h3 className="text-base text-gray-800">Post to anyone</h3>
-              </div>
+      {/* Flowbite Modal */}
+      <Modal
+  show={isModalOpen}
+  onClose={closeModal}
+  
+  className=" py-16" // Center the modal vertically and horizontally
+>
+  <Modal.Header>
+    <div className="flex items-center space-x-4">
+      <img
+        alt="Profile picture of a person"
+        className="w-12 h-12 rounded-full"
+        src={defaultProfile}
+      />
+      <div className="flex flex-col items-start">
+        <h2 className="text-xl font-bold mb-1">{userData.name}</h2>
+        <h3 className="text-base text-gray-800">Post to anyone</h3>
+      </div>
+    </div>
+  </Modal.Header>
 
-              {/* Close button */}
-              <button
-                type="button"
-                onClick={closeModal}
-                className="absolute top-3 right-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-full text-sm w-8 h-8 flex justify-center items-center"
-              >
-                <svg
-                  className="w-3 h-3"
-                  aria-hidden="true"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 14 14"
-                >
-                  <path
-                    stroke="currentColor"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M1 1l6 6m0 0l6 6M7 7l6-6M7 7L1 13"
-                  />
-                </svg>
-                <span className="sr-only">Close modal</span>
-              </button>
-            </div>
+  <Modal.Body>
+    <textarea
+      value={postContent}
+      onChange={(e) => setPostContent(e.target.value)}
+      className="w-full h-56 p-2 focus:outline-none"
+      placeholder="What do you want to talk about?"
+    ></textarea>
 
-            <textarea
-              value={postContent}
-              onChange={(e) => setPostContent(e.target.value)}
-              className="w-full h-56 p-2 focus:outline-none"
-              placeholder="What do you want to talk about?"
-            ></textarea>
+    {/* Image Preview */}
+    {selectedFile && (
+      <div className="mt-4">
+        <img
+          src={URL.createObjectURL(selectedFile)}
+          alt="Selected Preview"
+          className="max-w-xs max-h-12 rounded-lg shadow-md"
+        />
+      </div>
+    )}
+  </Modal.Body>
 
-            <div className="flex justify-around mt-4 w-full">
-              <div className="flex items-center space-x-2 cursor-pointer hover:text-blue-600">
-                <label className="text-gray-600 cursor-pointer hover:bg-gray-200 p-2 rounded">
-                  <FontAwesomeIcon
-                    icon={faImage}
-                    className="text-blue-500 mx-2"
-                  />
-                  Add photo
-                  <input
-                    type="file"
-                    accept="image/*"
-                    className="hidden"
-                    onChange={handleFileChange}
-                  />
-                </label>
-              </div>
-            </div>
-
-            <div className=" flex justify-between">
-              {/* Image Preview */}
-              {selectedFile ? (
-                <div>
-                  <img
-                    src={URL.createObjectURL(selectedFile)}
-                    alt="Selected Preview"
-                    className="max-w-xs max-h-12 rounded-lg  translate-y-4 shadow-md"
-                  />
-                </div>
-              ) : (
-                <div></div>
-              )}
-
-              {/* Modal Actions */}
-              <div className="flex justify-end mt-6">
-                <button
-                  onClick={handlePostSubmit} // Submit post on click
-                  className={`${
-                    loading
-                      ? "bg-gray-400 cursor-not-allowed"
-                      : "bg-blue-600 hover:bg-blue-700"
-                  } text-white font-bold py-2 px-4 rounded inline-block flex items-center`}
-                  disabled={loading} // Disable button when loading
-                >
-                  {loading ? (
-                    <>
-                      <FontAwesomeIcon icon={faSpinner} spin className="mr-2" />
-                      Posting...
-                    </>
-                  ) : (
-                    "Post"
-                  )}
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
+  <Modal.Footer>
+    <button
+      onClick={handlePostSubmit}
+      className={`${
+        loading
+          ? "bg-gray-400 cursor-not-allowed"
+          : "bg-blue-600 hover:bg-blue-700"
+      } text-white font-bold py-2 px-4 rounded flex items-center`}
+      disabled={loading}
+    >
+      {loading ? (
+        <>
+          <FontAwesomeIcon icon={faSpinner} spin className="mr-2" />
+          Posting...
+        </>
+      ) : (
+        "Post"
       )}
+    </button>
+  </Modal.Footer>
+</Modal>
+
     </div>
   );
 }

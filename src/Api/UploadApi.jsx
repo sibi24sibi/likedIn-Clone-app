@@ -1,5 +1,6 @@
 import { firestore } from "../Firebase";
-import { collection, addDoc } from "firebase/firestore";
+import { collection, addDoc  , deleteDoc,
+  doc, } from "firebase/firestore";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 
 const postsCollection = collection(firestore, "posts");
@@ -37,6 +38,7 @@ export const addPost = async (postData, imageFile) => {
 // Function to handle post deletion
 export const handleDeletePost = async (postId) => {
   try {
+    
     await deleteDoc(doc(firestore, "posts", postId)); // Delete the post from Firestore
   } catch (error) {
     console.error("Error deleting post: ", error);

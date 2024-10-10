@@ -1,15 +1,12 @@
-import React from "react";
-import { FaPaperPlane } from "react-icons/fa";
+import React, { useState } from "react";
+import { FaPaperPlane, FaPencilAlt } from "react-icons/fa";
 import { GoDotFill } from "react-icons/go";
 import { HiOutlineOfficeBuilding } from "react-icons/hi";
 import { IoNotifications, IoSchoolOutline } from "react-icons/io5";
 import { MdVerifiedUser } from "react-icons/md";
-import { defaultCoverImage, defaultProfile } from "../assets/assets";
-import { useState } from "react";
-import { FaPencilAlt } from "react-icons/fa";
 import { FiPlusCircle } from "react-icons/fi";
-
-import Modal from "./Modal/Modal";
+import { defaultCoverImage, defaultProfile } from "../assets/assets";
+import { Modal } from "flowbite-react"; // Import Flowbite modal
 import ProfileForm from "./ProfileForm";
 
 function ProfileSection() {
@@ -88,8 +85,13 @@ function ProfileSection() {
           </button>
         </div>
       </div>
-      <Modal open={open} onclose={() => setOpen(false)}>
-        <ProfileForm />
+
+      {/* Flowbite Modal */}
+      <Modal show={open} onClose={() => setOpen(false)}>
+        <Modal.Header>Edit Profile</Modal.Header>
+        <Modal.Body>
+          <ProfileForm onClose={() => setOpen(false)} />
+        </Modal.Body>
       </Modal>
     </>
   );

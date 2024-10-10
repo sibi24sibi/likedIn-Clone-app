@@ -1,45 +1,55 @@
 import React, { useEffect, useState } from "react";
-import { firestore } from "../Firebase"; // Adjust the path as needed
-import {
-  collection,
-  onSnapshot,
-  orderBy,
-  query,
-  deleteDoc,
-  doc,
-} from "firebase/firestore";
-import { defaultProfile } from "../assets/assets"; // Your profile picture path
+import { firestore } from "../Firebase";
+import { collection, onSnapshot, orderBy, query } from "firebase/firestore";
+import { defaultProfile } from "../assets/assets";
 import { useAuth } from "../Api/AuthApi";
-import "./Skeleton.css";
+import { Button, Modal } from "flowbite-react";
 import { formatTimestamp } from "../assets/assets";
+import { handleDeletePost } from "../Api/UploadApi";
+import "./Skeleton.css";
 
 function PostModel() {
   const { userData } = useAuth();
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [openModal, setOpenModal] = useState(false);
+  const [selectedPostId, setSelectedPostId] = useState(null);
 
   useEffect(() => {
-    // Define the query for posts
     const postsQuery = query(
       collection(firestore, "posts"),
-      orderBy("createdAt", "desc") // Order posts by creation time
+      orderBy("createdAt", "desc")
     );
 
-    // Set up the real-time listener
     const unsubscribe = onSnapshot(postsQuery, (snapshot) => {
       const postsData = snapshot.docs.map((doc) => ({
         id: doc.id,
         ...doc.data(),
       }));
       setPosts(postsData);
-      setLoading(false); // Set loading to false once data is fetched
+      setLoading(false);
     });
 
-    // Cleanup subscription on unmount
     return () => unsubscribe();
   }, []);
 
-  // Dummy loading component
+  const openDeleteModal = (postId) => {
+    setSelectedPostId(postId);
+    setOpenModal(true);
+  };
+
+  const closeDeleteModal = () => {
+    setOpenModal(false);
+    setSelectedPostId(null);
+  };
+
+  const confirmDelete = async () => {
+    if (selectedPostId) {
+      await handleDeletePost(selectedPostId);
+      closeDeleteModal(); // Close modal after deletion
+    }
+  };
+
   const LoadingComponent = () => (
     <div className="skeleton-wrapper">
       <div className="skeleton-profile">
@@ -69,8 +79,6 @@ function PostModel() {
           <LoadingComponent />
           <LoadingComponent />
           <LoadingComponent />
-          <LoadingComponent />
-          <LoadingComponent />
         </>
       ) : (
         posts.map((post) => (
@@ -84,7 +92,7 @@ function PostModel() {
                   <div className="w-12 h-12 mr-3">
                     <img
                       className="w-full h-full rounded-full object-cover"
-                      src={defaultProfile} // Replace this with the user's profile image if available
+                      src={defaultProfile}
                       alt="Profile"
                     />
                   </div>
@@ -100,7 +108,7 @@ function PostModel() {
                 </div>
                 <div>
                   <button
-                    onClick={() => handleDeletePost(post.id)} // Pass post.id to the delete function
+                    onClick={() => openDeleteModal(post.id)}
                     className="text-red-600 font-medium hover:bg-red-100 px-3 py-1 rounded transition duration-300"
                   >
                     Delete
@@ -140,6 +148,19 @@ function PostModel() {
           </div>
         ))
       )}
+
+      <Modal show={openModal} onClose={closeDeleteModal} className="  py-36">
+        <Modal.Header>Delete Post</Modal.Header>
+        <Modal.Body>
+          <p>Are you sure you want to delete this post?</p>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button onClick={confirmDelete}  color="red">
+            Yes, delete it
+          </Button>
+          <Button onClick={closeDeleteModal}>Cancel</Button>
+        </Modal.Footer>
+      </Modal>
     </>
   );
 }

@@ -1,100 +1,73 @@
-import React, { useState } from "react";
-import { linkedinSmallLogo, defaultProfile } from "../assets/assets.js";
-import { linkedinBigLogo } from "../assets/assets.js";
-
-import { auth } from "../Firebase.js";
+import React from "react";
+import { auth } from "../Firebase";
+import { linkedinSmallLogo, linkedinBigLogo, defaultProfile } from "../assets/assets.js";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faBagShopping,
-  faHome,
-  faUser,
-  faMagnifyingGlass,
-  faBars,
-} from "@fortawesome/free-solid-svg-icons";
+import { faBagShopping, faHome, faUser, faMagnifyingGlass ,  faRightFromBracket } from "@fortawesome/free-solid-svg-icons";
 import { NavLink } from "react-router-dom";
+import { Navbar } from "flowbite-react";
 import { useAuth } from "../Api/AuthApi.jsx";
 import { signOut } from "firebase/auth";
 
 function Header() {
-  // State to control dropdown visibility
-  const { user } = useAuth();
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-  console.log(user);
-  // Function to toggle the menu
-  const toggleMenu = () => {
-    setIsMenuOpen(!isMenuOpen);
-  };
+  const { user } = useAuth();
+
 
   const logo = user ? linkedinSmallLogo : linkedinBigLogo;
 
   return (
-    <div>
-      <nav className="bg-white border-gray-200 dark:bg-gray-900 shadow-lg">
-        <div className="max-w-screen flex flex-wrap items-center justify-between md:mx-12 p-4">
-          <a
-            href="#"
-            className="flex items-center space-x-3 rtl:space-x-reverse"
-          >
-            <img
-              src={logo}
-              className={`${user ? "h-10" : " h-20 -my-10"}`}
-              alt="Logo"
-            />
-            <form className={`${user ? "" : "hidden"} max-w-md mx-auto`}>
-              <label
-                htmlFor="default-search"
-                className="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white"
-              >
-                Search
-              </label>
-              <div className="relative">
-                <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
-                  <FontAwesomeIcon icon={faMagnifyingGlass} />
-                </div>
-                <input
-                  type="search"
-                  className="block w-full h-10 p-4 ps-10 rounded-lg focus:border-[black]"
-                  placeholder="Search"
-                  required
-                />
-              </div>
-            </form>
-          </a>
+    <Navbar
+      fluid={true}
+      rounded={true}
+      className="bg-white border-gray-200 dark:bg-gray-900 justify-between shadow-lg px-16">
+<div className=" flex">
+  
 
-          <button
-            onClick={toggleMenu}
-            type="button"
-            className="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
-            aria-controls="navbar-user"
-            aria-expanded={isMenuOpen ? "true" : "false"}
-          >
-            <span className="sr-only">Open main menu</span>
-            <FontAwesomeIcon icon={faBars} />
-          </button>
+<img src={logo} className={` ${user ? 'h-10 mx-3' : 'h-20 w-auto my-[-24px]'}`} alt="Logo" />
 
-          {/* Mobile Menu */}
-          <div
-            className={`items-center justify-evenly ${
-              isMenuOpen ? "block" : "hidden"
-            } w-full md:flex md:w-auto md:order-1`}
-            id="navbar-user"
-          >
-            {user ? (
-              <ul className="flex font-medium flex-col p-4 md:p-0 mt-4 lg:space-x-8 md:space-x-4 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 md:bg-white">
+
+
+<form className={`${user ? "" : "hidden"} max-w-md mx-auto`}>
+  <label
+    htmlFor="default-search"
+    className="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white"
+  >
+    Search
+  </label>
+  <div className="relative">
+    <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+    <FontAwesomeIcon icon={faMagnifyingGlass} />
+    </div>
+    <input
+      type="search"
+      className="block w-4/6 h-10 p-4 ps-10 rounded-lg focus:border-[black]"
+      placeholder="Search"
+      required
+    />
+  </div>
+</form>
+
+</div>
+        
+ 
+      <Navbar.Toggle />
+
+      <Navbar.Collapse>
+      {user ? (
+              <ul className="flex font-medium flex-col p-4  gap-2 md:p-0 mt-4 lg:space-x-8 md:space-x-4 rtl:space-x-reverse md:flex-row md:w-auto md:mt-0 md:border-0 md:bg-white">
                 <NavLink to="/home">
-                  <li className="py-1 md:flex flex-col md:text-[#475569] hover:text-[black] hover:border-b-[black] hover:border-b-[3px] duration-100">
+                  <li className="py-1 md:flex flex-col md:text-[#475569] md:hover:text-[black] md:hover:border-b-[black] md:hover:border-b-[3px] duration-100">
                     <FontAwesomeIcon
                       icon={faHome}
-                      className="hidden md:block"
-                    />
+                      className="hidden  md:block"/>
+                  
                     <a href="#" className="m-1">
                       Home
                     </a>
                   </li>
                 </NavLink>
                 <NavLink to="/connect">
-                  <li className="py-1 md:flex flex-col md:text-[#475569] hover:text-[black] hover:border-b-[black] hover:border-b-[3px] duration-100">
+                  <li className="py-1 md:flex flex-col md:text-[#475569]md:hover:text-[black] md:hover:border-b-[black] md:hover:border-b-[3px] duration-100">
                     <FontAwesomeIcon
                       icon={faUser}
                       className="hidden md:block"
@@ -105,7 +78,7 @@ function Header() {
                   </li>
                 </NavLink>
                 <NavLink to="/jobs">
-                  <li className="py-1 md:flex flex-col md:text-[#475569] hover:text-[black] hover:border-b-[black] hover:border-b-[3px] duration-100">
+                  <li className="py-1 md:flex flex-col md:text-[#475569]md:hover:text-[black] md:hover:border-b-[black] md:hover:border-b-[3px]  duration-100">
                     <FontAwesomeIcon
                       icon={faBagShopping}
                       className="hidden md:block"
@@ -116,13 +89,8 @@ function Header() {
                   </li>
                 </NavLink>
                 <NavLink to="/profile">
-                  <li className="py-1 flex flex-col md:text-[#475569] hover:text-[black] hover:border-b-[black] hover:border-b-[3px] duration-100">
-                    {/* <img
-                      className="w-6 h-6 rounded-full hidden md:block"
-                      src={defaultProfile}
-                      alt="user photo"
-                    /> */}
-
+                  <li className="py-1 flex flex-col md:text-[#475569]md:hover:text-[black] md:hover:border-b-[black] md:hover:border-b-[3px] md:hover:border-b-[3px] duration-100">
+                   
                     <FontAwesomeIcon
                       icon={faUser}
                       className="hidden md:block"
@@ -133,7 +101,7 @@ function Header() {
                   </li>
                 </NavLink>
                 <NavLink to="/postJob">
-                  <li className="md:flex flex-col md:text-[#475569] hover:text-[black] hover:border-b-[black] hover:border-b-[3px] duration-100">
+                  <li className="md:flex flex-col md:text-[#475569] md:hover:text-[black] md:hover:border-b-[black] md:hover:border-b-[3px] duration-100">
                     <FontAwesomeIcon
                       icon={faBagShopping}
                       className="hidden md:block"
@@ -143,19 +111,20 @@ function Header() {
                     </a>
                   </li>
                 </NavLink>
-                <li className="">
+                <li className=" my-2 md:my-0">
                   <button
-                    className="bg-blue-500 text-slate-50 rounded-lg text-base font-normal uppercase py-2 px-4 md:mt-2"
+                    className="bg-blue-500 text-slate-50 rounded-lg text-base font-normal uppercase py-2 px-4 "
                     onClick={() => signOut(auth)}
                   >
-                    Logout
+                  <FontAwesomeIcon icon={faRightFromBracket}   />
+            
                   </button>
                 </li>
               </ul>
             ) : (
-              <div className="flex">
+              <ul className="md:flex  rtl:space-x-reverse md:flex-row md:w-auto md:mt-0 md:border-0 md:bg-white">
                 <NavLink to="/signin">
-                  <li className=" flex flex-col">
+                  <li className=" flex flex-col-reverse ">
                     <button className="text-[blue] hover:bg-[#f1f5f9] font-medium bg-[white] border-blue-600 py-2 px-5  rounded-[90px]">
                       Login
                     </button>
@@ -168,12 +137,10 @@ function Header() {
                     </button>
                   </li>
                 </NavLink>
-              </div>
+              </ul>
             )}
-          </div>
-        </div>
-      </nav>
-    </div>
+      </Navbar.Collapse>
+    </Navbar>
   );
 }
 
