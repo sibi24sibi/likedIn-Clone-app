@@ -50,7 +50,7 @@ function UploadPost() {
 
   return (
     <div className="flex items-center justify-center">
-      <div className="bg-white p-4 rounded-lg shadow-md flex flex-col items-center space-y-4">
+      <div className="bg-white-500 p-4 rounded-lg shadow-md flex flex-col items-center space-y-4  w-fit  md:w-fit" >
         <div className="flex items-center space-x-5">
           <img
             alt="User avatar"
@@ -58,7 +58,7 @@ function UploadPost() {
             src={defaultProfile}
           />
           <input
-            className="flex-grow p-2 border w-[400px] rounded-full focus:outline-none hover:bg-gray-100 cursor-pointer transition duration-200"
+            className="flex-grow p-2 border md:w-[400px] rounded-full focus:outline-none hover:bg-gray-100 cursor-pointer transition duration-200"
             placeholder="Start a post, try writing with AI"
             type="text"
             onClick={handleInputClick}

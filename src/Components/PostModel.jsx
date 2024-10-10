@@ -84,7 +84,7 @@ function PostModel() {
         posts.map((post) => (
           <div
             key={post.id}
-            className="bg-white rounded-lg shadow-md mx-auto max-w-[540px] w-10/12"
+            className="bg-white rounded-lg shadow-md mx-auto max-w-[540px] w-4/5 md:w-10/12"
           >
             <div className="p-4">
               <div className="flex justify-between items-start mb-4">
@@ -106,7 +106,7 @@ function PostModel() {
                     </p>
                   </div>
                 </div>
-                <div>
+                <div className=" grid  grid-rows-2 md:grid-cols-2 ">
                   <button
                     onClick={() => openDeleteModal(post.id)}
                     className="text-red-600 font-medium hover:bg-red-100 px-3 py-1 rounded transition duration-300"

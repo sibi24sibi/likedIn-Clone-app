@@ -50,9 +50,12 @@ function MainApp() {
   }
 
   return (
-    <Router>
+    <div className=' min-w-full  ' >
+
+
+    <Router >
       <Header />
-      <div className="App min-h-screen ">
+      <div className="App  min-h-screen ">
         <Routes>
           {user ? (
             <>
@@ -82,6 +85,7 @@ function MainApp() {
       </div>
       <Footer />
     </Router>
+    </div>
   );
 }
 

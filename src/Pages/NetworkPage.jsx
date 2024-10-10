@@ -28,10 +28,10 @@ export const NetworkPage = () => {
   }
 
   return (
-    <div className="p-6 bg-gray-100 min-h-screen">
-      <div className="max-w-7xl mx-auto">
-        <h3 className="text-2xl font-bold mb-6">People You May Know</h3>
-        <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+    <div className="md:p-10 bg-gray-100 min-h-screen ">
+      <div className="max-w-7xl ">
+        <h3 className="text-2xl font-bold md:m-2 m-6">People You May Know</h3>
+        <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-4  gap-y-4 p-4 ">
           {data.length === 0 ? (
             <p>No users found.</p>
           ) : (

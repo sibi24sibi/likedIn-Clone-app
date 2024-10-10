@@ -19,8 +19,8 @@ function Header() {
     <Navbar
       fluid={true}
       rounded={true}
-      className="bg-white border-gray-200 dark:bg-gray-900 justify-between shadow-lg px-0 md:px-16 ">
-<div className=" flex">
+      className="bg-white border-gray-200 dark:bg-gray-900 justify-between shadow-lg md:px-10    ">
+<div className=" flex  ">
   
 
 <img src={logo} className={` ${user ? 'h-10 mx-3' : 'h-20 w-auto my-[-24px]'}`} alt="Logo" />
@@ -40,7 +40,7 @@ function Header() {
     </div>
     <input
       type="search"
-      className="block w-4/6 h-10 p-4 ps-10 rounded-lg focus:border-[black]"
+      className="block md:w-10/12  h-10 p-4 ps-10 rounded-lg focus:border-[black]"
       placeholder="Search"
       required
     />
