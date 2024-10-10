@@ -30,8 +30,8 @@ export const AuthProvider = ({ children }) => {
         userID: user.uid,
         name: user.displayName,
         email: user.email,
-        role: "unknown", // Default role
-        phone: "unknown", // Default phone
+        role: "unknown", 
+        phone: "unknown", 
       }
     : null;
 

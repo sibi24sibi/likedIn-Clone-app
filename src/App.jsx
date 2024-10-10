@@ -52,7 +52,7 @@ function MainApp() {
   return (
     <Router>
       <Header />
-      <div className="App min-h-screen">
+      <div className="App min-h-screen ">
         <Routes>
           {user ? (
             <>

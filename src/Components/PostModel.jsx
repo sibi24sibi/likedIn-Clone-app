@@ -84,7 +84,7 @@ function PostModel() {
         posts.map((post) => (
           <div
             key={post.id}
-            className="bg-white rounded-lg shadow-md mx-auto max-w-[540px] w-full"
+            className="bg-white rounded-lg shadow-md mx-auto max-w-[540px] w-10/12"
           >
             <div className="p-4">
               <div className="flex justify-between items-start mb-4">

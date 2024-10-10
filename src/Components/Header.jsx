@@ -19,7 +19,7 @@ function Header() {
     <Navbar
       fluid={true}
       rounded={true}
-      className="bg-white border-gray-200 dark:bg-gray-900 justify-between shadow-lg px-16">
+      className="bg-white border-gray-200 dark:bg-gray-900 justify-between shadow-lg px-0 md:px-16 ">
 <div className=" flex">
   
 
