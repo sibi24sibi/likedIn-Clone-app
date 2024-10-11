@@ -50,7 +50,7 @@ function UploadPost() {
 
   return (
     <div className="flex items-center justify-center">
-      <div className="bg-white-500 p-4 rounded-lg shadow-md flex flex-col items-center space-y-4  w-fit  md:w-fit" >
+      <div className="bg-white-500 p-4 rounded-lg shadow-md flex flex-col items-center space-y-4  w-11/12  md:w-fit" >
         <div className="flex items-center space-x-5">
           <img
             alt="User avatar"
@@ -58,8 +58,8 @@ function UploadPost() {
             src={defaultProfile}
           />
           <input
-            className="flex-grow p-2 border md:w-[400px] rounded-full focus:outline-none hover:bg-gray-100 cursor-pointer transition duration-200"
-            placeholder="Start a post, try writing with AI"
+            className="flex-grow p-2 border md:w-[550px] rounded-full focus:outline-none hover:bg-gray-100 cursor-pointer transition duration-200"
+            placeholder="Share a post"
             type="text"
             onClick={handleInputClick}
           />
@@ -86,7 +86,7 @@ function UploadPost() {
   show={isModalOpen}
   onClose={closeModal}
   
-  className=" py-16" // Center the modal vertically and horizontally
+  // Center the modal vertically and horizontally
 >
   <Modal.Header>
     <div className="flex items-center space-x-4">
@@ -109,6 +109,26 @@ function UploadPost() {
       className="w-full h-56 p-2 focus:outline-none"
       placeholder="What do you want to talk about?"
     ></textarea>
+
+
+<div className="flex justify-around mt-4 w-full">
+              <div className="flex items-center space-x-2 cursor-pointer hover:text-blue-600">
+                <label className="text-gray-600 cursor-pointer hover:bg-gray-200 p-2 rounded">
+                  <FontAwesomeIcon
+                    icon={faImage}
+                    className="text-blue-500 mx-2"
+                  />
+                  Add photo
+                  <input
+                    type="file"
+                    accept="image/*"
+                    className="hidden"
+                    onChange={handleFileChange}
+                  />
+                </label>
+              </div>
+            </div>
+
 
     {/* Image Preview */}
     {selectedFile && (

@@ -2,7 +2,7 @@ import React from "react";
 
 function JobDetail() {
   return (
-    <div className="flex  justify-center pr-[7rem] bg-gray-100 ">
+    <div className="  justify-center pr-[7rem]  hidden md:block">
       <div className="bg-white p-6 w-[35rem] rounded-lg shadow-lg border border-gray-200">
         <div className="flex justify-between items-center">
           <div className="flex items-center space-x-3">

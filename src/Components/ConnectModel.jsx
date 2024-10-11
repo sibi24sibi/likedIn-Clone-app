@@ -7,7 +7,7 @@ function ConnectModel({ user }) {
   return (
     <div
       key={user.id} // Use user prop instead of datas
-      className="min-w-[184px] max-w-[184px]  h-72 rounded-md shadow-sm hover:shadow-[0px_3px_4px_1px_#b6b6b6] relative border-[1px] border-gray-300 border-opacity-90 transition-shadow ease-in duration-100"
+      className="md:min-w-[184px] md:max-w-[184px]  h-72 rounded-md shadow-sm hover:shadow-[0px_3px_4px_1px_#b6b6b6] relative border-[1px] border-gray-300 border-opacity-90 transition-shadow ease-in duration-100"
     >
       <div className="banner-image">
         <img

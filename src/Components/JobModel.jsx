@@ -18,7 +18,7 @@ function JobModel() {
 ]
 
   return (
-    <div className='bg-slate-50 h-auto w-[33%] rounded-lg border mx-auto my-4 border-slate-200 flex flex-col p-3 gap-3'>
+    <div className='bg-slate-50 h-auto w-10/12 md:w-[33%] rounded-lg border mx-auto my-4 border-slate-200 flex flex-col p-3 gap-3'>
       <div className='gap-1'>
         <h1 className='font-semibold text-[18px]'>Job picks for you</h1>
         <p className='text-[14px] text-gray-500'>Based on your profile and search history</p>

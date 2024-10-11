@@ -75,16 +75,16 @@ function PostModel() {
   return (
     <>
       {loading ? (
-        <>
+        <div className="my-8">
           <LoadingComponent />
           <LoadingComponent />
           <LoadingComponent />
-        </>
+        </div>
       ) : (
         posts.map((post) => (
           <div
             key={post.id}
-            className="bg-white rounded-lg shadow-md mx-auto max-w-[540px] w-4/5 md:w-10/12"
+            className="bg-white rounded-lg shadow-md mx-auto max-w-[540px] mt-16 mb-5  md:w-10/12"
           >
             <div className="p-4">
               <div className="flex justify-between items-start mb-4">
@@ -149,7 +149,7 @@ function PostModel() {
         ))
       )}
 
-      <Modal show={openModal} onClose={closeDeleteModal} className="  py-36">
+      <Modal show={openModal} onClose={closeDeleteModal} className=" py-36">
         <Modal.Header>Delete Post</Modal.Header>
         <Modal.Body>
           <p>Are you sure you want to delete this post?</p>

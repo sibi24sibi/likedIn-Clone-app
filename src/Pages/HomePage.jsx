@@ -8,7 +8,7 @@ function Home() {
   return (
     <div className="min-h-screen  ">
       <div>
-        <div className="my-5 relative top-5">
+        <div className="my-2 relative top-5">
           <UploadPost  />
         </div>
         <PostModel />

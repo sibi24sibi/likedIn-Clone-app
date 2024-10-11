@@ -4,7 +4,7 @@ import JobDetail from "./../Components/JobDetail";
 
 function JobPage() {
   return (
-    <div className="flex">
+    <div className="flex py-5">
       <JobModel />
       <JobDetail />
     </div>

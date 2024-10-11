@@ -22,6 +22,7 @@ import JobPage from "./Pages/JobPage";
 import { ErorPage } from "./Pages/ErorPage";
 import { AuthProvider, useAuth } from "./Api/AuthApi";
 import { NetworkPage } from "./Pages/NetworkPage";
+import { ProfilePage } from "./Pages/ProfilePage";
 
 // Initialize Firebase Authentication
 function App() {
@@ -62,7 +63,7 @@ function MainApp() {
               {/* Authenticated Routes */}
               <Route path="/" element={<HomePage />} />
               <Route path="/home" element={<HomePage />} />
-              <Route path="/profile" element={<ProfileSection />} />
+              <Route path="/profile" element={<ProfilePage />} />
               <Route path="/jobs" element={<JobPage />} />
               <Route path="/postJob" element={<JobForm />} />
               <Route path="/connect" element={<NetworkPage />} />
@@ -76,8 +77,9 @@ function MainApp() {
               {/* Unauthenticated Routes */}
               <Route path="/signup" element={<SignupForm />} />
               <Route path="/signin" element={<SigninForm />} />
-              <Route path="/error" element={<ErorPage />} />
               <Route path="/" element={<Navigate to="/signin" />} />
+              <Route path="/error" element={<ErorPage />} />
+              <Route path="/home" element={<Navigate to="/signin" />} />
               <Route path="*" element={<Navigate to="/error" />} />
             </>
           )}

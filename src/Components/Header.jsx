@@ -40,7 +40,7 @@ function Header() {
     </div>
     <input
       type="search"
-      className="block md:w-10/12  h-10 p-4 ps-10 rounded-lg focus:border-[black]"
+      className="block md:w-10/12 w-9/12  h-10 p-4 ps-10 rounded-lg focus:border-[black]"
       placeholder="Search"
       required
     />
@@ -50,13 +50,13 @@ function Header() {
 </div>
         
  
-      <Navbar.Toggle />
+      <Navbar.Toggle className=" absolute top-0 right-0 my-3 mx-3  " />
 
       <Navbar.Collapse>
       {user ? (
               <ul className="flex font-medium flex-col p-4  gap-2 md:p-0 mt-4 lg:space-x-8 md:space-x-4 rtl:space-x-reverse md:flex-row md:w-auto md:mt-0 md:border-0 md:bg-white">
                 <NavLink to="/home">
-                  <li className="py-1 md:flex flex-col md:text-[#475569] md:hover:text-[black] md:hover:border-b-[black] md:hover:border-b-[3px] duration-100">
+                  <li className="py-1 flex flex-col md:text-[#475569]md:hover:text-[black]">
                     <FontAwesomeIcon
                       icon={faHome}
                       className="hidden  md:block"/>
@@ -67,7 +67,7 @@ function Header() {
                   </li>
                 </NavLink>
                 <NavLink to="/connect">
-                  <li className="py-1 md:flex flex-col md:text-[#475569]md:hover:text-[black] md:hover:border-b-[black] md:hover:border-b-[3px] duration-100">
+                  <li className="py-1 flex flex-col md:text-[#475569]md:hover:text-[black]">
                     <FontAwesomeIcon
                       icon={faUser}
                       className="hidden md:block"
@@ -78,7 +78,7 @@ function Header() {
                   </li>
                 </NavLink>
                 <NavLink to="/jobs">
-                  <li className="py-1 md:flex flex-col md:text-[#475569]md:hover:text-[black] md:hover:border-b-[black] md:hover:border-b-[3px]  duration-100">
+                  <li className="py-1 flex flex-col md:text-[#475569]md:hover:text-[black]">
                     <FontAwesomeIcon
                       icon={faBagShopping}
                       className="hidden md:block"
@@ -89,19 +89,19 @@ function Header() {
                   </li>
                 </NavLink>
                 <NavLink to="/profile">
-                  <li className="py-1 flex flex-col md:text-[#475569]md:hover:text-[black] md:hover:border-b-[black] md:hover:border-b-[3px] md:hover:border-b-[3px] duration-100">
+                  <li className="py-1 flex flex-col md:text-[#475569]md:hover:text-[black] ">
                    
                     <FontAwesomeIcon
                       icon={faUser}
                       className="hidden md:block"
                     />
-                    <a href="#" className="m-1 md:mt-2">
+                    <a href="#" className="m-1">
                       Me
                     </a>
                   </li>
                 </NavLink>
                 <NavLink to="/postJob">
-                  <li className="md:flex flex-col md:text-[#475569] md:hover:text-[black] md:hover:border-b-[black] md:hover:border-b-[3px] duration-100">
+                  <li className="py-1 flex flex-col md:text-[#475569]md:hover:text-[black]">
                     <FontAwesomeIcon
                       icon={faBagShopping}
                       className="hidden md:block"

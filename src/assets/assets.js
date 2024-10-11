@@ -2,6 +2,7 @@ import linkedinSmallLogo from "./images/logo.png";
 import linkedinBigLogo from "./images/LinkedIn-Logo.png";
 import defaultProfile from "./images/image.jpg";
 import defaultCoverImage from "./images/cover2.webp";
+import errorImg from '../assets/images/Likedin-error-image.png'
 
 // Function to format the timestamp
 export const formatTimestamp = (timestamp) => {
@@ -25,4 +26,5 @@ export {
   linkedinBigLogo,
   defaultProfile,
   defaultCoverImage,
+  errorImg
 };
