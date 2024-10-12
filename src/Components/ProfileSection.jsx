@@ -6,18 +6,20 @@ import { IoNotifications, IoSchoolOutline } from "react-icons/io5";
 import { MdVerifiedUser } from "react-icons/md";
 import { FiPlusCircle } from "react-icons/fi";
 import { defaultCoverImage, defaultProfile } from "../assets/assets";
-import { Modal } from "flowbite-react"; // Import Flowbite modal
-import ProfileForm from "./ProfileForm";
+
 import { useAuth } from "../Api/AuthApi";
+import { ProfileFormModal } from "./Modals/ProfileFormModal";
 
 function ProfileSection( ) {
+
   const [open, setOpen] = useState(false);
+
   const {userData} =useAuth()
 
   return (
     //relative top-5 bg-gray-100 h-auto max-w-full  sm:max-w-[700px] rounded-xl my-10 mx-5 sm:ml-16 flex flex-col border border-grey
     <>
-         <div className=' relative top-5 w-10/12  h-auto rounded-xl my-7 '>
+         <div className=' relative top-5 w-9/12 h-auto rounded-xl my-7 '>
         <img
           className='relative h-[150px] sm:h-[210px] w-full rounded-t-xl object-cover'
           src={defaultCoverImage}
@@ -77,13 +79,8 @@ function ProfileSection( ) {
           </button>
         </div>
       </div>
-      {/* Flowbite Modal */}
-      <Modal show={open} onClose={() => setOpen(false)}>
-        <Modal.Header>Edit Profile</Modal.Header>
-        <Modal.Body>
-          <ProfileForm onClose={() => setOpen(false)} />
-        </Modal.Body>
-      </Modal>
+
+    <ProfileFormModal setOpen={setOpen} open={open}/>
     </>
   );
 }

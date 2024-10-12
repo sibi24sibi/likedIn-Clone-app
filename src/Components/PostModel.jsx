@@ -8,34 +8,14 @@ import { defaultProfile } from "../assets/assets";
 import { useAuth } from "../Api/AuthApi";
 import { Button, Modal } from "flowbite-react";
 import { formatTimestamp } from "../assets/assets";
-import { handleDeletePost } from "../Api/UploadApi";
+
 import "./Skeleton.css";
 
-function PostModel({loadings,postData = []}) {
+function PostModel({loadings,postData = [],postMode ,onDelete }) {
 
-  
+
   const { userData } = useAuth();
 
-  const [openModal, setOpenModal] = useState(false);
-  const [selectedPostId, setSelectedPostId] = useState(null);
-
-
-  const openDeleteModal = (postId) => {
-    setSelectedPostId(postId);
-    setOpenModal(true);
-  };
-
-  const closeDeleteModal = () => {
-    setOpenModal(false);
-    setSelectedPostId(null);
-  };
-
-  const confirmDelete = async () => {
-    if (selectedPostId) {
-      await handleDeletePost(selectedPostId);
-      closeDeleteModal(); // Close modal after deletion
-    }
-  };
 
   const LoadingComponent = () => (
     <div className="skeleton-wrapper">
@@ -61,6 +41,7 @@ function PostModel({loadings,postData = []}) {
 
   return (
     <>
+    <div></div>
       {loadings ? (
         <div className="my-8">
           <LoadingComponent />
@@ -70,9 +51,9 @@ function PostModel({loadings,postData = []}) {
       ) : (
         postData.map((post) => (
           <div
-            key={post.id}
-            className="bg-white rounded-lg shadow-md mx-auto max-w-[540px] mt-16 mb-5  md:w-10/12"
-          >
+  key={post.id}
+  className={`bg-white ${postMode ? 'max-w-[740px]' : 'max-w-[540px]'} rounded-lg shadow-md mx-auto mt-16 mb-5 md:w-10/12`}
+>
             <div className="p-4">
               <div className="flex justify-between items-start mb-4">
                 <div className="flex items-start">
@@ -93,16 +74,19 @@ function PostModel({loadings,postData = []}) {
                     </p>
                   </div>
                 </div>
-                <div className=" grid  grid-rows-2 md:grid-cols-2 ">
-                  <button
-                    onClick={() => openDeleteModal(post.id)}
-                    className="text-red-600 font-medium hover:bg-red-100 px-3 py-1 rounded transition duration-300"
-                  >
-                    Delete
-                  </button>
-                  <button className="text-blue-600 font-medium hover:bg-blue-100 px-3 py-1 rounded transition duration-300">
-                    + Follow
-                  </button>
+                <div >
+                {postMode ? (
+                    <button
+                      onClick={() => onDelete(post.id)}
+                      className="text-red-600 font-medium hover:bg-red-100 px-3 py-1 rounded transition duration-300"
+                    >
+                      Delete
+                    </button>
+                  ) : (
+                    <button className="text-blue-600 font-medium hover:bg-blue-100 px-3 py-1 rounded transition duration-300">
+                      + Follow
+                    </button>
+                  )}
                 </div>
               </div>
               <p className="text-gray-700 text-base font-normal my-2">
@@ -137,18 +121,6 @@ function PostModel({loadings,postData = []}) {
         ))
       )}
 
-      <Modal show={openModal} onClose={closeDeleteModal} className=" py-36">
-        <Modal.Header>Delete Post</Modal.Header>
-        <Modal.Body>
-          <p>Are you sure you want to delete this post?</p>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button onClick={confirmDelete}  color="red">
-            Yes, delete it
-          </Button>
-          <Button onClick={closeDeleteModal}>Cancel</Button>
-        </Modal.Footer>
-      </Modal>
     </>
   );
 }
