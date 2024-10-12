@@ -6,11 +6,14 @@ import { auth } from "../Firebase";
 import UploadPost from "../Components/UploadPost";
 import PostModel from "../Components/PostModel";
 
+
 function Home() {
 
 
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
+
+  const postMode = false;
 
 
   useEffect(() => {
@@ -39,7 +42,7 @@ function Home() {
         <div className="my-2 relative top-5">
           <UploadPost   />
         </div>
-        <PostModel postData={posts} loadings={loading} />
+        <PostModel postData={posts} loadings={loading}  postMode={postMode}  />
       </div>
     </div>
   );

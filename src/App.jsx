@@ -1,6 +1,6 @@
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { InfinitySpin } from "react-loader-spinner";
+import { Watch } from "react-loader-spinner";
 import {
   Route,
   BrowserRouter as Router,
@@ -39,8 +39,8 @@ function MainApp() {
   // Show a loading spinner while authentication state is being determined
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-screen">
-        <InfinitySpin
+      <div className="flex items-center justify-center h-screen min-h-screen max-h-screen">
+        <Watch
           visible={true}
           width="200"
           color="#4fa94d"
@@ -56,7 +56,7 @@ function MainApp() {
 
     <Router >
       <Header />
-      <div className="App  min-h-screen  ">
+      <div className="App  min-h-screen   ">
         <Routes>
           {user ? (
             <>
@@ -77,10 +77,14 @@ function MainApp() {
               {/* Unauthenticated Routes */}
               <Route path="/signup" element={<SignupForm />} />
               <Route path="/signin" element={<SigninForm />} />
-              <Route path="/" element={<Navigate to="/signin" />} />
               <Route path="/error" element={<ErorPage />} />
-              <Route path="/home" element={<Navigate to="/signin" />} />
               <Route path="*" element={<Navigate to="/error" />} />
+              <Route path="/" element={<Navigate to="/signin" />} />
+              <Route path="/home" element={<Navigate to="/signin" />} />
+              <Route path="/profile" element={<Navigate to="/signin" />} />
+              <Route path="/jobs" element={<Navigate to="/signin" />} />
+              <Route path="/postJob" element={<Navigate to="/signin" />} />
+              <Route path="/connect" element={<Navigate to="/signin" />} />
             </>
           )}
         </Routes>
