@@ -3,6 +3,8 @@ import ConnectModel from "../Components/ConnectModel";
 import { collection, onSnapshot } from "firebase/firestore";
 import { firestore } from "../Firebase";
 
+
+
 export const NetworkPage = () => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);

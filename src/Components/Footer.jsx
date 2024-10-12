@@ -1,6 +1,8 @@
 import React from "react";
 import { linkedinBigLogo } from "../assets/assets.js";
 
+
+
 function Footer() {
   return (
     <footer className=" relative w-full bottom-0 left-0 bg-gray-100 text-gray-600 py-10 ">
