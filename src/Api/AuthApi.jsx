@@ -13,6 +13,7 @@ import {
 import { app, firestore } from "../Firebase"; // Ensure Firebase is initialized here.
 import { setDoc, doc } from "firebase/firestore";
 
+
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
@@ -50,6 +51,7 @@ export const AuthProvider = ({ children }) => {
       await signInWithEmailAndPassword(auth, email, password);
       setSuccessMessage("Logged in successfully!");
       setError("");
+      
     } catch (err) {
       setError(err.message);
     }

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGoogle } from "@fortawesome/free-brands-svg-icons";
 import { useAuth } from "../Api/AuthApi";
-
+import { Link } from "react-router-dom";
 const SigninForm = () => {
   const {
     login,
@@ -152,14 +152,15 @@ const SigninForm = () => {
               )}
             </p>
             {!showResetForm && (
+              
+              
               <p className="text-sm font-light text-gray-500 dark:text-gray-400 text-center">
                 Don't have an account?
-                <a
-                  href="/signup"
-                  className="font-medium text-primary-600 mx-1 hover:underline dark:text-primary-500"
-                >
+                <Link to='/signup'>
+                <p className="font-medium text-primary-600 mx-1 hover:underline dark:text-primary-500"  >
                   Sign up
-                </a>
+                </p>
+              </Link>
               </p>
             )}
           </div>

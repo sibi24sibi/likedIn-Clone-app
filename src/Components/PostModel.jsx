@@ -1,6 +1,9 @@
+import { SlLike } from "react-icons/sl"; 
+import { BiLike } from "react-icons/bi"; 
+import { AiOutlineLike } from "react-icons/ai"; 
+import { FaRegComment } from "react-icons/fa"; 
 import React, { useEffect, useState } from "react";
-import { firestore } from "../Firebase";
-import { collection, onSnapshot, orderBy, query } from "firebase/firestore";
+
 import { defaultProfile } from "../assets/assets";
 import { useAuth } from "../Api/AuthApi";
 import { Button, Modal } from "flowbite-react";
@@ -8,30 +11,14 @@ import { formatTimestamp } from "../assets/assets";
 import { handleDeletePost } from "../Api/UploadApi";
 import "./Skeleton.css";
 
-function PostModel() {
+function PostModel({loadings,postData = []}) {
+
+  
   const { userData } = useAuth();
-  const [posts, setPosts] = useState([]);
-  const [loading, setLoading] = useState(true);
+
   const [openModal, setOpenModal] = useState(false);
   const [selectedPostId, setSelectedPostId] = useState(null);
 
-  useEffect(() => {
-    const postsQuery = query(
-      collection(firestore, "posts"),
-      orderBy("createdAt", "desc")
-    );
-
-    const unsubscribe = onSnapshot(postsQuery, (snapshot) => {
-      const postsData = snapshot.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-      }));
-      setPosts(postsData);
-      setLoading(false);
-    });
-
-    return () => unsubscribe();
-  }, []);
 
   const openDeleteModal = (postId) => {
     setSelectedPostId(postId);
@@ -74,14 +61,14 @@ function PostModel() {
 
   return (
     <>
-      {loading ? (
+      {loadings ? (
         <div className="my-8">
           <LoadingComponent />
           <LoadingComponent />
           <LoadingComponent />
         </div>
       ) : (
-        posts.map((post) => (
+        postData.map((post) => (
           <div
             key={post.id}
             className="bg-white rounded-lg shadow-md mx-auto max-w-[540px] mt-16 mb-5  md:w-10/12"
@@ -136,12 +123,13 @@ function PostModel() {
                 <div>{post.comments || 0} Comments</div>
               </div>
               <hr className="my-2 border-gray-200" />
-              <div className="flex justify-around pt-2">
-                <button className="flex items-center text-gray-600 hover:bg-gray-100 px-3 py-2 rounded transition duration-300">
-                  Like
+              <div className="flex justify-around pt-2  ">
+                <button className="flex items-center text-gray-600 hover:bg-gray-100 px-3 justify-center w-full py-2 rounded transition duration-300">
+                <SlLike /><span  className="mx-3 ">  Like </span>
                 </button>
-                <button className="flex items-center text-gray-600 hover:bg-gray-100 px-3 py-2 rounded transition duration-300">
-                  Comment
+                <button className="flex items-center text-gray-600 hover:bg-gray-100 px-3 justify-center w-full py-2 rounded transition duration-300">
+                  <FaRegComment /><span className="mx-3"> Comment </span>
+       
                 </button>
               </div>
             </div>
