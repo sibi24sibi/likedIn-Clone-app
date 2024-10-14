@@ -55,6 +55,7 @@ export const handlePostSubmit = async  (postContent,selectedFile,user,closeModal
     content: postContent,
     createdAt: new Date(),
     userID: user.uid,
+    username:user.displayName,
     postID: uuid()
   };
 

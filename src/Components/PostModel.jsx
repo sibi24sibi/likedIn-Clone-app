@@ -89,8 +89,8 @@ function PostModel({ loadings, postData = [], postMode, onDelete }) {
                     />
                   </div>
                   <div>
-                    <h3 className="font-semibold text-gray-900">{userData.name}</h3>
-                    <p className="text-sm text-gray-600">{userData.role}</p>
+                    <h3 className="font-semibold text-gray-900">{post.username}</h3>
+           
                     <p className="text-xs text-gray-500">
                       Posted {formatTimestamp(post.createdAt)}
                     </p>
