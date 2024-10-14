@@ -134,19 +134,16 @@ function PostModel({ loadings, postData = [], postMode, onDelete }) {
                   <SlLike />
                   <span className="mx-3"> Like </span>
                 </button>
-                <button className="flex items-center text-gray-600 hover:bg-gray-100 px-3 justify-center w-full py-2 rounded transition duration-300">
-                  <FaRegComment />
-                  <span className="mx-3"> Comment </span>
-                </button>
-              </div>
+               
 
               <button
                   onClick={() => toggleCommentsVisibility(post.id)}
                   className="flex items-center text-gray-600 hover:bg-gray-100 px-3 justify-center w-full py-2 rounded transition duration-300"
-                >
+                  >
                   <FaRegComment />
-                  <span className="mx-3"> show Comments </span>
+                  <span className="mx-3"> Comment </span>
                 </button>
+                  </div>
               </div>
 
               {/* Comment Section */}
