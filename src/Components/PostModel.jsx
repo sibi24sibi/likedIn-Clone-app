@@ -5,13 +5,15 @@ import { defaultProfile } from "../assets/assets";
 import { useAuth } from "../Api/AuthApi";
 import { Button, Modal } from "flowbite-react";
 import { formatTimestamp } from "../assets/assets";
-import { handleLikePost } from "../Api/UploadApi"; // import your new like function
+import { handleLikePost, handleCommentPost } from "../Api/UploadApi"; // import your new like and comment functions
 
 import "./Skeleton.css";
 
 function PostModel({ loadings, postData = [], postMode, onDelete }) {
   const { userData } = useAuth();
-  const [likedPosts, setLikedPosts] = useState(new Set()); // Track liked posts
+  const [likedPosts, setLikedPosts] = useState(new Set());
+  const [visibleComments, setVisibleComments] = useState({}); 
+  const [newComment, setNewComment] = useState({});
 
   const LoadingComponent = () => (
     <div className="skeleton-wrapper">
@@ -41,13 +43,25 @@ function PostModel({ loadings, postData = [], postMode, onDelete }) {
 
     if (liked) {
       newLikedPosts.delete(postId); // Unlike
-      await handleLikePost(postId, userData.userID, false); // Update Firestore to unlike
+      await handleLikePost(postId, userData.name, false); // Update Firestore to unlike
     } else {
       newLikedPosts.add(postId); // Like
-      await handleLikePost(postId, userData.userID, true); // Update Firestore to like
+      await handleLikePost(postId, userData.name, true); // Update Firestore to like
     }
     
     setLikedPosts(newLikedPosts); // Update state
+  };
+
+  const handleCommentSubmit = async (postId) => {
+    if (newComment[postId]) {
+      await handleCommentPost(postId, userData.name, newComment[postId]);
+      setNewComment({ ...newComment, [postId]: "" }); // Reset input field after submission
+      // Optionally, you can fetch updated comments here
+    }
+  };
+
+  const toggleCommentsVisibility = (postId) => {
+    setVisibleComments((prev) => ({ ...prev, [postId]: !prev[postId] }));
   };
 
   return (
@@ -109,7 +123,7 @@ function PostModel({ loadings, postData = [], postMode, onDelete }) {
               )}
               <div className="flex justify-between text-sm text-gray-500 mb-2">
                 <div>{(post.likes || []).length} likes</div>
-                <div>{post.comments || 0} Comments</div>
+                <div>{(post.comments || []).length || 0} Comments</div>
               </div>
               <hr className="my-2 border-gray-200" />
               <div className="flex justify-around pt-2">
@@ -125,7 +139,43 @@ function PostModel({ loadings, postData = [], postMode, onDelete }) {
                   <span className="mx-3"> Comment </span>
                 </button>
               </div>
-            </div>
+
+              <button
+                  onClick={() => toggleCommentsVisibility(post.id)}
+                  className="flex items-center text-gray-600 hover:bg-gray-100 px-3 justify-center w-full py-2 rounded transition duration-300"
+                >
+                  <FaRegComment />
+                  <span className="mx-3"> show Comments </span>
+                </button>
+              </div>
+
+              {/* Comment Section */}
+              {visibleComments[post.id] && ( // Render comments only if visible
+                <div className="mt-4">
+                  <div>
+                    {(post.comments || []).map((comment, index) => (
+                      <div key={index} className="text-gray-700 text-sm">
+                        <span className="font-semibold">{comment.username}</span>: {comment.text}
+                      </div>
+                    ))}
+                  </div>
+                  <div className="flex mt-2">
+                    <input
+                      type="text"
+                      placeholder="Add a comment..."
+                      value={newComment[post.id] || ""}
+                      onChange={(e) => setNewComment({ ...newComment, [post.id]: e.target.value })}
+                      className="border rounded px-3 py-1 w-full"
+                    />
+                    <button
+                      onClick={() => handleCommentSubmit(post.id)}
+                      className="ml-2 bg-blue-500 text-white rounded px-3 py-1"
+                    >
+                      Submit
+                    </button>
+                  </div>
+                </div>
+              )}
           </div>
         ))
       )}
