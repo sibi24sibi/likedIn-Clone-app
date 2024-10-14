@@ -1,21 +1,17 @@
 import { SlLike } from "react-icons/sl"; 
-import { BiLike } from "react-icons/bi"; 
-import { AiOutlineLike } from "react-icons/ai"; 
 import { FaRegComment } from "react-icons/fa"; 
 import React, { useEffect, useState } from "react";
-
 import { defaultProfile } from "../assets/assets";
 import { useAuth } from "../Api/AuthApi";
 import { Button, Modal } from "flowbite-react";
 import { formatTimestamp } from "../assets/assets";
+import { handleLikePost } from "../Api/UploadApi"; // import your new like function
 
 import "./Skeleton.css";
 
-function PostModel({loadings,postData = [],postMode ,onDelete }) {
-
-
+function PostModel({ loadings, postData = [], postMode, onDelete }) {
   const { userData } = useAuth();
-
+  const [likedPosts, setLikedPosts] = useState(new Set()); // Track liked posts
 
   const LoadingComponent = () => (
     <div className="skeleton-wrapper">
@@ -39,9 +35,23 @@ function PostModel({loadings,postData = [],postMode ,onDelete }) {
     </div>
   );
 
+  const handleLike = async (postId) => {
+    const liked = likedPosts.has(postId);
+    const newLikedPosts = new Set(likedPosts);
+
+    if (liked) {
+      newLikedPosts.delete(postId); // Unlike
+      await handleLikePost(postId, userData.userID, false); // Update Firestore to unlike
+    } else {
+      newLikedPosts.add(postId); // Like
+      await handleLikePost(postId, userData.userID, true); // Update Firestore to like
+    }
+    
+    setLikedPosts(newLikedPosts); // Update state
+  };
+
   return (
     <>
-    <div></div>
       {loadings ? (
         <div className="my-8">
           <LoadingComponent />
@@ -51,9 +61,9 @@ function PostModel({loadings,postData = [],postMode ,onDelete }) {
       ) : (
         postData.map((post) => (
           <div
-  key={post.id}
-  className={`bg-white ${postMode ? 'max-w-[740px]' : 'max-w-[540px]'} rounded-lg shadow-md mx-auto mt-16 mb-5 md:w-10/12`}
->
+            key={post.id}
+            className={`bg-white ${postMode ? 'max-w-[740px]' : 'max-w-[540px]'} rounded-lg shadow-md mx-auto mt-16 mb-5 md:w-10/12`}
+          >
             <div className="p-4">
               <div className="flex justify-between items-start mb-4">
                 <div className="flex items-start">
@@ -65,17 +75,15 @@ function PostModel({loadings,postData = [],postMode ,onDelete }) {
                     />
                   </div>
                   <div>
-                    <h3 className="font-semibold text-gray-900">
-                      {userData.name}
-                    </h3>
+                    <h3 className="font-semibold text-gray-900">{userData.name}</h3>
                     <p className="text-sm text-gray-600">{userData.role}</p>
                     <p className="text-xs text-gray-500">
                       Posted {formatTimestamp(post.createdAt)}
                     </p>
                   </div>
                 </div>
-                <div >
-                {postMode ? (
+                <div>
+                  {postMode ? (
                     <button
                       onClick={() => onDelete(post.id)}
                       className="text-red-600 font-medium hover:bg-red-100 px-3 py-1 rounded transition duration-300"
@@ -89,9 +97,7 @@ function PostModel({loadings,postData = [],postMode ,onDelete }) {
                   )}
                 </div>
               </div>
-              <p className="text-gray-700 text-base font-normal my-2">
-                {post.content}
-              </p>
+              <p className="text-gray-700 text-base font-normal my-2">{post.content}</p>
               {post.imageUrl && (
                 <div className="mb-4 flex justify-center">
                   <img
@@ -101,26 +107,28 @@ function PostModel({loadings,postData = [],postMode ,onDelete }) {
                   />
                 </div>
               )}
-
               <div className="flex justify-between text-sm text-gray-500 mb-2">
-                <div>{post.likes || 0} likes</div>
+                <div>{(post.likes || []).length} likes</div>
                 <div>{post.comments || 0} Comments</div>
               </div>
               <hr className="my-2 border-gray-200" />
-              <div className="flex justify-around pt-2  ">
-                <button className="flex items-center text-gray-600 hover:bg-gray-100 px-3 justify-center w-full py-2 rounded transition duration-300">
-                <SlLike /><span  className="mx-3 ">  Like </span>
+              <div className="flex justify-around pt-2">
+                <button
+                  onClick={() => handleLike(post.id)}
+                  className={`flex items-center ${likedPosts.has(post.id) ? 'text-blue-600' : 'text-gray-600'} hover:bg-gray-100 px-3 justify-center w-full py-2 rounded transition duration-300`}
+                >
+                  <SlLike />
+                  <span className="mx-3"> Like </span>
                 </button>
                 <button className="flex items-center text-gray-600 hover:bg-gray-100 px-3 justify-center w-full py-2 rounded transition duration-300">
-                  <FaRegComment /><span className="mx-3"> Comment </span>
-       
+                  <FaRegComment />
+                  <span className="mx-3"> Comment </span>
                 </button>
               </div>
             </div>
           </div>
         ))
       )}
-
     </>
   );
 }

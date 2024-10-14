@@ -1,6 +1,6 @@
 import { firestore } from "../Firebase";
 import { collection, addDoc  , deleteDoc,
-  doc, } from "firebase/firestore";
+  doc,   updateDoc ,arrayUnion ,arrayRemove } from "firebase/firestore";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import uuid from "react-uuid";
 
@@ -72,5 +72,20 @@ export const handlePostSubmit = async  (postContent,selectedFile,user,closeModal
     // Optionally, set an error state to show a message to the user
   } finally {
     setLoading(false); // Stop loading after the process
+  }
+};
+
+export const handleLikePost = async (postId, userId, like) => {
+  const postRef = doc(firestore, "posts", postId);
+  
+  // Update likes based on like parameter
+  try {
+    await updateDoc(postRef, {
+      likes: like
+        ? arrayUnion(userId) // Add user ID to likes array
+        : arrayRemove(userId) // Remove user ID from likes array
+    });
+  } catch (error) {
+    console.error("Error updating likes: ", error);
   }
 };
