@@ -1,3 +1,4 @@
+import { AiFillLike } from "react-icons/ai"; 
 import { SlLike } from "react-icons/sl"; 
 import { FaRegComment } from "react-icons/fa"; 
 import React, { useEffect, useState } from "react";
@@ -6,7 +7,7 @@ import { useAuth } from "../Api/AuthApi";
 import { Button, Modal } from "flowbite-react";
 import { formatTimestamp } from "../assets/assets";
 import { handleLikePost, handleCommentPost } from "../Api/UploadApi"; // import your new like and comment functions
-
+  
 import "./Skeleton.css";
 
 function PostModel({ loadings, postData = [], postMode, onDelete }) {
@@ -15,6 +16,20 @@ function PostModel({ loadings, postData = [], postMode, onDelete }) {
   const [visibleComments, setVisibleComments] = useState({}); 
   const [newComment, setNewComment] = useState({});
 
+
+  useEffect(() => {
+    // Initialize liked posts based on post data
+    const initialLikedPosts = new Set();
+    postData.forEach((post) => {
+      if (post.likes && post.likes.includes(userData.name)) {
+        initialLikedPosts.add(post.id);
+      }
+    });
+    setLikedPosts(initialLikedPosts);
+  }, [postData, userData.name]);
+
+
+  
   const LoadingComponent = () => (
     <div className="skeleton-wrapper">
       <div className="skeleton-profile">
@@ -131,7 +146,7 @@ function PostModel({ loadings, postData = [], postMode, onDelete }) {
                   onClick={() => handleLike(post.id)}
                   className={`flex items-center ${likedPosts.has(post.id) ? 'text-blue-600' : 'text-gray-600'} hover:bg-gray-100 px-3 justify-center w-full py-2 rounded transition duration-300`}
                 >
-                  <SlLike />
+                 {likedPosts.has(post.id) ? <AiFillLike /> : <SlLike /> }
                   <span className="mx-3"> Like </span>
                 </button>
                
