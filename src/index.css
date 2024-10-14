@@ -2,23 +2,3 @@
 @tailwind components;
 @tailwind utilities;
 
-.max-size-for-network-page{
-   
-        max-width: 24rem
-}
-
-@media (min-width: 768px) {
-    .max-size-for-network-page {
-        max-width: none;
-    }
-}
-
-@media (min-width: 768px) {
-    .align-for-footer {
-        grid-template-columns: repeat(5, minmax(0, 1fr));
-    }
-}
-
-.align-for-footer{
-    grid-template-columns: repeat(1, minmax(0, 1fr));
-}
