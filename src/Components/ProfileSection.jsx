@@ -58,7 +58,7 @@ function ProfileSection() {
         <div className='flex flex-col sm:flex-row justify-between p-1'>
           <div className='ml-4 sm:ml-6 mt-7 flex flex-col'>
             <div className='pt-1 flex items-center gap-2'>
-              <h1 className='text-[20px] sm:text-[26px] font-medium'>{profileData.name}</h1>
+              <h1 className='text-[20px] sm:text-[26px] font-medium'>{ userData.name ||profileData.name}</h1>
               <MdVerifiedUser />
               <p className='font-light text-sm text-gray-500'>(He/Him)</p>
             </div>
