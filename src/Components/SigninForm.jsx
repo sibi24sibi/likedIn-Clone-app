@@ -28,12 +28,12 @@ const SigninForm = () => {
   };
 
   return (
-    <section className="dark:bg-gray-900 md:min-h-screen my-32">
-      <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0 my-16">
-        <h3 className="text-3xl font-normal">
+    <section className="dark:bg-gray-900 md:min-h-screen my-2">
+      <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0 my-6">
+        <div className="w-full bg-slate-100 rounded-lg shadow dark:border md:mt-10 mb-3 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
+        <h3 className="text-3xl font-normal text-center py-6">
           {showResetForm ? "Reset Password" : "Sign In"}
         </h3>
-        <div className="w-full bg-white rounded-lg shadow dark:border md:mt-10 mb-3 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
           <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
             {error && (
               <div className="mb-4 text-red-600 bg-red-100 border border-red-400 rounded p-2">
