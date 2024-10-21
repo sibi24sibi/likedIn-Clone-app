@@ -2,7 +2,7 @@ import { AiFillLike } from "react-icons/ai";
 import { SlLike } from "react-icons/sl"; 
 import { FaRegComment } from "react-icons/fa"; 
 import React, { useEffect, useState } from "react";
-import { defaultProfile } from "../assets/assets";
+import { defaultProfile, NoPost } from "../assets/assets";
 import { useAuth } from "../Api/AuthApi";
 import { Button, Modal } from "flowbite-react";
 import { formatTimestamp } from "../assets/assets";
@@ -17,8 +17,9 @@ function PostModel({ loadings, postData = [], postMode, onDelete }) {
   const [newComment, setNewComment] = useState({});
 
 
+
+
   useEffect(() => {
-    // Initialize liked posts based on post data
     const initialLikedPosts = new Set();
     postData.forEach((post) => {
       if (post.likes && post.likes.includes(userData.name)) {
@@ -28,8 +29,6 @@ function PostModel({ loadings, postData = [], postMode, onDelete }) {
     setLikedPosts(initialLikedPosts);
   }, [postData, userData.name]);
 
-
-  
   const LoadingComponent = () => (
     <div className="skeleton-wrapper">
       <div className="skeleton-profile">
@@ -87,11 +86,23 @@ function PostModel({ loadings, postData = [], postMode, onDelete }) {
           <LoadingComponent />
           <LoadingComponent />
         </div>
+      ) : postData.length === 0 ? (
+        <div className="empty-state flex  items-center justify-center my-24">
+          <div>
+            <img src={NoPost} alt="" className=" h-44 w-auto" />
+            <p className="text-gray-600 text-center font-extrabold text-4xl my-5">
+              No posts found
+            </p>
+          </div>
+        </div>
       ) : (
         postData.map((post) => (
           <div
             key={post.id}
-            className={`bg-white ${postMode ? 'max-w-[740px]' : 'max-w-[540px]'} rounded-lg shadow-md mx-auto mt-16 mb-5 md:w-10/12`}
+            className={`bg-white ${
+              postMode ? 'max-w-[640px]' : 'max-w-[640px]'
+            } rounded-lg shadow-md mx-auto mt-16 mb-5 w-full
+             md:w-10/12`}
           >
             <div className="p-4">
               <div className="flex justify-between items-start mb-4">
@@ -104,7 +115,9 @@ function PostModel({ loadings, postData = [], postMode, onDelete }) {
                     />
                   </div>
                   <div>
-                    <h3 className="font-semibold text-gray-900">{post.username}</h3>
+                    <h3 className="font-semibold text-gray-900">
+                      {post.username}
+                    </h3>
            
                     <p className="text-xs text-gray-500">
                       Posted {formatTimestamp(post.createdAt)}
@@ -126,7 +139,11 @@ function PostModel({ loadings, postData = [], postMode, onDelete }) {
                   )}
                 </div>
               </div>
-              <p className="text-gray-700 text-base font-normal my-2">{post.content}</p>
+
+              
+              <p className="text-gray-700 text-base font-normal my-2">
+                {post.content}
+              </p>
               {post.imageUrl && (
                 <div className="mb-4 flex justify-center">
                   <img
@@ -144,50 +161,56 @@ function PostModel({ loadings, postData = [], postMode, onDelete }) {
               <div className="flex justify-around pt-2">
                 <button
                   onClick={() => handleLike(post.id)}
-                  className={`flex items-center ${likedPosts.has(post.id) ? 'text-blue-600' : 'text-gray-600'} hover:bg-gray-100 px-3 justify-center w-full py-2 rounded transition duration-300`}
+                  className={`flex items-center ${
+                    likedPosts.has(post.id)
+                      ? 'text-blue-600'
+                      : 'text-gray-600'
+                  } hover:bg-gray-100 px-3 justify-center w-full py-2 rounded transition duration-300`}
                 >
-                 {likedPosts.has(post.id) ? <AiFillLike /> : <SlLike /> }
+                  {likedPosts.has(post.id) ? <AiFillLike /> : <SlLike />}
                   <span className="mx-3"> Like </span>
                 </button>
-               
 
-              <button
+                <button
                   onClick={() => toggleCommentsVisibility(post.id)}
                   className="flex items-center text-gray-600 hover:bg-gray-100 px-3 justify-center w-full py-2 rounded transition duration-300"
-                  >
+                >
                   <FaRegComment />
                   <span className="mx-3"> Comment </span>
                 </button>
-                  </div>
               </div>
+            </div>
 
-              {/* Comment Section */}
-              {visibleComments[post.id] && ( // Render comments only if visible
-                <div className="mt-4">
-                  <div>
-                    {(post.comments || []).map((comment, index) => (
-                      <div key={index} className="text-gray-700 text-sm">
-                        <span className="font-semibold">{comment.username}</span>: {comment.text}
-                      </div>
-                    ))}
-                  </div>
-                  <div className="flex mt-2">
-                    <input
-                      type="text"
-                      placeholder="Add a comment..."
-                      value={newComment[post.id] || ""}
-                      onChange={(e) => setNewComment({ ...newComment, [post.id]: e.target.value })}
-                      className="border rounded px-3 py-1 w-full"
-                    />
-                    <button
-                      onClick={() => handleCommentSubmit(post.id)}
-                      className="ml-2 bg-blue-500 text-white rounded px-3 py-1"
-                    >
-                      Submit
-                    </button>
-                  </div>
+            {/* Comment Section */}
+            {visibleComments[post.id] && (
+              <div className="mt-4">
+                <div>
+                  {(post.comments || []).map((comment, index) => (
+                    <div key={index} className="text-gray-700 text-sm">
+                      <span className="font-semibold">{comment.username}</span>
+                      : {comment.text}
+                    </div>
+                  ))}
                 </div>
-              )}
+                <div className="flex mt-2">
+                  <input
+                    type="text"
+                    placeholder="Add a comment..."
+                    value={newComment[post.id] || ""}
+                    onChange={(e) =>
+                      setNewComment({ ...newComment, [post.id]: e.target.value })
+                    }
+                    className="border rounded px-3 py-1 w-full"
+                  />
+                  <button
+                    onClick={() => handleCommentSubmit(post.id)}
+                    className="ml-2 bg-blue-500 text-white rounded px-3 py-1"
+                  >
+                    Submit
+                  </button>
+                </div>
+              </div>
+            )}
           </div>
         ))
       )}

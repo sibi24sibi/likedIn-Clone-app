@@ -2,12 +2,17 @@ import React, { useEffect, useState } from "react";
 import ConnectModel from "../Components/ConnectModel";
 import { collection, onSnapshot } from "firebase/firestore";
 import { firestore } from "../Firebase";
+import { useAuth } from "../Api/AuthApi";
 
 
 
 export const NetworkPage = () => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
+
+  const {userData} = useAuth();
+
+
 
   useEffect(() => {
     const unsubscribe = onSnapshot(
@@ -17,16 +22,24 @@ export const NetworkPage = () => {
           id: doc.id,
           ...doc.data(),
         }));
-        setData(postData);
+
+        const filterData = postData.filter((u) => u.userID !== userData.userID)
+
+        const shuffledNetworksData = filterData.sort(() => Math.random() - 0.5)
+ 
+        setData(shuffledNetworksData);
         setLoading(false);
+
       }
     );
 
     return () => unsubscribe();
   }, []);
 
+    
+
   return (
-    <div className="md:p-10 max-size-for-network-page bg-gray-100 min-h-screen ">
+    <div className="md:p-10 max-w-sm md:max-w-none bg-gray-100 min-h-screen ">
       <div className="max-w-5xl mx-auto ">
         <h3 className="text-4xl font-semibold m-6 uppercase text-center">People You May Know</h3>
         <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-4 gap-y-4 p-4 ">
@@ -55,8 +68,10 @@ export const NetworkPage = () => {
                 </div>
               ))
             : data.length === 0
-            ? <p>No users found.</p>
-            : data.map((user) => <ConnectModel key={user.id} user={user} />)}
+            ? <div className=" flex  items-center justify-center w-[100vw] md:w-[70vw]">
+              <p className=" text-center">No users found.</p>
+              </div>
+            : data.map((user) => <ConnectModel key={user.id} user={user} userData={userData} />)}
         </div>
       </div>
     </div>

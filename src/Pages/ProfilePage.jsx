@@ -62,7 +62,7 @@ export const ProfilePage = () => {
                 <div className='flex justify-center'>
                     <ProfileSection />
                 </div>
-                <div className='flex flex-col'>
+                <div className='flex flex-col mx-4'>
                     <PostModel postData={posts} loadings={loading} postMode={postMode} onDelete={openDeleteModal} />
                     <DeleconfModal open={openModal} onClose={closeDeleteModal} onConfirm={confirmDelete} />
                     <ProfileFormModal setOpen={setOpen} open={open} />

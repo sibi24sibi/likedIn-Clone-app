@@ -58,31 +58,31 @@ function Header() {
       <Navbar.Collapse>
       {user ? (
               <ul className="flex font-medium flex-col p-4 gap-2 md:p-0 mt-4 lg:space-x-8 md:space-x-4 rtl:space-x-reverse md:flex-row md:w-auto md:mt-0 md:border-0 md:bg-white">
-              <NavLink to="/home" className={({ isActive }) => isActive ? 'border-b-2 border-b-black' : ''}>
+              <NavLink to="/home" className={({ isActive }) => isActive ? 'border-b-0  md:border-b-2 md:border-b-black' : ''}>
                 <li className="py-1 flex flex-col md:text-[#475569] md:hover:text-[black]">
                   <FontAwesomeIcon icon={faHome} className="hidden md:block" />
                   <span className="m-1">Home</span>
                 </li>
               </NavLink>
-              <NavLink to="/connect" className={({ isActive }) => isActive ? 'border-b-2 border-b-black' : ''}>
+              <NavLink to="/connect" className={({ isActive }) => isActive ? 'border-b-0  md:border-b-2 md:border-b-black' : ''}>
                 <li className="py-1 flex flex-col md:text-[#475569] md:hover:text-[black]">
                   <FontAwesomeIcon icon={faUser} className="hidden md:block" />
                   <span className="m-1">My Network</span>
                 </li>
               </NavLink>
-              <NavLink to="/jobs" className={({ isActive }) => isActive ? 'border-b-2 border-b-black' : ''}>
+              <NavLink to="/jobs" className={({ isActive }) => isActive ? 'border-b-0  md:border-b-2 md:border-b-black' : ''}>
                 <li className="py-1 flex flex-col md:text-[#475569] md:hover:text-[black]">
                   <FontAwesomeIcon icon={faBagShopping} className="hidden md:block" />
                   <span className="m-1">Jobs</span>
                 </li>
               </NavLink>
-              <NavLink to="/profile" className={({ isActive }) => isActive ? 'border-b-2 border-b-black' : ''}>
+              <NavLink to="/profile" className={({ isActive }) => isActive ? ' border-b-0  md:border-b-2 md:border-b-black' : ''}>
                 <li className="py-1 flex flex-col md:text-[#475569] md:hover:text-[black]">
                   <FontAwesomeIcon icon={faUser} className="hidden md:block" />
                   <span className="m-1">Me</span>
                 </li>
               </NavLink>
-              <NavLink to="/postJob" className={({ isActive }) => isActive ? 'border-b-2 border-b-black' : ''}>
+              <NavLink to="/postJob" className={({ isActive }) => isActive ? ' border-b-0 md:border-b-2 md:border-b-black' : ''}>
                 <li className="py-1 flex flex-col md:text-[#475569] md:hover:text-[black]">
                   <FontAwesomeIcon icon={faBagShopping} className="hidden md:block" />
                   <span className="m-1 mt-2">Post a Job</span>

@@ -1,7 +1,8 @@
 import { firestore } from "../Firebase";
 import { collection, addDoc  , deleteDoc,
-  doc, updateDoc,arrayRemove ,arrayUnion } from "firebase/firestore";
+  doc, updateDoc,arrayRemove ,arrayUnion ,setDoc} from "firebase/firestore";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { LazyLoadImage } from 'react-lazy-load-image-component';
 import uuid from "react-uuid";
 
 const postsCollection = collection(firestore, "posts");
@@ -11,6 +12,7 @@ const uploadImage = async (file) => {
   const storageRef = ref(storage, `images/${file.name}`);
   await uploadBytes(storageRef, file);
   const downloadURL = await getDownloadURL(storageRef);
+  
   return downloadURL;
 };
 
@@ -98,4 +100,18 @@ export const handleCommentPost = async (postId, username, commentText) => {
   await updateDoc(postRef, {
       comments: arrayUnion({ username, text: commentText, createdAt: new Date() }) // Add comment object to the comments array
   });
+};
+
+
+export const addConnection = async (userId, targetId) => {
+  try {
+    const connectionToAdd = doc(collection(firestore,'connections'), `${userId}_${targetId}`);
+
+    await setDoc(connectionToAdd, { userId, targetId });
+
+
+  } catch (err) {
+    console.error("Error adding connection:", err);
+  
+  }
 };

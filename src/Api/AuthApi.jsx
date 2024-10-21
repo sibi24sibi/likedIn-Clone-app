@@ -22,7 +22,6 @@ export const AuthProvider = ({ children }) => {
   const [error, setError] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
   const [resetMessage, setResetMessage] = useState("");
-  const [currentUserDetails, setCurrentUserDetails] = useState(null);
 
   const auth = getAuth(app);
 
@@ -35,6 +34,15 @@ export const AuthProvider = ({ children }) => {
         phone: "unknown", 
       }
     : null;
+
+    const clearMessages = () => {
+      setTimeout(() => {
+        setSuccessMessage("");
+        setResetMessage("");
+        setError("");
+      }, 3000);
+    };
+  
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
@@ -51,9 +59,11 @@ export const AuthProvider = ({ children }) => {
       await signInWithEmailAndPassword(auth, email, password);
       setSuccessMessage("Logged in successfully!");
       setError("");
+      clearMessages()
       
     } catch (err) {
       setError(err.message);
+      clearMessages()
     }
   };
 
@@ -83,8 +93,10 @@ export const AuthProvider = ({ children }) => {
 
       setSuccessMessage("Account created successfully!");
       setError("");
+      clearMessages()
     } catch (err) {
       setError(err.message);
+      clearMessages()
     }
   };
 
@@ -94,8 +106,10 @@ export const AuthProvider = ({ children }) => {
       await signInWithPopup(auth, provider);
       setSuccessMessage("Logged in with Google successfully!");
       setError("");
+      clearMessages()
     } catch (err) {
       setError(err.message);
+      clearMessages()
     }
   };
 
@@ -104,8 +118,10 @@ export const AuthProvider = ({ children }) => {
       await signOut(auth);
       setSuccessMessage("Logged out successfully!");
       setError("");
+      clearMessages()
     } catch (err) {
       setError(err.message);
+      clearMessages()
     }
   };
 
@@ -114,10 +130,13 @@ export const AuthProvider = ({ children }) => {
       await firebaseSendPasswordResetEmail(auth, email);
       setResetMessage("Password reset email sent successfully!");
       setError("");
+      clearMessages()
     } catch (err) {
       setError(err.message);
+      clearMessages()
     }
   };
+  
 
   return (
     <AuthContext.Provider

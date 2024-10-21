@@ -16,6 +16,8 @@ function Home() {
   const postMode = false;
 
 
+
+
   useEffect(() => {
     const postsQuery = query(
       collection(firestore, "posts"),
@@ -27,6 +29,9 @@ function Home() {
         id: doc.id,
         ...doc.data(),
       }));
+
+      
+
       setPosts(postsData);
       setLoading(false);
     });
@@ -42,7 +47,9 @@ function Home() {
         <div className="my-2 relative top-5">
           <UploadPost   />
         </div>
+        <div className="mx-4">
         <PostModel postData={posts} loadings={loading}  postMode={postMode}  />
+        </div>
       </div>
     </div>
   );

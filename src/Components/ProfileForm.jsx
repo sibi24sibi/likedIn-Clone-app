@@ -1,9 +1,10 @@
-import { useState } from "react";
+import React, { useState } from "react";
+import { firestore } from "../Firebase"; // Ensure Firebase is initialized and imported
+import { doc, setDoc } from "firebase/firestore";
 
-const ProfileForm = ({ onClose }) => {
+const ProfileForm = ({ onClose, userId }) => { // Add userId prop to identify the user document
   const [profileData, setProfileData] = useState({
-    firstname: "",
-    lastname: "",
+    name:"", 
     jobrole: "",
     skills: "",
     education: "",
@@ -19,54 +20,47 @@ const ProfileForm = ({ onClose }) => {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     console.log("Profile Data Submitted", profileData);
-    onClose(); // Close the modal after form submission
+
+    try {
+      // Save the profile data to Firestore
+      const userDocRef = doc(firestore, "users", userId); // Replace "users" with your collection name
+      await setDoc(userDocRef, profileData, { merge: true }); // Merge to update existing document
+      console.log("Profile data successfully saved!");
+      onClose(); // Close the modal after form submission
+    } catch (error) {
+      console.error("Error saving profile data: ", error);
+    }
   };
 
   return (
-    <div className="bg-white rounded-lg w-full max-w-lg mx-auto my-4 py-6 px-8  ">
+    <div className="bg-white rounded-lg w-full max-w-lg mx-auto my-4 py-6 px-8">
       <h1 className="font-semibold text-2xl mb-4 text-center text-gray-700">
         Edit Profile
       </h1>
       <form onSubmit={handleSubmit}>
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+  
           {/* First Name */}
           <div>
             <label
-              htmlFor="firstname"
+              htmlFor="name"
               className="block mb-1 text-sm font-medium text-gray-700"
             >
-              First name
+              Name
             </label>
             <input
               type="text"
-              name="firstname"
+              name="name"
               onChange={handleChange}
-              value={profileData.firstname}
+              value={profileData.name}
               className="w-full p-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              required
+             
             />
           </div>
-          {/* Last Name */}
-          <div>
-            <label
-              htmlFor="lastname"
-              className="block mb-1 text-sm font-medium text-gray-700"
-            >
-              Last name
-            </label>
-            <input
-              type="text"
-              name="lastname"
-              onChange={handleChange}
-              value={profileData.lastname}
-              className="w-full p-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              required
-            />
-          </div>
-        </div>
+        
+     
         {/* Job Title */}
         <div className="mt-4">
           <label
@@ -81,7 +75,7 @@ const ProfileForm = ({ onClose }) => {
             onChange={handleChange}
             value={profileData.jobrole}
             className="w-full p-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            required
+           
           />
         </div>
         {/* Skills */}
@@ -98,7 +92,7 @@ const ProfileForm = ({ onClose }) => {
             onChange={handleChange}
             value={profileData.skills}
             className="w-full p-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            required
+          
           />
         </div>
         {/* Education */}
@@ -115,7 +109,7 @@ const ProfileForm = ({ onClose }) => {
             onChange={handleChange}
             value={profileData.education}
             className="w-full p-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            required
+           
           />
         </div>
         {/* City/Country */}
@@ -132,7 +126,7 @@ const ProfileForm = ({ onClose }) => {
             onChange={handleChange}
             value={profileData.country}
             className="w-full p-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            required
+          
           />
         </div>
         {/* About */}
@@ -149,7 +143,7 @@ const ProfileForm = ({ onClose }) => {
             value={profileData.about}
             className="w-full p-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             rows="3"
-            required
+           
           />
         </div>
         {/* Submit Button */}
