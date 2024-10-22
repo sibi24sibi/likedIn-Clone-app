@@ -1,8 +1,8 @@
-import React, { useState } from "react";
+import React, { useState ,useEffect} from "react";
 import { firestore } from "../Firebase"; // Ensure Firebase is initialized and imported
 import { doc, setDoc } from "firebase/firestore";
 
-const ProfileForm = ({ onClose, userId }) => { // Add userId prop to identify the user document
+const ProfileForm = ({ onClose, userId, initialData}) => { // Add userId prop to identify the user document
   const [profileData, setProfileData] = useState({
     name:"", 
     jobrole: "",
@@ -11,6 +11,13 @@ const ProfileForm = ({ onClose, userId }) => { // Add userId prop to identify th
     country: "",
     about: "",
   });
+
+  useEffect(() => {
+    if (initialData) {
+      setProfileData(initialData);
+    }
+  }, [initialData]);
+
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -26,8 +33,8 @@ const ProfileForm = ({ onClose, userId }) => { // Add userId prop to identify th
 
     try {
       // Save the profile data to Firestore
-      const userDocRef = doc(firestore, "users", userId); // Replace "users" with your collection name
-      await setDoc(userDocRef, profileData, { merge: true }); // Merge to update existing document
+      const userDocRef = doc(firestore, "users", userId); 
+      await setDoc(userDocRef, profileData, { merge: true }); 
       console.log("Profile data successfully saved!");
       onClose(); // Close the modal after form submission
     } catch (error) {

@@ -1,8 +1,13 @@
 import React from "react";
 import {errorImg} from "../assets/assets"
 import { Link } from "react-router-dom";
+import { useAuth } from "../Api/AuthApi";
 
 export const ErorPage = () => {
+
+  const { user } = useAuth();
+  
+
   return <div className=" flex justify-center  items-center min-h-screen">
     <div>
     <img src={errorImg} alt=""  /> 
@@ -11,7 +16,7 @@ export const ErorPage = () => {
       <Link to='/'>
     <div className="  flex">
       
-    <button className=" mx-auto rounded-full border border-blue-500 p-1 px-3 text-blue-800 font-semibold my-10">Go to your feed</button>
+    <button className=" mx-auto rounded-full border border-blue-500 p-1 px-3 text-blue-800 font-semibold my-10">{user ? 'Go to feed ' : 'Reuturn to signup'}</button>
     </div>
       </Link>
     </div>

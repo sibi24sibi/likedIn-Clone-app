@@ -12,30 +12,29 @@ import { firestore } from "../Firebase"; // Ensure Firestore is imported
 import { doc, getDoc } from "firebase/firestore";
 
 function ProfileSection() {
-  const [open, setOpen] = useState(false);
 
-  const [profileData, setProfileData] = useState(false);
+
+  const [open, setOpen] = useState(false);
+  const [profileData, setProfileData] = useState(null); 
   const { userData } = useAuth();
 
-  // Fetch user document by ID if needed
   const getDocumentById = async (id) => {
-    const docRef = doc(firestore, "users", id); // Replace "users" with your collection name
+    const docRef = doc(firestore, "users", id);
     const docSnap = await getDoc(docRef);
 
     if (docSnap.exists()) {
       console.log("Document data:", docSnap.data());
-      setProfileData(docSnap.data())
+      setProfileData(docSnap.data());
     } else {
       console.log("No such document!");
     }
   };
 
-  // Optionally call getDocumentById when the component mounts or when userData changes
   useEffect(() => {
-    if (userData && profileData) {
-      getDocumentById(userData.userID); // Call this if userData is available
+    if (userData && userData.userID) {
+      getDocumentById(userData.userID);
     }
-  }, [userData,profileData]);
+  }, [userData]);
 
   return (
     <>
@@ -48,7 +47,7 @@ function ProfileSection() {
         <div className="absolute md:top-[7rem] top-[5rem] md:left-[1rem] left-[1rem]">
           <img
             className='h-[125px] sm:h-[155px] w-[125px] sm:w-[155px] rounded-full border-2 border-white object-cover'
-            src={defaultProfile}
+            src={ defaultProfile}
             alt='profile pic'
           />
         </div>
@@ -58,17 +57,17 @@ function ProfileSection() {
         <div className='flex flex-col sm:flex-row justify-between p-1'>
           <div className='ml-4 sm:ml-6 mt-7 flex flex-col'>
             <div className='pt-1 flex items-center gap-2'>
-              <h1 className='text-[20px] sm:text-[26px] font-medium'>{ profileData.name || userData.name }</h1>
+              <h1 className='text-[20px] sm:text-[26px] font-medium'>{profileData?.name || ''}</h1>
               <MdVerifiedUser />
               <p className='font-light text-sm text-gray-500'>(He/Him)</p>
             </div>
             <div className='flex gap-2'>
-              <h1 className='text-[14px] sm:text-[16px] font-medium'>{userData.role}</h1>
+              <h1 className='text-[14px] sm:text-[16px] font-medium'>{profileData?.jobrole || ''}</h1>
             </div>
             <div className='flex items-center gap-1'>
-              <p className='text-[12px] sm:text-[14px] text-gray-400'>{'Mumbai, India'}</p>
+              <p className='text-[12px] sm:text-[14px] text-gray-400'>{profileData?.country || ''}</p>
               <GoDotFill className='text-[12px] sm:text-[14px] text-gray-400' />
-              <a href='/' className='text-[12px] sm:text-[14px] text-sky-600'>{'+91 2379387342'}</a>
+              <a href='tel:+912379387342' className='text-[12px] sm:text-[14px] text-sky-600'>{'+91 2379387342'}</a>
             </div>
             <a href='/' className='text-[12px] sm:text-[14px] text-sky-600'>{'176 followers'}</a>
           </div>
@@ -99,7 +98,7 @@ function ProfileSection() {
         </div>
       </div>
 
-      <ProfileFormModal setOpen={setOpen} open={open} />
+      <ProfileFormModal setOpen={setOpen} open={open} initialData={profileData} userId={userData?.userID}  />
     </>
   );
 }
