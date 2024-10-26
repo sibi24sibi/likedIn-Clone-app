@@ -17,7 +17,7 @@ function Footer() {
       {!user && 
        <div className="grid sm:grid-cols-2 lg:grid-cols-5 gap-8 mb-8 ">
        
-        <div className="flex flex-col items-start space-y-3  lg:col-span-1 sm:col-span-2">
+        <div className="flex flex-col items-start space-y-3  md:col-span-1 sm:col-span-2">
           <img
             src={linkedinBigLogo}
             alt="LinkedIn Logo"
