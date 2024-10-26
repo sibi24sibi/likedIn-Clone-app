@@ -15,7 +15,7 @@ function Footer() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 ">
         {/* Top Section */}
       {!user && 
-       <div className="grid grid-cols-2 lg:grid-cols-5  gap-8 mb-8 ">
+       <div className="lg:grid lg:grid-cols-5  gap-8 mb-8 space-y-5 ">
        
         <div className="flex flex-col items-start space-y-3  ">
           <img
