@@ -64,6 +64,7 @@ function MainApp() {
               <Route path="/" element={<HomePage />} />
               <Route path="/home" element={<HomePage />} />
               <Route path="/profile" element={<ProfilePage />} />
+              <Route path="/profile/:id" element={<ProfilePage />} />
               <Route path="/jobs" element={<JobPage />} />
               <Route path="/postJob" element={<JobForm />} />
               <Route path="/connect" element={<NetworkPage />} />

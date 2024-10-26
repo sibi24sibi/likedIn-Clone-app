@@ -11,8 +11,7 @@ import {
   sendPasswordResetEmail as firebaseSendPasswordResetEmail,
 } from "firebase/auth";
 import { app, firestore } from "../Firebase"; // Ensure Firebase is initialized here.
-import { setDoc, doc } from "firebase/firestore";
-
+import { setDoc, doc, getDoc } from "firebase/firestore";
 
 const AuthContext = createContext();
 
@@ -22,81 +21,83 @@ export const AuthProvider = ({ children }) => {
   const [error, setError] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
   const [resetMessage, setResetMessage] = useState("");
+  const [userData, setUserData] = useState(null);
 
   const auth = getAuth(app);
 
-  const userData = user
-    ? {
-        userID: user.uid,
-        name: user.displayName,
-        email: user.email,
-        role: "unknown", 
-        phone: "unknown", 
-      }
-    : null;
-
-    const clearMessages = () => {
-      setTimeout(() => {
-        setSuccessMessage("");
-        setResetMessage("");
-        setError("");
-      }, 3000);
-    };
-  
+  const clearMessages = () => {
+    setTimeout(() => {
+      setSuccessMessage("");
+      setResetMessage("");
+      setError("");
+    }, 3000);
+  };
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-      setUser(currentUser); // Set the current user
-      setLoading(false); // Once auth state is known, set loading to false
+    const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
+      setLoading(true);
+      setUser(currentUser);
+
+      if (currentUser) {
+        try {
+          const userDoc = await getDoc(doc(firestore, "users", currentUser.uid));
+          if (userDoc.exists()) {
+            setUserData(userDoc.data());
+          } else {
+            setUserData({
+              userID: currentUser.uid,
+              name: currentUser.displayName || "unknown",
+              email: currentUser.email,
+              role: "unknown",
+              phone: "unknown",
+            });
+          }
+        } catch (err) {
+          console.error("Error fetching user data:", err);
+          setError("Failed to load user data.");
+        }
+      } else {
+        setUserData(null);
+      }
+      setLoading(false);
     });
 
-    // Cleanup subscription on unmount
     return () => unsubscribe();
-  }, []);
+  }, [auth]);
 
   const login = async (email, password) => {
     try {
       await signInWithEmailAndPassword(auth, email, password);
       setSuccessMessage("Logged in successfully!");
-      setError("");
-      clearMessages()
-      
+      clearMessages();
     } catch (err) {
-      setError(err.message);
-      clearMessages()
+      setError(err.message || "Login failed.");
+      clearMessages();
     }
   };
 
   const signup = async (email, password, displayName) => {
     try {
-      // Create the user
-      const userCredential = await createUserWithEmailAndPassword(
-        auth,
-        email,
-        password
-      );
-
-      // Get the user object
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
 
-      // Update the user's profile with displayName
       await updateProfile(user, { displayName });
 
       const userData = {
         userID: user.uid,
         name: displayName,
         email: email,
+        role: "unknown",
+        phone: "unknown",
       };
 
-      // Save the user data to Firestore
-      await setDoc(doc(firestore, "users", user.uid), userData); // 'users' is the collection name
+      await setDoc(doc(firestore, "users", user.uid), userData);
 
       setSuccessMessage("Account created successfully!");
-      setError("");
-      clearMessages()
+      clearMessages();
     } catch (err) {
-      setError(err.message);
-      clearMessages()
+      setError(err.message || "Signup failed.");
+      clearMessages();
     }
   };
 
@@ -105,11 +106,10 @@ export const AuthProvider = ({ children }) => {
     try {
       await signInWithPopup(auth, provider);
       setSuccessMessage("Logged in with Google successfully!");
-      setError("");
-      clearMessages()
+      clearMessages();
     } catch (err) {
-      setError(err.message);
-      clearMessages()
+      setError(err.message || "Google login failed.");
+      clearMessages();
     }
   };
 
@@ -117,11 +117,10 @@ export const AuthProvider = ({ children }) => {
     try {
       await signOut(auth);
       setSuccessMessage("Logged out successfully!");
-      setError("");
-      clearMessages()
+      clearMessages();
     } catch (err) {
-      setError(err.message);
-      clearMessages()
+      setError(err.message || "Logout failed.");
+      clearMessages();
     }
   };
 
@@ -129,14 +128,12 @@ export const AuthProvider = ({ children }) => {
     try {
       await firebaseSendPasswordResetEmail(auth, email);
       setResetMessage("Password reset email sent successfully!");
-      setError("");
-      clearMessages()
+      clearMessages();
     } catch (err) {
-      setError(err.message);
-      clearMessages()
+      setError(err.message || "Failed to send password reset email.");
+      clearMessages();
     }
   };
-  
 
   return (
     <AuthContext.Provider

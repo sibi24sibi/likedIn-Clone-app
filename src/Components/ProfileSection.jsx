@@ -67,18 +67,18 @@ function ProfileSection() {
             <div className='flex items-center gap-1'>
               <p className='text-[12px] sm:text-[14px] text-gray-400'>{profileData?.country || ''}</p>
               <GoDotFill className='text-[12px] sm:text-[14px] text-gray-400' />
-              <a href='tel:+912379387342' className='text-[12px] sm:text-[14px] text-sky-600'>{'+91 2379387342'}</a>
+              <a href='tel:+912379387342' className='text-[12px] sm:text-[14px] text-sky-600'>{profileData?.phone || 'unknown'}</a>
             </div>
             <a href='/' className='text-[12px] sm:text-[14px] text-sky-600'>{'176 followers'}</a>
           </div>
           <div className='mr-4 sm:mr-10 mt-4 sm:mt-12 ml-4'>
             <div className='flex items-center gap-2.5'>
               <HiOutlineOfficeBuilding />
-              <p className='text-[12px] sm:text-[14px]'>{'National Pvt. Ltd.'}</p>
+              <p className='text-[12px] sm:text-[14px]'> {profileData?.company || 'unknown'}</p>
             </div>
             <div className='flex items-center gap-2.5'>
               <IoSchoolOutline />
-              <p className='text-[12px] sm:text-[14px]'>{'Government School, Mumbai'}</p>
+              <p className='text-[12px] sm:text-[14px]'>{profileData?.education || 'unknown'}</p>
             </div>
           </div>
         </div>

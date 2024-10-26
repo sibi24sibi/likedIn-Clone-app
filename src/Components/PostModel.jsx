@@ -116,7 +116,7 @@ function PostModel({ loadings, postData = [], postMode, onDelete }) {
                   </div>
                   <div>
                     <h3 className="font-semibold text-gray-900">
-                      {post.username}
+                      {post.userName}
                     </h3>
            
                     <p className="text-xs text-gray-500">
