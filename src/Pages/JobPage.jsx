@@ -4,9 +4,11 @@ import JobDetail from "./../Components/JobDetail";
 
 function JobPage() {
   return (
-    <div className="flex py-5">
+    <div className="flex py-5 justify-center">
       <JobModel />
+      <div className="hidden md:block "> 
       <JobDetail />
+      </div>
     </div>
   );
 }

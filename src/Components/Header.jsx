@@ -8,6 +8,7 @@ import { Navbar } from "flowbite-react";
 import { useAuth } from "../Api/AuthApi.jsx";
 import { signOut } from "firebase/auth";
 import uuid from "react-uuid";
+import SearchComponent from "./SearchComponent.jsx";
 
 function Header() {
 
@@ -22,7 +23,7 @@ function Header() {
     <Navbar
       fluid={true}
       rounded={true}
-      className="bg-white border-gray-200 dark:bg-gray-900 justify-between shadow-lg md:px-10    ">
+      className="bg-white border-gray-200 dark:bg-gray-900 justify-between shadow-lg md:px-10 py-3    ">
 <div className=" flex  ">
   
 
@@ -37,17 +38,7 @@ function Header() {
   >
     Search
   </label>
-  <div className="relative">
-    <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
-    <FontAwesomeIcon icon={faMagnifyingGlass} />
-    </div>
-    <input
-      type="search"
-      className="block md:w-10/12 w-9/12  h-10 p-4 ps-10 rounded-lg focus:border-[black]"
-      placeholder="Search"
-      required
-    />
-  </div>
+ <SearchComponent/>
 </form>
 
 </div>
@@ -98,22 +89,34 @@ function Header() {
               </li>
             </ul>
             ) : (
-              <ul className="md:flex  rtl:space-x-reverse md:flex-row md:w-auto md:mt-0 md:border-0 md:bg-white">
-                <NavLink to="/signin">
-                  <li className=" flex flex-col-reverse ">
-                    <button className="text-[blue] hover:bg-[#f1f5f9] font-medium bg-[white] border-blue-600 py-2 px-5  rounded-[90px]">
-                      Login
-                    </button>
-                  </li>
-                </NavLink>
-                <NavLink to="/signup">
-                  <li className=" flex flex-col  ">
-                    <button className="text-[blue] hover:bg-[#e2e8f0]  border-[1px] border-blue-600 font-medium bg-[white] py-2 px-4  rounded-[90px]">
-                      Sign up
-                    </button>
-                  </li>
-                </NavLink>
-              </ul>
+             <ul className="md:flex rtl:space-x-reverse md:flex-row md:w-auto gap-4 ">
+  <NavLink 
+    to="/signin" 
+    className={({ isActive }) => 
+      `flex flex-col md:flex-row text-center ${isActive ? 'border-[1px] border-blue-600 text-blue-950 rounded-full' : ''}`
+    }
+  >
+    <li>
+      <button className="text-black hover:bg-[#e2e8f0] font-medium bg-white py-2 px-4 rounded-full ">
+        Login
+      </button>
+    </li>
+  </NavLink>
+  
+  <NavLink 
+    to="/signup" 
+    className={({ isActive }) => 
+      `flex flex-col md:flex-row text-center ${isActive ? 'border-[1px] border-blue-600 text-blue-950 rounded-full' : ''}`
+    }
+  >
+    <li>
+      <button className="text-black hover:bg-[#e2e8f0] font-medium bg-white py-2 px-4 rounded-full">
+        Sign up
+      </button>
+    </li>
+  </NavLink>
+</ul>
+
             )}
       </Navbar.Collapse>
     </Navbar>
