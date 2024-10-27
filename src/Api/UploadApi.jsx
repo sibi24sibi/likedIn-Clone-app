@@ -1,6 +1,6 @@
 import { firestore } from "../Firebase";
 import { collection, addDoc  , deleteDoc,
-  doc, updateDoc,arrayRemove ,arrayUnion ,setDoc} from "firebase/firestore";
+  doc, updateDoc,arrayRemove ,arrayUnion ,setDoc ,onSnapshot} from "firebase/firestore";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 import uuid from "react-uuid";
@@ -15,6 +15,23 @@ const uploadImage = async (file) => {
   
   return downloadURL;
 };
+
+
+
+export const listenToUsers = (setUsers) => {
+  // Listen for real-time updates
+  const unsubscribe = onSnapshot(collection(firestore, "users"), (snapshot) => {
+    const usersList = snapshot.docs.map((doc) => ({
+      id: doc.id,
+      ...doc.data(),
+    }));
+    setUsers(usersList); // Update the state with the latest users
+  });
+
+  return unsubscribe; // Return the unsubscribe function to stop listening when needed
+};
+
+
 
 export const addPost = async (postData, imageFile) => {
   try {

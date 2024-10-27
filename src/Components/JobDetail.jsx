@@ -74,7 +74,7 @@ function JobDetail() {
           </>
         ) : (
           <div className="flex items-center justify-center ">
-            <div className="bg-slate-100 p-6 py-20 rounded-lg shadow-md text-center px-32 ">
+            <div className="bg-slate-100 p-6 py-20 rounded-lg shadow-md text-center px-32  ">
               <p className="text-lg font-semibold">Select any job to apply</p>
               </div>
           </div>

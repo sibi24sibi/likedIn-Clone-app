@@ -73,12 +73,16 @@ function Header() {
                   <span className="m-1">Me</span>
                 </li>
               </NavLink>
+              {/* 
+              
               <NavLink to="/postJob" className={({ isActive }) => isActive ? ' border-b-0 md:border-b-2 md:border-b-black' : ''}>
                 <li className="py-1 flex flex-col md:text-[#475569] md:hover:text-[black]">
                   <FontAwesomeIcon icon={faBagShopping} className="hidden md:block" />
                   <span className="m-1 mt-2">Post a Job</span>
                 </li>
               </NavLink>
+              
+              */}
               <li className="my-2 md:my-0">
                 <button
                   className="text-slate-950 border-2 rounded-lg text-base font-normal uppercase py-2 px-4"

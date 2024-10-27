@@ -43,7 +43,7 @@ const handlePosthandle = (e) => {
           <img
             alt="User avatar"
             className="w-12 h-12 rounded-full hover:bg-gray-100 cursor-pointer transition duration-200"
-            src={defaultProfile}
+            src={userData.profilePic || defaultProfile}
           />
           <input
             className="flex-grow p-2 border md:w-[550px] rounded-full focus:outline-none hover:bg-gray-100 cursor-pointer transition duration-200"
@@ -76,7 +76,7 @@ const handlePosthandle = (e) => {
             <img
               alt="Profile picture of a person"
               className="w-12 h-12 rounded-full"
-              src={defaultProfile}
+              src={userData.profilePic || defaultProfile}
             />
             <div className="flex flex-col items-start">
               <h2 className="text-xl font-bold mb-1">{userData.name}</h2>

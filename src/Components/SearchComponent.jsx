@@ -30,6 +30,8 @@ function SearchComponent() {
     fetchUsers();
   }, []);
 
+
+
   // Filter users based on the search term
   useEffect(() => {
     const filtered = users.filter((user) =>
@@ -39,15 +41,31 @@ function SearchComponent() {
     setDropdownVisible(filtered.length > 0 && searchTerm !== "");
   }, [searchTerm, users]);
 
+
+  useEffect(() => {
+    if (searchTerm) {
+      const filtered = users.filter((user) =>
+        user.name.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+      setFilteredUsers(filtered);
+      setDropdownVisible(filtered.length > 0);
+    } else {
+      setFilteredUsers([]);
+      
+      setDropdownVisible(false);
+    }
+  }, [searchTerm, users]);
+
   const handleDropdownItemClick = (userName) => {
     setSearchTerm(userName);
     setDropdownVisible(false);
   };
 
   const handleInputBlur = () => {
-    setTimeout(() => setDropdownVisible(false), 100); // Delay to allow item click
+    setTimeout(() => setDropdownVisible(false), 100); 
     setSearchTerm('')
   };
+
 
   return (
     <div className="relative">
@@ -84,7 +102,7 @@ function SearchComponent() {
                 role="option"
                 aria-selected="false"
               >
-                <img src={defaultProfile} className="w-7 h-7 rounded-full" alt={`${user.name}'s profile`} />
+                <img src={ user.profilePic || defaultProfile} className="w-7 h-7 rounded-full" alt={`${user.name}'s profile`} />
                 <span>{user.name}</span>
               </li>
             ))}

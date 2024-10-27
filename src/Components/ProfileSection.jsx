@@ -47,7 +47,7 @@ function ProfileSection() {
         <div className="absolute md:top-[7rem] top-[5rem] md:left-[1rem] left-[1rem]">
           <img
             className='h-[125px] sm:h-[155px] w-[125px] sm:w-[155px] rounded-full border-2 border-white object-cover'
-            src={ defaultProfile}
+            src={ profileData?.profilePic || defaultProfile}
             alt='profile pic'
           />
         </div>

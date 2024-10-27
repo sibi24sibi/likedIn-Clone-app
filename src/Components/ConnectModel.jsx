@@ -90,7 +90,7 @@ function ConnectModel({ user }) {
 
       <div className="avatar flex justify-center items-center">
         <img
-          src={user.profileImage || defaultProfile}
+          src={user.profilePic || defaultProfile}
           alt={user.name || "User"}
           className="rounded-full w-24 absolute"
         />

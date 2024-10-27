@@ -12,6 +12,7 @@ import {
 } from "firebase/auth";
 import { app, firestore } from "../Firebase"; // Ensure Firebase is initialized here.
 import { setDoc, doc, getDoc } from "firebase/firestore";
+import { allDefaultProfilePics } from "../assets/assets"; // Import correctly
 
 const AuthContext = createContext();
 
@@ -83,12 +84,16 @@ export const AuthProvider = ({ children }) => {
 
       await updateProfile(user, { displayName });
 
+      // Assign a random profile picture at the time of signup
+      const randomProfilePic = allDefaultProfilePics[Math.floor(Math.random() * allDefaultProfilePics.length)];
+
       const userData = {
         userID: user.uid,
         name: displayName,
         email: email,
         role: "unknown",
         phone: "unknown",
+        profilePic: randomProfilePic,
       };
 
       await setDoc(doc(firestore, "users", user.uid), userData);

@@ -110,7 +110,7 @@ function PostModel({ loadings, postData = [], postMode, onDelete }) {
                   <div className="w-12 h-12 mr-3">
                     <img
                       className="w-full h-full rounded-full object-cover"
-                      src={defaultProfile}
+                      src={ post.userProfileImage }
                       alt="Profile"
                     />
                   </div>
