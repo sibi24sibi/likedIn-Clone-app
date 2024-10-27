@@ -1,10 +1,10 @@
 
-import {jobLogoPic} from '/src/assets/images/logo.avif'
+import {jobLogoPic} from '../assets/assets'
 
 const jobData = [
   {
     id: 1,
-    logo: {jobLogoPic},
+    logo: jobLogoPic,
     job_role: 'Software Developer',
     company: 'XYZ Consultancy Services',
     location: 'Noida, Uttar Pradesh',
@@ -26,7 +26,7 @@ const jobData = [
   },
   {
     id: 2,
-    logo: {jobLogoPic},
+    logo: jobLogoPic,
     job_role: 'Java Developer',
     company: 'ABC Consultancy Services',
     location: 'Delhi, India',
@@ -47,7 +47,7 @@ const jobData = [
   },
   {
     id: 3,
-    logo: {jobLogoPic},
+    logo: jobLogoPic,
     job_role: 'Data Scientist',
     company: 'Data Solutions Inc.',
     location: 'Bangalore, Karnataka',
@@ -68,7 +68,7 @@ const jobData = [
   },
   {
     id: 4,
-    logo: {jobLogoPic},
+    logo: jobLogoPic,
     job_role: 'Product Manager',
     company: 'Innovative Tech',
     location: 'Hyderabad, Telangana',
@@ -89,7 +89,7 @@ const jobData = [
   },
   {
     id: 5,
-    logo: {jobLogoPic},
+    logo: jobLogoPic,
     job_role: 'UX/UI Designer',
     company: 'Creative Studio',
     location: 'Mumbai, Maharashtra',
@@ -110,7 +110,7 @@ const jobData = [
   },
   {
     id: 6,
-    logo: {jobLogoPic},
+    logo: jobLogoPic,
     job_role: 'Network Engineer',
     company: 'Tech Networks',
     location: 'Chennai, Tamil Nadu',

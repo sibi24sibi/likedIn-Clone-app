@@ -37,6 +37,7 @@ function Home() {
             ...post,
             userName: user?.name || "Unknown User",
             userProfileImage: user?.profilePic || defaultProfile,
+            userRole : user?.role || 'Unknown',
           };
         });
         setPosts(postsData);

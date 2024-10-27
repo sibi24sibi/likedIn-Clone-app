@@ -107,7 +107,7 @@ function PostModel({ loadings, postData = [], postMode, onDelete }) {
             <div className="p-4">
               <div className="flex justify-between items-start mb-4">
                 <div className="flex items-start">
-                  <div className="w-12 h-12 mr-3">
+                  <div className="w-12 h-12  m-2">
                     <img
                       className="w-full h-full rounded-full object-cover"
                       src={ post.userProfileImage }
@@ -118,7 +118,9 @@ function PostModel({ loadings, postData = [], postMode, onDelete }) {
                     <h3 className="font-semibold text-gray-900">
                       {post.userName}
                     </h3>
-           
+                    <p className="text-xs text-gray-600">
+                      {post.userRole || 'unknown'}
+                    </p>
                     <p className="text-xs text-gray-500">
                       Posted {formatTimestamp(post.createdAt)}
                     </p>

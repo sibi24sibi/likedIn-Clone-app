@@ -4,6 +4,7 @@ import defaultProfile from "./images/image.jpg";
 import defaultCoverImage from "./images/cover2.webp";
 import errorImg from '../assets/images/Likedin-error-image.png'
 import NoPost from '../assets/images/Screenshot 2024-10-14 221043.png'
+import jobLogoPic from '../../src/assets/images/logo.avif'
 
 import profilePic_King from "../assets/images/profilePic/Monkey_Profile (1).jpg";
 import profilePic_BlueFunky from "../assets/images/profilePic/Monkey_Profile (2).jpg";
@@ -67,5 +68,6 @@ export {
   defaultProfile,
   defaultCoverImage,
   errorImg,
-  NoPost
+  NoPost,
+  jobLogoPic
 };
