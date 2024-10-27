@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom"; // Import useNavigate
 import {
   getAuth,
   onAuthStateChanged,
@@ -7,12 +8,11 @@ import {
   signOut,
   GoogleAuthProvider,
   signInWithPopup,
-  updateProfile,
   sendPasswordResetEmail as firebaseSendPasswordResetEmail,
 } from "firebase/auth";
-import { app, firestore } from "../Firebase"; // Ensure Firebase is initialized here.
+import { app, firestore } from "../Firebase";
 import { setDoc, doc, getDoc } from "firebase/firestore";
-import { allDefaultProfilePics } from "../assets/assets"; // Import correctly
+import { allDefaultProfilePics, defaultProfile } from "../assets/assets";
 
 const AuthContext = createContext();
 
@@ -25,6 +25,7 @@ export const AuthProvider = ({ children }) => {
   const [userData, setUserData] = useState(null);
 
   const auth = getAuth(app);
+  const navigate = useNavigate(); // Initialize useNavigate
 
   const clearMessages = () => {
     setTimeout(() => {
@@ -34,31 +35,32 @@ export const AuthProvider = ({ children }) => {
     }, 3000);
   };
 
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
-      setLoading(true);
-      setUser(currentUser);
-
-      if (currentUser) {
-        try {
-          const userDoc = await getDoc(doc(firestore, "users", currentUser.uid));
-          if (userDoc.exists()) {
-            setUserData(userDoc.data());
-          } else {
-            setUserData({
-              userID: currentUser.uid,
-              name: currentUser.displayName || "unknown",
-              email: currentUser.email,
-              role: "unknown",
-              phone: "unknown",
-            });
-          }
-        } catch (err) {
-          console.error("Error fetching user data:", err);
-          setError("Failed to load user data.");
-        }
+  // Function to fetch user data from Firestore
+  const fetchUserData = async (uid) => {
+    try {
+      const userDoc = await getDoc(doc(firestore, "users", uid));
+      if (userDoc.exists()) {
+        setUserData(userDoc.data());
       } else {
+        setError("User data not found.");
+      }
+    } catch (err) {
+      console.error("Error fetching user data:", err);
+      setError("Failed to load user data.");
+    }
+  };
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
+      setLoading(true);
+      if (user) {
+        setUser(user);
+        await fetchUserData(user.uid); // Fetch user data after authentication
+        console.log("User signed in:", user);
+      } else {
+        setUser(null);
         setUserData(null);
+        console.log("User signed out");
       }
       setLoading(false);
     });
@@ -70,6 +72,7 @@ export const AuthProvider = ({ children }) => {
     try {
       await signInWithEmailAndPassword(auth, email, password);
       setSuccessMessage("Logged in successfully!");
+      navigate("/home"); // Navigate to home page after login
       clearMessages();
     } catch (err) {
       setError(err.message || "Login failed.");
@@ -82,23 +85,19 @@ export const AuthProvider = ({ children }) => {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
 
-      await updateProfile(user, { displayName });
-
-      // Assign a random profile picture at the time of signup
+      // Assign a random profile picture
       const randomProfilePic = allDefaultProfilePics[Math.floor(Math.random() * allDefaultProfilePics.length)];
 
-      const userData = {
-        userID: user.uid,
+      // Add user data to Firestore
+      await setDoc(doc(firestore, "users", user.uid), {
         name: displayName,
         email: email,
-        role: "unknown",
-        phone: "unknown",
-        profilePic: randomProfilePic,
-      };
-
-      await setDoc(doc(firestore, "users", user.uid), userData);
+        userID: user.uid, // Use Firebase-generated uid
+        profilePic: randomProfilePic || defaultProfile,
+      });
 
       setSuccessMessage("Account created successfully!");
+      navigate("/home"); // Navigate to welcome page after signup
       clearMessages();
     } catch (err) {
       setError(err.message || "Signup failed.");
@@ -109,8 +108,24 @@ export const AuthProvider = ({ children }) => {
   const signInWithGoogle = async () => {
     const provider = new GoogleAuthProvider();
     try {
-      await signInWithPopup(auth, provider);
+      const result = await signInWithPopup(auth, provider);
+      const user = result.user;
+
+      // Check if user data exists, if not, create a new entry in Firestore
+      const userDoc = await getDoc(doc(firestore, "users", user.uid));
+      if (!userDoc.exists()) {
+        const randomProfilePic = allDefaultProfilePics[Math.floor(Math.random() * allDefaultProfilePics.length)];
+
+        await setDoc(doc(firestore, "users", user.uid), {
+          name: user.displayName || "Unknown User",
+          email: user.email,
+          userID: user.uid,
+          profilePic: randomProfilePic,
+        });
+      }
+
       setSuccessMessage("Logged in with Google successfully!");
+      navigate("/home"); // Navigate to dashboard after Google login
       clearMessages();
     } catch (err) {
       setError(err.message || "Google login failed.");
@@ -122,6 +137,7 @@ export const AuthProvider = ({ children }) => {
     try {
       await signOut(auth);
       setSuccessMessage("Logged out successfully!");
+      navigate("/"); 
       clearMessages();
     } catch (err) {
       setError(err.message || "Logout failed.");
@@ -139,6 +155,7 @@ export const AuthProvider = ({ children }) => {
       clearMessages();
     }
   };
+
 
   return (
     <AuthContext.Provider

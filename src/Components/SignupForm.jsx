@@ -24,7 +24,9 @@ const SignupForm = () => {
     <section className="dark:bg-gray-900 md:min-h-screen md:my-32">
       <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0 my-16">
         <div className="w-full bg-slate-100  rounded-lg shadow dark:border md:mt-10 mb-3 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
-        <h3 className="text-3xl font-normal text-center p-12">Create an Account</h3>
+          <h3 className="text-3xl font-normal text-center p-12">
+            Create an Account
+          </h3>
           <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
             {error && (
               <div className="mb-4 text-red-600 bg-red-100 border border-red-400 rounded p-2">
@@ -117,16 +119,21 @@ const SignupForm = () => {
                 Continue with Google
               </button>
             </form>
-            <p className="text-sm font-light text-gray-500 dark:text-gray-400 text-center">
-              Already have an account?
-              <Link to='/signin'>
-              
-              <p
-            
-                className="font-medium text-primary-600 mx-1 hover:underline dark:text-primary-500"
+            <p className="text-sm font-light text-gray-500 dark:text-gray-400 text-center mt-3">
+              Already have an account?{" "}
+              <Link to="/signin">
+                <span className="font-medium text-primary-600 hover:underline dark:text-primary-500">
+                  Sign in
+                </span>
+              </Link>
+            </p>
+
+            <p className="text-sm font-light text-center mt-3">
+              <Link
+                to="/forgot"
+                className="font-medium text-primary-600 hover:underline dark:text-primary-500"
               >
-                Sign in
-              </p>
+                Forgot Password?
               </Link>
             </p>
           </div>

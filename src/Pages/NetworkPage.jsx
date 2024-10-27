@@ -3,46 +3,29 @@ import ConnectModel from "../Components/ConnectModel";
 import { collection, onSnapshot } from "firebase/firestore";
 import { firestore } from "../Firebase";
 import { useAuth } from "../Api/AuthApi";
-
-
+import { listenToUsers } from "../Api/UploadApi";
 
 export const NetworkPage = () => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  const {userData} = useAuth();
-
-
+  const { userData } = useAuth();
 
   useEffect(() => {
-    const unsubscribe = onSnapshot(
-      collection(firestore, "users"),
-      (snapshot) => {
-        const postData = snapshot.docs.map((doc) => ({
-          id: doc.id,
-          ...doc.data(),
-        }));
-
-        const filterData = postData.filter((u) => u.userID !== userData.userID)
-
-        const shuffledNetworksData = filterData.sort(() => Math.random() - 0.5)
- 
-        setData(shuffledNetworksData);
-        setLoading(false);
-
-      }
-    );
-
+    const unsubscribe = listenToUsers(setData);
+    setLoading(false);
     return () => unsubscribe();
   }, []);
 
-    
+  // Filter out the current user and shuffle the remaining users
+  const filteredData = data.filter((u) => u.userID !== userData.userID);
+  const shuffledNetworksData = filteredData.sort(() => Math.random() - 0.5);
 
   return (
-    <div className="md:p-10  bg-gray-100 min-h-screen ">
-      <div className="max-w-5xl mx-auto ">
+    <div className="md:p-10 bg-gray-100 min-h-screen">
+      <div className="max-w-5xl mx-auto">
         <h3 className="text-4xl font-semibold m-6 uppercase text-center">People You May Know</h3>
-        <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-4 gap-y-4 p-4 ">
+        <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-4 gap-y-4 p-4">
           {loading
             ? Array.from({ length: 4 }).map((_, index) => (
                 <div
@@ -67,11 +50,15 @@ export const NetworkPage = () => {
                   </div>
                 </div>
               ))
-            : data.length === 0
-            ? <div className=" flex  items-center justify-center w-[100vw] md:w-[70vw]">
-              <p className=" text-center">No users found.</p>
-              </div>
-            : data.map((user) => <ConnectModel key={user.id} user={user} userData={userData} />)}
+            : shuffledNetworksData.length === 0 ? (
+                <div className="flex items-center justify-center w-[100vw] md:w-[70vw]">
+                  <p className="text-center">No users found.</p>
+                </div>
+              ) : (
+                shuffledNetworksData.map((user) => (
+                  <ConnectModel key={user.id} user={user} userData={userData} />
+                ))
+              )}
         </div>
       </div>
     </div>

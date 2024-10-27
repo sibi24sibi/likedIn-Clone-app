@@ -4,6 +4,7 @@ import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 import { firestore } from "../Firebase";
 import { collection, getDocs } from "firebase/firestore";
 import { defaultProfile } from "../assets/assets";
+import { listenToUsers } from "../Api/UploadApi";
 
 function SearchComponent() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -11,23 +12,13 @@ function SearchComponent() {
   const [filteredUsers, setFilteredUsers] = useState([]);
   const [dropdownVisible, setDropdownVisible] = useState(false);
 
-  // Fetch all users from Firestore
-  useEffect(() => {
-    const fetchUsers = async () => {
-      try {
-        const usersCollection = collection(firestore, "users");
-        const querySnapshot = await getDocs(usersCollection);
-        const usersData = querySnapshot.docs.map((doc) => ({
-          id: doc.id,
-          ...doc.data(),
-        }));
-        setUsers(usersData);
-      } catch (error) {
-        console.error("Error fetching users: ", error);
-      }
-    };
 
-    fetchUsers();
+
+  
+
+   useEffect(() => {
+    const unsubscribe = listenToUsers(setUsers);
+    return () => unsubscribe();
   }, []);
 
 
@@ -102,7 +93,7 @@ function SearchComponent() {
                 role="option"
                 aria-selected="false"
               >
-                <img src={ user.profilePic || defaultProfile} className="w-7 h-7 rounded-full" alt={`${user.name}'s profile`} />
+                <img src={user.profilePic || defaultProfile} className="w-7 h-7 rounded-full" alt={`${user.name}'s profile`} />
                 <span>{user.name}</span>
               </li>
             ))}

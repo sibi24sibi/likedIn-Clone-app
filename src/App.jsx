@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Watch } from "react-loader-spinner";
 import {
   Route,
-  BrowserRouter as Router,
+
   Routes,
   Navigate,
 } from "react-router-dom";
@@ -24,6 +24,7 @@ import { AuthProvider, useAuth } from "./Api/AuthApi";
 import { NetworkPage } from "./Pages/NetworkPage";
 import { ProfilePage } from "./Pages/ProfilePage";
 import JobDetail from "./Components/JobDetail";
+import ForgotPasswordForm from "./Components/ForgotPasswordForm";
 
 // Initialize Firebase Authentication
 function App() {
@@ -66,7 +67,6 @@ function MainApp() {
 
   return (
     <div className=" min-w-full  ">
-      <Router>
         <Header />
         <div className="App  min-h-screen   ">
           <Routes>
@@ -84,10 +84,9 @@ function MainApp() {
                 />
                 <Route path="/postJob" element={<JobForm />} />
                 <Route path="/connect" element={<NetworkPage />} />
-                <Route path="/signin" element={<Navigate to="/home" />} />
-                <Route path="/signup" element={<Navigate to="/home" />} />
                 <Route path="/error" element={<ErorPage />} />
                 <Route path="*" element={<Navigate to="/error" />} />
+
               </>
             ) : (
               <>
@@ -97,17 +96,13 @@ function MainApp() {
                 <Route path="/error" element={<ErorPage />} />
                 <Route path="*" element={<Navigate to="/error" />} />
                 <Route path="/" element={<Navigate to="/signin" />} />
-                <Route path="/home" element={<Navigate to="/signin" />} />
-                <Route path="/profile" element={<Navigate to="/signin" />} />
-                <Route path="/jobs" element={<Navigate to="/signin" />} />
-                <Route path="/postJob" element={<Navigate to="/signin" />} />
-                <Route path="/connect" element={<Navigate to="/signin" />} />
+                <Route path="/forgot" element={<ForgotPasswordForm/>} />
               </>
             )}
           </Routes>
         </div>
         <Footer />
-      </Router>
+  
     </div>
   );
 }
