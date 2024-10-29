@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { firestore } from "../Firebase"; // Ensure Firebase is initialized and imported
+import { firestore, storage } from "../Firebase"; // Ensure Firebase and Storage are initialized
 import { doc, setDoc } from "firebase/firestore";
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 
 const ProfileForm = ({ onClose, userId, initialData }) => {
   const [profileData, setProfileData] = useState({
@@ -10,9 +11,11 @@ const ProfileForm = ({ onClose, userId, initialData }) => {
     education: "",
     country: "",
     about: "",
-    phone: "",    // Added phone field
-    company: "",  // Added company field
+    phone: "",
+    company: "",
+    profilePic: "", // Added profile picture field
   });
+  const [profilePicFile, setProfilePicFile] = useState(null);
 
   useEffect(() => {
     if (initialData) {
@@ -28,14 +31,29 @@ const ProfileForm = ({ onClose, userId, initialData }) => {
     }));
   };
 
+  const handleImageChange = (e) => {
+    if (e.target.files[0]) {
+      setProfilePicFile(e.target.files[0]);
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Profile Data Submitted", profileData);
+    let profilePicUrl = profileData.profilePic;
 
     try {
-      // Save the profile data to Firestore
+      // If a new profile picture is selected, upload it to Firebase Storage
+      if (profilePicFile) {
+        const profilePicRef = ref(storage, `profilePics/${userId}`);
+        await uploadBytes(profilePicRef, profilePicFile);
+        profilePicUrl = await getDownloadURL(profilePicRef);
+      }
+
+      // Update profile data in Firestore, including the profile picture URL if changed
+      const updatedProfileData = { ...profileData, profilePic: profilePicUrl };
       const userDocRef = doc(firestore, "users", userId);
-      await setDoc(userDocRef, profileData, { merge: true });
+      await setDoc(userDocRef, updatedProfileData, { merge: true });
+
       console.log("Profile data successfully saved!");
       onClose(); // Close the modal after form submission
     } catch (error) {
@@ -51,7 +69,10 @@ const ProfileForm = ({ onClose, userId, initialData }) => {
       <form onSubmit={handleSubmit}>
         {/* Name */}
         <div>
-          <label htmlFor="name" className="block mb-1 text-sm font-medium text-gray-700">
+          <label
+            htmlFor="name"
+            className="block mb-1 text-sm font-medium text-gray-700"
+          >
             Name
           </label>
           <input
@@ -65,7 +86,10 @@ const ProfileForm = ({ onClose, userId, initialData }) => {
 
         {/* Job Title */}
         <div className="mt-4">
-          <label htmlFor="jobrole" className="block mb-1 text-sm font-medium text-gray-700">
+          <label
+            htmlFor="role"
+            className="block mb-1 text-sm font-medium text-gray-700"
+          >
             Job Title
           </label>
           <input
@@ -77,9 +101,31 @@ const ProfileForm = ({ onClose, userId, initialData }) => {
           />
         </div>
 
-        {/* Skills */}
+        {/* Profile Picture Upload */}
+        {/* Profile Picture Upload */}
+        <div className="mt-6">
+          <label
+            htmlFor="profilePic"
+            className="block mb-2 text-sm font-semibold text-gray-700"
+          >
+            Profile Picture
+          </label>
+          <div className="relative flex items-center">
+            <input
+              type="file"
+              accept="image/*"
+              onChange={handleImageChange}
+              className="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline-none hover:border-blue-500 hover:shadow-sm transition-all duration-200"
+            />
+          </div>
+        </div>
+
+        {/* Other input fields */}
         <div className="mt-4">
-          <label htmlFor="skills" className="block mb-1 text-sm font-medium text-gray-700">
+          <label
+            htmlFor="skills"
+            className="block mb-1 text-sm font-medium text-gray-700"
+          >
             Skills
           </label>
           <input
@@ -91,9 +137,11 @@ const ProfileForm = ({ onClose, userId, initialData }) => {
           />
         </div>
 
-        {/* Education */}
         <div className="mt-4">
-          <label htmlFor="education" className="block mb-1 text-sm font-medium text-gray-700">
+          <label
+            htmlFor="education"
+            className="block mb-1 text-sm font-medium text-gray-700"
+          >
             Education
           </label>
           <input
@@ -105,9 +153,11 @@ const ProfileForm = ({ onClose, userId, initialData }) => {
           />
         </div>
 
-        {/* City/Country */}
         <div className="mt-4">
-          <label htmlFor="country" className="block mb-1 text-sm font-medium text-gray-700">
+          <label
+            htmlFor="country"
+            className="block mb-1 text-sm font-medium text-gray-700"
+          >
             City/Country
           </label>
           <input
@@ -119,9 +169,11 @@ const ProfileForm = ({ onClose, userId, initialData }) => {
           />
         </div>
 
-        {/* Phone */}
         <div className="mt-4">
-          <label htmlFor="phone" className="block mb-1 text-sm font-medium text-gray-700">
+          <label
+            htmlFor="phone"
+            className="block mb-1 text-sm font-medium text-gray-700"
+          >
             Phone
           </label>
           <input
@@ -133,9 +185,11 @@ const ProfileForm = ({ onClose, userId, initialData }) => {
           />
         </div>
 
-        {/* Company */}
         <div className="mt-4">
-          <label htmlFor="company" className="block mb-1 text-sm font-medium text-gray-700">
+          <label
+            htmlFor="company"
+            className="block mb-1 text-sm font-medium text-gray-700"
+          >
             Company
           </label>
           <input
@@ -147,9 +201,11 @@ const ProfileForm = ({ onClose, userId, initialData }) => {
           />
         </div>
 
-        {/* About */}
         <div className="mt-4">
-          <label htmlFor="about" className="block mb-1 text-sm font-medium text-gray-700">
+          <label
+            htmlFor="about"
+            className="block mb-1 text-sm font-medium text-gray-700"
+          >
             About
           </label>
           <textarea

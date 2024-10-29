@@ -1,19 +1,19 @@
 import React, { useEffect, useState } from "react";
 import ConnectModel from "../Components/ConnectModel";
-import { collection, onSnapshot } from "firebase/firestore";
-import { firestore } from "../Firebase";
-import { useAuth } from "../Api/AuthApi";
 import { listenToUsers } from "../Api/UploadApi";
+import { useAuth } from "../Api/AuthApi";
 
 export const NetworkPage = () => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
-
   const { userData } = useAuth();
 
   useEffect(() => {
-    const unsubscribe = listenToUsers(setData);
-    setLoading(false);
+    const unsubscribe = listenToUsers((fetchedData) => {
+      setData(fetchedData);
+      setLoading(false); // Set loading to false after data has been fetched
+    });
+
     return () => unsubscribe();
   }, []);
 

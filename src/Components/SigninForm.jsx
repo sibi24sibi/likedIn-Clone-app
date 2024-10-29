@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGoogle } from "@fortawesome/free-brands-svg-icons";
 import { useAuth } from "../Api/AuthApi";
 import { Link } from "react-router-dom";
+
 const SigninForm = () => {
   const {
     login,
@@ -12,10 +13,11 @@ const SigninForm = () => {
     sendPasswordResetEmail,
     resetMessage,
   } = useAuth();
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [showResetForm, setShowResetForm] = useState(false); // To toggle between login and reset password form
-  const [resetEmail, setResetEmail] = useState(""); // For reset password email
+  const [showResetForm, setShowResetForm] = useState(false);
+  const [resetEmail, setResetEmail] = useState("");
 
   const handleLogin = (e) => {
     e.preventDefault();
@@ -28,145 +30,127 @@ const SigninForm = () => {
   };
 
   return (
-    <section className="dark:bg-gray-900 md:min-h-screen my-2">
-      <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0 my-6">
-        <div className="w-full bg-slate-100 rounded-lg shadow dark:border md:mt-10 mb-3 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
-        <h3 className="text-3xl font-normal text-center py-6">
-          {showResetForm ? "Reset Password" : "Sign In"}
-        </h3>
-          <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
-            {error && (
-              <div className="mb-4 text-red-600 bg-red-100 border border-red-400 rounded p-2">
-                {error}
-              </div>
-            )}
-            {successMessage && (
-              <div className="mb-4 text-green-600 bg-green-100 border border-green-400 rounded p-2">
-                {successMessage}
-              </div>
-            )}
-            {resetMessage && (
-              <div className="mb-4 text-green-600 bg-green-100 border border-green-400 rounded p-2">
-                {resetMessage}
-              </div>
-            )}
+    <div className="bg-gray-100 font-['Roboto']">
+      <div className="flex flex-col md:flex-row min-h-screen">
+     
 
-            {!showResetForm ? (
-              <form className="space-y-4 md:space-y-6" onSubmit={handleLogin}>
-                <div>
-                  <label
-                    htmlFor="email"
-                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                  >
-                    Email
-                  </label>
-                  <input
-                    type="email"
-                    id="email"
-                    className="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    required
-                  />
-                </div>
-                <div>
-                  <label
-                    htmlFor="password"
-                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                  >
-                    Password
-                  </label>
-                  <input
-                    type="password"
-                    id="password"
-                    className="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    required
-                  />
-                </div>
-                <button
-                  type="submit"
-                  className="w-full text-white bg-blue-500 hover:bg-blue-600 rounded-full focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
-                >
-                  Sign In
-                </button>
-                <hr />
-                <button
-                  onClick={signInWithGoogle}
-                  type="button"
-                  className="w-full border-2 text-black rounded-full focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
-                >
-                  <FontAwesomeIcon icon={faGoogle} className="mx-2" />
-                  Continue with Google
-                </button>
-              </form>
-            ) : (
-              <form
-                className="space-y-4 md:space-y-6"
-                onSubmit={handlePasswordReset}
+        {/* Right Section (Login Form) */}
+        <div className="flex flex-col w-full  items-center justify-center p-6 ">
+          {/* LinkedIn Logo */}
+          <div className="mb-8">
+            <i className="fab fa-linkedin text-blue-700 text-4xl"></i>
+          </div>
+
+          {!showResetForm ? (
+            <form className="w-full max-w-sm bg-white shadow-md rounded-lg p-8" onSubmit={handleLogin}>
+              <h2 className="text-2xl font-semibold mb-6 text-gray-800">Sign in</h2>
+              <p className="mb-6 text-gray-600">Stay updated on your professional world</p>
+
+              <div className="mb-4">
+                <label htmlFor="email" className="block text-sm text-gray-600 mb-1">Email or Phone</label>
+                <input
+                  type="email"
+                  id="email"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  placeholder="Email or phone"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                />
+              </div>
+
+              <div className="mb-6">
+                <label htmlFor="password" className="block text-sm text-gray-600 mb-1">Password</label>
+                <input
+                  type="password"
+                  id="password"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  placeholder="Password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                />
+              </div>
+
+              <button
+                type="submit"
+                className="w-full bg-blue-700 text-white font-semibold py-2 rounded-lg hover:bg-blue-800 mb-4"
               >
-                <div>
-                  <label
-                    htmlFor="resetEmail"
-                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                  >
-                    Enter your email to reset password
-                  </label>
-                  <input
-                    type="email"
-                    id="resetEmail"
-                    className="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    value={resetEmail}
-                    onChange={(e) => setResetEmail(e.target.value)}
-                    required
-                  />
-                </div>
-                <button
-                  type="submit"
-                  className="w-full text-white bg-blue-500 hover:bg-blue-600 rounded-full focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
-                >
-                  Send Reset Email
-                </button>
-              </form>
-            )}
+                Sign in
+              </button>
 
-            <p className="text-sm font-light text-gray-500 dark:text-gray-400 text-center">
-              {showResetForm ? (
+              {error && <p className="text-red-500 text-sm text-center">{error}</p>}
+              {successMessage && <p className="text-green-500 text-sm text-center">{successMessage}</p>}
+
+              <div className="text-center">
                 <button
-                  className="font-medium text-primary-600 mx-1 hover:underline dark:text-primary-500"
+                  type="button"
+                  className="text-blue-700 text-sm hover:underline"
+                  onClick={() => setShowResetForm(true)}
+                >
+                  Forgot password?
+                </button>
+              </div>
+
+              <div className="flex items-center my-6">
+                <hr className="flex-grow border-t border-gray-300" />
+                <span className="mx-2 text-gray-400 text-sm">or</span>
+                <hr className="flex-grow border-t border-gray-300" />
+              </div>
+
+              <button
+                type="button"
+                className="w-full flex items-center justify-center bg-white border border-gray-300 text-gray-600 font-semibold py-2 rounded-lg hover:bg-gray-100"
+                onClick={signInWithGoogle}
+              >
+                <FontAwesomeIcon icon={faGoogle} className="text-lg mr-2" /> Sign in with Google
+              </button>
+
+              <div className="text-center mt-8">
+                <p className="text-gray-600 text-sm">
+                  New to LinkedIn? <Link to="/signup" className="text-blue-700 font-semibold hover:underline">Join now</Link>
+                </p>
+              </div>
+            </form>
+          ) : (
+            <form className="w-full max-w-sm bg-white shadow-md rounded-lg p-8" onSubmit={handlePasswordReset}>
+              <h2 className="text-2xl font-semibold mb-6 text-gray-800">Reset Password</h2>
+              <p className="mb-6 text-gray-600">Enter your email to reset your password</p>
+
+              <div className="mb-4">
+                <label htmlFor="resetEmail" className="block text-sm text-gray-600 mb-1">Email</label>
+                <input
+                  type="email"
+                  id="resetEmail"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  placeholder="Enter your email"
+                  value={resetEmail}
+                  onChange={(e) => setResetEmail(e.target.value)}
+                />
+              </div>
+
+              <button
+                type="submit"
+                className="w-full bg-blue-700 text-white font-semibold py-2 rounded-lg hover:bg-blue-800 mb-4"
+              >
+                Send Reset Link
+              </button>
+
+              {resetMessage && <p className="text-green-500 text-sm text-center">{resetMessage}</p>}
+              {error && <p className="text-red-500 text-sm text-center">{error}</p>}
+
+              <div className="text-center">
+                <button
+                  type="button"
+                  className="text-blue-700 text-sm hover:underline"
                   onClick={() => setShowResetForm(false)}
                 >
-                  Back to Sign In
+                  Back to Sign in
                 </button>
-              ) : (
-                <>
-                  <a
-                    href="#"
-                    className="font-medium text-primary-600 mx-1 hover:underline dark:text-primary-500"
-                    onClick={() => setShowResetForm(true)}
-                  >
-                    Forgot password?
-                  </a>
-                </>
-              )}
-            </p>
-            {!showResetForm && (
-              
-              
-              <p className="text-sm font-light text-gray-500 dark:text-gray-400 text-center">
-                Don't have an account?
-                <Link to='/signup'>
-                <p className="font-medium text-primary-600 mx-1 hover:underline dark:text-primary-500"  >
-                  Sign up
-                </p>
-              </Link>
-              </p>
-            )}
-          </div>
+              </div>
+            </form>
+          )}
         </div>
       </div>
-    </section>
+    </div>
   );
 };
 

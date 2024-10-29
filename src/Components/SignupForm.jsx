@@ -21,125 +21,109 @@ const SignupForm = () => {
   };
 
   return (
-    <section className="dark:bg-gray-900 md:min-h-screen md:my-32">
-      <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0 my-16">
-        <div className="w-full bg-slate-100  rounded-lg shadow dark:border md:mt-10 mb-3 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
-          <h3 className="text-3xl font-normal text-center p-12">
-            Create an Account
-          </h3>
-          <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
-            {error && (
-              <div className="mb-4 text-red-600 bg-red-100 border border-red-400 rounded p-2">
-                {error}
-              </div>
-            )}
-            {successMessage && (
-              <div className="mb-4 text-green-600 bg-green-100 border border-green-400 rounded p-2">
-                {successMessage}
-              </div>
-            )}
-            <form className="space-y-4 md:space-y-6" onSubmit={handleSignup}>
-              <div>
-                <label
-                  htmlFor="name"
-                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                >
-                  Name
-                </label>
-                <input
-                  type="text"
-                  id="name"
-                  className="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  required
-                />
-              </div>
-              <div>
-                <label
-                  htmlFor="email"
-                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                >
-                  Email
-                </label>
-                <input
-                  type="email"
-                  id="email"
-                  className="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  required
-                />
-              </div>
-              <div>
-                <label
-                  htmlFor="password"
-                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                >
-                  Password (6+ characters)
-                </label>
-                <input
-                  type="password"
-                  id="password"
-                  className="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  required
-                />
-              </div>
-              <div>
-                <label
-                  htmlFor="confPassword"
-                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                >
-                  Confirm Password
-                </label>
-                <input
-                  type="password"
-                  id="confPassword"
-                  className="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                  value={confPassword}
-                  onChange={(e) => setConfPassword(e.target.value)}
-                  required
-                />
-              </div>
-              <button
-                type="submit"
-                className="w-full text-white bg-blue-500 hover:bg-blue-600 rounded-full focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
-              >
-                Sign Up
-              </button>
-              <hr />
-              <button
-                onClick={signInWithGoogle}
-                type="button"
-                className="w-full border-2 text-black rounded-full focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
-              >
-                <FontAwesomeIcon icon={faGoogle} className="mx-2" />
-                Continue with Google
-              </button>
-            </form>
-            <p className="text-sm font-light text-gray-500 dark:text-gray-400 text-center mt-3">
-              Already have an account?{" "}
-              <Link to="/signin">
-                <span className="font-medium text-primary-600 hover:underline dark:text-primary-500">
-                  Sign in
-                </span>
-              </Link>
-            </p>
+    <div className="bg-gray-100 font-['Roboto'] min-h-screen flex flex-col items-center justify-center ">
+      <div className="w-full max-w-md bg-white shadow-lg rounded-lg p-8 my-20">
+        <h2 className="text-3xl font-bold mb-6 text-gray-800 text-center">Create an Account</h2>
+        <p className="mb-6 text-gray-500 text-lg text-center">Stay updated on your professional world</p>
 
-            <p className="text-sm font-light text-center mt-3">
-              <Link
-                to="/forgot"
-                className="font-medium text-primary-600 hover:underline dark:text-primary-500"
-              >
-                Forgot Password?
-              </Link>
-            </p>
+        {error && (
+          <div className="mb-4 text-red-600 bg-red-100 border border-red-400 rounded p-2">
+            {error}
           </div>
+        )}
+        {successMessage && (
+          <div className="mb-4 text-green-600 bg-green-100 border border-green-400 rounded p-2">
+            {successMessage}
+          </div>
+        )}
+
+        <form className="space-y-4" onSubmit={handleSignup}>
+          <div>
+            <label htmlFor="name" className="block text-sm text-gray-600 mb-2">Name</label>
+            <input
+              type="text"
+              id="name"
+              className="w-full px-3 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              required
+            />
+          </div>
+
+          <div>
+            <label htmlFor="email" className="block text-sm text-gray-600 mb-2">Email</label>
+            <input
+              type="email"
+              id="email"
+              className="w-full px-3 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+          </div>
+
+          <div>
+            <label htmlFor="password" className="block text-sm text-gray-600 mb-2">Password (6+ characters)</label>
+            <input
+              type="password"
+              id="password"
+              className="w-full px-3 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+          </div>
+
+          <div>
+            <label htmlFor="confPassword" className="block text-sm text-gray-600 mb-2">Confirm Password</label>
+            <input
+              type="password"
+              id="confPassword"
+              className="w-full px-3 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              value={confPassword}
+              onChange={(e) => setConfPassword(e.target.value)}
+              required
+            />
+          </div>
+
+          <button
+            type="submit"
+            className="w-full bg-blue-600 text-white font-semibold py-3 rounded-lg hover:bg-blue-700 mb-4"
+          >
+            Sign Up
+          </button>
+
+          <div className="flex items-center my-6">
+            <hr className="flex-grow border-t border-gray-300" />
+            <span className="mx-2 text-gray-400 text-sm">or</span>
+            <hr className="flex-grow border-t border-gray-300" />
+          </div>
+
+          <button
+            onClick={signInWithGoogle}
+            type="button"
+            className="w-full flex items-center justify-center bg-white border border-gray-300 text-gray-600 font-semibold py-3 rounded-lg hover:bg-gray-100"
+          >
+            <FontAwesomeIcon icon={faGoogle} className="text-lg mr-2" />
+            Continue with Google
+          </button>
+        </form>
+
+        <div className="text-center mt-8">
+          <p className="text-gray-600 text-sm">
+            Already have an account?{" "}
+            <Link to="/signin" className="text-blue-600 font-semibold hover:underline">
+              Sign in
+            </Link>
+          </p>
+          <p className="text-sm font-light mt-3">
+            <Link to="/forgot" className="text-blue-600 font-semibold hover:underline">
+              Forgot Password?
+            </Link>
+          </p>
         </div>
       </div>
-    </section>
+    </div>
   );
 };
 

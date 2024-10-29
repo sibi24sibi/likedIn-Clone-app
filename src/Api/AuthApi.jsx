@@ -56,7 +56,7 @@ export const AuthProvider = ({ children }) => {
       if (user) {
         setUser(user);
         await fetchUserData(user.uid); // Fetch user data after authentication
-        console.log("User signed in:", user);
+      
       } else {
         setUser(null);
         setUserData(null);

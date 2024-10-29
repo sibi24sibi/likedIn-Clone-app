@@ -54,7 +54,7 @@ function MainApp() {
   // Show a loading spinner while authentication state is being determined
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-screen min-h-screen max-h-screen">
+      <div className="flex items-center justify-center h-screen min-h-screen  max-h-screen">
         <Watch
           visible={true}
           width="200"
@@ -76,7 +76,7 @@ function MainApp() {
                 <Route path="/" element={<HomePage />} />
                 <Route path="/home" element={<HomePage />} />
                 <Route path="/profile" element={<ProfilePage />} />
-                <Route path="/profile/:id" element={<ProfilePage />} />
+                <Route path="/connect/:id" element={<ProfilePage />} />
                 <Route path="/jobs" element={<JobPage />} />
                 <Route
                   path="/jobs/:id"
@@ -85,7 +85,7 @@ function MainApp() {
                 <Route path="/postJob" element={<JobForm />} />
                 <Route path="/connect" element={<NetworkPage />} />
                 <Route path="/error" element={<ErorPage />} />
-                <Route path="*" element={<Navigate to="/error" />} />
+         
 
               </>
             ) : (

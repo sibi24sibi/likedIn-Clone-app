@@ -1,6 +1,10 @@
 import { firestore } from "../Firebase";
 import { collection, addDoc  , deleteDoc,
-  doc, updateDoc,arrayRemove ,arrayUnion ,setDoc ,onSnapshot} from "firebase/firestore";
+  doc, updateDoc,arrayRemove ,arrayUnion ,setDoc ,onSnapshot,
+  where,
+  query,
+  getDoc,
+  getDocs} from "firebase/firestore";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 import uuid from "react-uuid";
@@ -25,10 +29,65 @@ export const listenToUsers = (setUsers) => {
       id: doc.id,
       ...doc.data(),
     }));
-    setUsers(usersList); // Update the state with the latest users
+    setUsers(usersList); 
   });
 
-  return unsubscribe; // Return the unsubscribe function to stop listening when needed
+  return unsubscribe; 
+};
+
+export const listenToAllPosts = (setAllPosts) => {
+  // Listen for real-time updates
+  const unsubscribe = onSnapshot(collection(firestore, "posts"), (snapshot) => {
+    const usersList = snapshot.docs.map((doc) => ({
+      id: doc.id,
+      ...doc.data(),
+    }));
+    setAllPosts(usersList); 
+  });
+
+  return unsubscribe; 
+};
+
+
+
+
+export const listenToSingleUser = (setUsers, userID) => {
+  // Create a query with a where clause
+  const usersQuery = query(
+    collection(firestore, "users"),
+    where("userID", "==", userID) 
+  );
+
+  // Listen for real-time updates
+  const unsubscribe = onSnapshot(usersQuery, (snapshot) => {
+    const usersList = snapshot.docs.map((doc) => ({
+      id: doc.id,
+      ...doc.data(),
+    }));
+    setUsers(usersList);
+  });
+
+  return unsubscribe;
+};
+
+
+export const listenToSinglePost = (setAllPosts, userID) => {
+
+  const PostsQuery = query(
+    collection(firestore, "posts"),
+    where("userID", "==", userID) 
+  );
+
+
+  const unsubscribe = onSnapshot(PostsQuery, (snapshot) => {
+    const postsList = snapshot.docs.map((doc) => ({
+      id: doc.id,
+      ...doc.data(),
+    }));
+    setAllPosts(postsList);
+  });
+
+  return unsubscribe; 
 };
 
 
@@ -129,5 +188,53 @@ export const addConnection = async (userId, targetId) => {
   } catch (err) {
     console.error("Error adding connection:", err);
   
+  }
+};
+
+
+
+// this belowe code to be modified
+const connectionsCollection = collection(firestore, "connections");
+
+// Check if a connection exists
+export const checkConnectionStatus = async (userId, targetId) => {
+  const q = query(
+    connectionsCollection,
+    where("userId", "==", userId),
+    where("targetId", "==", targetId)
+  );
+  const querySnapshot = await getDocs(q);
+  return !querySnapshot.empty;
+};
+
+
+// Toggle connection (add or delete)
+export const toggleConnectionStatus = async (connected, userId, targetId, setConnected) => {
+  const q = query(
+    connectionsCollection,
+    where("userId", "==", userId),
+    where("targetId", "==", targetId)
+  );
+
+  try {
+    if (connected) {
+      const querySnapshot = await getDocs(q);
+      if (!querySnapshot.empty) {
+        const connectionDoc = querySnapshot.docs[0];
+        await deleteDoc(doc(firestore, "connections", connectionDoc.id));
+        setConnected(false);
+        console.log(`Disconnected with ${targetId}`);
+      }
+    } else {
+      await addDoc(connectionsCollection, {
+        userId,
+        targetId,
+        connectedAt: new Date(),
+      });
+      setConnected(true);
+      console.log(`Connected with ${targetId}`);
+    }
+  } catch (error) {
+    console.error("Error updating connection status:", error);
   }
 };

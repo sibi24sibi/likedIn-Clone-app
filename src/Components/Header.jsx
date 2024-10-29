@@ -112,14 +112,16 @@ function Header() {
               </NavLink>
               
               */}
-            <li className="my-2 md:my-0">
+            <NavLink to="/postJob" className={({ isActive }) => isActive ? ' border-b-0 md:border-b-2 md:border-b-black' : ''}>
+            <li className="py-1 flex flex-col md:text-[#475569] md:hover:text-[black]">
               <button
                 className="text-slate-950 border-2 rounded-lg text-base font-normal uppercase py-2 px-4"
                 onClick={logout}
               >
                 <FontAwesomeIcon icon={faRightFromBracket} />
               </button>
-            </li>
+              </li>
+              </NavLink>
           </ul>
         ) : (
           <ul className="md:flex rtl:space-x-reverse md:flex-row md:w-auto gap-4 ">
