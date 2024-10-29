@@ -85,7 +85,7 @@ function MainApp() {
                 <Route path="/postJob" element={<JobForm />} />
                 <Route path="/connect" element={<NetworkPage />} />
                 <Route path="/error" element={<ErorPage />} />
-         
+                <Route path="*" element={<Navigate to="/error" />} />
 
               </>
             ) : (

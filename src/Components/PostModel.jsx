@@ -30,6 +30,9 @@ function PostModel({
       }
     });
     setLikedPosts(initialLikedPosts);
+
+ 
+
   }, [postData, userData.name]);
 
   const LoadingComponent = () => (
@@ -81,6 +84,8 @@ function PostModel({
     setVisibleComments((prev) => ({ ...prev, [postId]: !prev[postId] }));
   };
 
+
+
   return (
     <>
       {loadings ? (
@@ -130,15 +135,16 @@ function PostModel({
                   </div>
                 </div>
                 <div>
-                  { postMode || isOwnProfile   && (
-                    <button
-                      onClick={() => onDelete(post.id)}
-                      className="text-red-600 font-medium hover:bg-red-100 px-3 py-1 rounded transition duration-300"
-                    >
-                      Delete
-                    </button>
-                  )}
-                </div>
+  {isOwnProfile && (
+    <button
+      onClick={() => onDelete(post.id)}
+      className="text-red-600 font-medium hover:bg-red-100 px-3 py-1 rounded transition duration-300"
+    >
+      Delete
+    </button>
+  )}
+</div>
+
               </div>
 
               <p className="text-gray-700 text-base font-normal my-2">

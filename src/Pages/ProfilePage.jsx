@@ -69,6 +69,7 @@ export const ProfilePage = () => {
           loadings={loading}
           postMode={isOwnProfile ? posts.length > 0 : otherUserPosts.length > 0}
           onDelete={openDeleteModal}
+          isOwnProfile={isOwnProfile}
         />
         <DeleconfModal
           open={openModal}

@@ -1,14 +1,18 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect } from "react";
 import { firestore } from "../Firebase";
-import { collection, onSnapshot, orderBy, query } from "firebase/firestore";
+import { collection, onSnapshot, orderBy, query, limit, startAfter } from "firebase/firestore";
 import UploadPost from "../Components/UploadPost";
 import PostModel from "../Components/PostModel";
 import { listenToUsers } from "../Api/UploadApi";
 import { defaultProfile } from "../assets/assets";
 
+const POSTS_LIMIT = 10; // Number of posts to load each time
+
 function Home() {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [loadingMore, setLoadingMore] = useState(false);
+  const [lastVisible, setLastVisible] = useState(null);
   const postMode = false;
   const [users, setUsers] = useState([]);
 
@@ -22,7 +26,8 @@ function Home() {
   useEffect(() => {
     const postsQuery = query(
       collection(firestore, "posts"),
-      orderBy("createdAt", "desc")
+      orderBy("createdAt", "desc"),
+      limit(POSTS_LIMIT)
     );
 
     const unsubscribePosts = onSnapshot(postsQuery, (snapshot) => {
@@ -38,11 +43,80 @@ function Home() {
         };
       });
       setPosts(postsData);
+      setLastVisible(snapshot.docs[snapshot.docs.length - 1]); // Set last visible post
       setLoading(false);
     });
 
     return () => unsubscribePosts();
   }, [users]);
+
+  // Load more posts when scrolling
+  const loadMorePosts = () => {
+    if (loadingMore || !lastVisible) return; // Prevent loading if already loading or no more posts
+
+    setLoadingMore(true);
+
+    const nextPostsQuery = query(
+      collection(firestore, "posts"),
+      orderBy("createdAt", "desc"),
+      startAfter(lastVisible),
+      limit(POSTS_LIMIT)
+    );
+
+    onSnapshot(nextPostsQuery, (snapshot) => {
+      const morePostsData = snapshot.docs.map((doc) => {
+        const post = doc.data();
+        const user = users.find((user) => user.id === post.userID);
+        return {
+          id: doc.id,
+          ...post,
+          userName: user?.name || "Unknown User",
+          userProfileImage: user?.profilePic || defaultProfile,
+          userRole: user?.role || "Unknown",
+        };
+      });
+
+      setPosts((prevPosts) => [...prevPosts, ...morePostsData]);
+      setLastVisible(snapshot.docs[snapshot.docs.length - 1]); // Update last visible post
+      setLoadingMore(false);
+    });
+  };
+
+  // Handle scroll event
+  const handleScroll = () => {
+    if (window.innerHeight + document.documentElement.scrollTop + 1 >= document.documentElement.offsetHeight) {
+      loadMorePosts();
+    }
+  };
+
+  useEffect(() => {
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, [lastVisible, loadingMore]);
+
+  const LoadingComponent = () => (
+    <div className="skeleton-wrapper">
+      <div className="skeleton-profile">
+        <div className="skeleton-circle" />
+        <div className="skeleton-info">
+          <div className="skeleton-line skeleton-short" />
+          <div className="skeleton-line skeleton-long" />
+        </div>
+      </div>
+      <div className="skeleton-content">
+        <div className="skeleton-line skeleton-long" />
+        <div className="skeleton-line skeleton-medium" />
+        <div className="skeleton-line skeleton-short" />
+      </div>
+      <div className="skeleton-image" />
+      <div className="skeleton-actions">
+        <div className="skeleton-button" />
+        <div className="skeleton-button" />
+      </div>
+    </div>
+  );
 
   return (
     <div className="min-h-screen">
@@ -52,6 +126,14 @@ function Home() {
         </div>
         <div className="mx-4">
           <PostModel postData={posts} loadings={loading} postMode={postMode} />
+          {loadingMore && 
+          <>
+
+          <LoadingComponent/>
+          <LoadingComponent/>
+          <LoadingComponent/>
+          </>
+          } 
         </div>
       </div>
     </div>
