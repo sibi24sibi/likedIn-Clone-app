@@ -10,7 +10,7 @@ import { useNavigate} from "react-router-dom";
 function ConnectModel({ user }) {
   const { userData } = useAuth();
   const [connected, setConnected] = useState(false);
-
+  const navigate = useNavigate()
 
   useEffect(() => {
     if (user.userID && userData.userID) {
@@ -23,12 +23,17 @@ function ConnectModel({ user }) {
   }, [connected, userData.userID, user.userID]);
 
 
+  const handleViewProfile = () => {
+    navigate(`/connect/${user.id}`)
+  }
+
+
   return (
     <div
       key={user.id}
       className="md:min-w-[184px] md:max-w-[184px] h-72 rounded-md shadow-sm hover:shadow-[0px_3px_4px_1px_#b6b6b6] relative border-[1px] border-gray-300 border-opacity-90 transition-shadow ease-in duration-100"
     >
-     <div >
+     <div onClick={handleViewProfile}>
      <div className="banner-image">
         <img src={defaultCoverImage} alt="Banner" className="w-full h-16 object-cover rounded-t-md" />
       </div>

@@ -1,23 +1,20 @@
-import { AiFillLike } from "react-icons/ai"; 
-import { SlLike } from "react-icons/sl"; 
-import { FaRegComment } from "react-icons/fa"; 
+import { AiFillLike } from "react-icons/ai";
+import { SlLike } from "react-icons/sl";
+import { FaRegComment } from "react-icons/fa";
 import React, { useEffect, useState } from "react";
 import { defaultProfile, NoPost } from "../assets/assets";
 import { useAuth } from "../Api/AuthApi";
 import { Button, Modal } from "flowbite-react";
 import { formatTimestamp } from "../assets/assets";
 import { handleLikePost, handleCommentPost } from "../Api/UploadApi"; // import your new like and comment functions
-  
+
 import "./Skeleton.css";
 
 function PostModel({ loadings, postData = [], postMode, onDelete }) {
   const { userData } = useAuth();
   const [likedPosts, setLikedPosts] = useState(new Set());
-  const [visibleComments, setVisibleComments] = useState({}); 
+  const [visibleComments, setVisibleComments] = useState({});
   const [newComment, setNewComment] = useState({});
-
-
-
 
   useEffect(() => {
     const initialLikedPosts = new Set();
@@ -62,7 +59,7 @@ function PostModel({ loadings, postData = [], postMode, onDelete }) {
       newLikedPosts.add(postId); // Like
       await handleLikePost(postId, userData.name, true); // Update Firestore to like
     }
-    
+
     setLikedPosts(newLikedPosts); // Update state
   };
 
@@ -100,7 +97,7 @@ function PostModel({ loadings, postData = [], postMode, onDelete }) {
           <div
             key={post.id}
             className={`bg-white ${
-              postMode ? 'max-w-[640px]' : 'max-w-[640px]'
+              postMode ? "max-w-[640px]" : "max-w-[640px]"
             } rounded-lg shadow-md mx-auto mt-16 mb-5 w-full
              md:w-10/12`}
           >
@@ -110,7 +107,7 @@ function PostModel({ loadings, postData = [], postMode, onDelete }) {
                   <div className="w-12 h-12  m-2">
                     <img
                       className="w-full h-full rounded-full object-cover"
-                      src={ post.userProfileImage }
+                      src={post.userProfileImage}
                       alt="Profile"
                     />
                   </div>
@@ -119,7 +116,7 @@ function PostModel({ loadings, postData = [], postMode, onDelete }) {
                       {post.userName}
                     </h3>
                     <p className="text-xs text-gray-600">
-                      {post.userRole || 'unknown'}
+                      {post.userRole || "unknown"}
                     </p>
                     <p className="text-xs text-gray-500">
                       Posted {formatTimestamp(post.createdAt)}
@@ -127,22 +124,17 @@ function PostModel({ loadings, postData = [], postMode, onDelete }) {
                   </div>
                 </div>
                 <div>
-                  {postMode ? (
+                  {postMode && (
                     <button
                       onClick={() => onDelete(post.id)}
                       className="text-red-600 font-medium hover:bg-red-100 px-3 py-1 rounded transition duration-300"
                     >
                       Delete
                     </button>
-                  ) : (
-                    <button className="text-blue-600 font-medium hover:bg-blue-100 px-3 py-1 rounded transition duration-300">
-                      + Follow
-                    </button>
                   )}
                 </div>
               </div>
 
-              
               <p className="text-gray-700 text-base font-normal my-2">
                 {post.content}
               </p>
@@ -164,9 +156,7 @@ function PostModel({ loadings, postData = [], postMode, onDelete }) {
                 <button
                   onClick={() => handleLike(post.id)}
                   className={`flex items-center ${
-                    likedPosts.has(post.id)
-                      ? 'text-blue-600'
-                      : 'text-gray-600'
+                    likedPosts.has(post.id) ? "text-blue-600" : "text-gray-600"
                   } hover:bg-gray-100 px-3 justify-center w-full py-2 rounded transition duration-300`}
                 >
                   {likedPosts.has(post.id) ? <AiFillLike /> : <SlLike />}
@@ -189,8 +179,8 @@ function PostModel({ loadings, postData = [], postMode, onDelete }) {
                 <div>
                   {(post.comments || []).map((comment, index) => (
                     <div key={index} className="text-gray-700 text-sm">
-                      <span className="font-semibold">{comment.username}</span>
-                      : {comment.text}
+                      <span className="font-semibold">{comment.username}</span>:{" "}
+                      {comment.text}
                     </div>
                   ))}
                 </div>
@@ -200,7 +190,10 @@ function PostModel({ loadings, postData = [], postMode, onDelete }) {
                     placeholder="Add a comment..."
                     value={newComment[post.id] || ""}
                     onChange={(e) =>
-                      setNewComment({ ...newComment, [post.id]: e.target.value })
+                      setNewComment({
+                        ...newComment,
+                        [post.id]: e.target.value,
+                      })
                     }
                     className="border rounded px-3 py-1 w-full"
                   />

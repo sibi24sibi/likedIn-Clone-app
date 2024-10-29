@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { firestore } from "../Firebase";
-import { collection, onSnapshot, orderBy, query, getDocs } from "firebase/firestore";
+import { collection, onSnapshot, orderBy, query } from "firebase/firestore";
 import UploadPost from "../Components/UploadPost";
 import PostModel from "../Components/PostModel";
 import { listenToUsers } from "../Api/UploadApi";
@@ -10,51 +10,39 @@ function Home() {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const postMode = false;
-  const [users,setUsers] = useState([])
+  const [users, setUsers] = useState([]);
 
-
+  // Load users only once on component mount
   useEffect(() => {
-    const unsubscribe = listenToUsers(setUsers);
-    return () =>  unsubscribe()
-  },[])
+    const unsubscribeUsers = listenToUsers(setUsers);
+    return () => unsubscribeUsers();
+  }, []);
 
-
-
-
+  // Fetch posts and attach user data
   useEffect(() => {
-    const fetchPostsWithUserNames = async () => {
-      const postsQuery = query(
-        collection(firestore, "posts"),
-        orderBy("createdAt", "desc")
-      );
-  
-      const unsubscribePosts = onSnapshot(postsQuery, (snapshot) => {
-        const postsData = snapshot.docs.map((doc) => {
-          const post = doc.data();
-          const user = users?.find((user) => user.id === post.userID);
-          return {
-            id: doc.id,
-            ...post,
-            userName: user?.name || "Unknown User",
-            userProfileImage: user?.profilePic || defaultProfile,
-            userRole : user?.role || 'Unknown',
-          };
-        });
-        setPosts(postsData);
-        setLoading(false);
+    const postsQuery = query(
+      collection(firestore, "posts"),
+      orderBy("createdAt", "desc")
+    );
+
+    const unsubscribePosts = onSnapshot(postsQuery, (snapshot) => {
+      const postsData = snapshot.docs.map((doc) => {
+        const post = doc.data();
+        const user = users.find((user) => user.id === post.userID);
+        return {
+          id: doc.id,
+          ...post,
+          userName: user?.name || "Unknown User",
+          userProfileImage: user?.profilePic || defaultProfile,
+          userRole: user?.role || "Unknown",
+        };
       });
-  
-      return unsubscribePosts;
-    };
-  
-    const unsubscribe = fetchPostsWithUserNames();
-  
-    return () => {
-      unsubscribe && unsubscribe.then((unsub) => unsub()); 
-    };
-  }, [users]); // Add users as a dependency
-  
+      setPosts(postsData);
+      setLoading(false);
+    });
 
+    return () => unsubscribePosts();
+  }, [users]);
 
   return (
     <div className="min-h-screen">

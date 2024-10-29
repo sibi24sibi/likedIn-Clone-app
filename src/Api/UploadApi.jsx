@@ -51,22 +51,19 @@ export const listenToAllPosts = (setAllPosts) => {
 
 
 
-export const listenToSingleUser = (setUsers, userID) => {
-  // Create a query with a where clause
+export const listenToSingleUser = (setUser, userID) => {
   const usersQuery = query(
     collection(firestore, "users"),
-    where("userID", "==", userID) 
+    where("userID", "==", userID)
   );
 
-  // Listen for real-time updates
   const unsubscribe = onSnapshot(usersQuery, (snapshot) => {
-    const usersList = snapshot.docs.map((doc) => ({
+    const user = snapshot.docs.map((doc) => ({
       id: doc.id,
       ...doc.data(),
-    }));
-    setUsers(usersList);
+    }))[0]; // Assuming only one user per userID
+    setUser(user);
   });
-
   return unsubscribe;
 };
 

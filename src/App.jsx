@@ -76,7 +76,7 @@ function MainApp() {
                 <Route path="/" element={<HomePage />} />
                 <Route path="/home" element={<HomePage />} />
                 <Route path="/profile" element={<ProfilePage />} />
-                <Route path="/connect/:id" element={<ProfilePage />} />
+                <Route path="/connect/:profileId" element={<ProfilePage />} />
                 <Route path="/jobs" element={<JobPage />} />
                 <Route
                   path="/jobs/:id"
