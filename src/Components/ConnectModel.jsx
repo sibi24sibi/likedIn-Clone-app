@@ -43,10 +43,12 @@ function ConnectModel({ user }) {
       <div className="names mt-14 px-2 flex items-center justify-center flex-col">
         <h3 className="font-semibold">{user.name}</h3>
         <div className="font-thin text-center min-h-11 overflow-hidden line-clamp-2 break-words leading-5">
-          {user.role}
+          {user.role || 'unknown'}
         </div>
       </div>
-        
+
+        <div className="font-thin my-3 text-[0.8rem] leading-4 line-clamp-2 text-center">Based on your profile</div>
+
      </div>
       <div className="bottom px-2">
         <button
