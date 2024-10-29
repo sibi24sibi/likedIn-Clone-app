@@ -46,7 +46,7 @@ function ConnectModel({ user }) {
           {user.role}
         </div>
       </div>
-        <div className="font-thin text-[0.8rem] leading-4 line-clamp-2 text-center">Based on your profile</div>
+        
      </div>
       <div className="bottom px-2">
         <button

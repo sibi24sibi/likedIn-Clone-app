@@ -10,7 +10,13 @@ import { handleLikePost, handleCommentPost } from "../Api/UploadApi"; // import 
 
 import "./Skeleton.css";
 
-function PostModel({ loadings, postData = [], postMode, onDelete }) {
+function PostModel({
+  loadings,
+  postData = [],
+  postMode,
+  onDelete,
+  isOwnProfile,
+}) {
   const { userData } = useAuth();
   const [likedPosts, setLikedPosts] = useState(new Set());
   const [visibleComments, setVisibleComments] = useState({});
@@ -124,7 +130,7 @@ function PostModel({ loadings, postData = [], postMode, onDelete }) {
                   </div>
                 </div>
                 <div>
-                  {postMode && (
+                  { postMode || isOwnProfile   && (
                     <button
                       onClick={() => onDelete(post.id)}
                       className="text-red-600 font-medium hover:bg-red-100 px-3 py-1 rounded transition duration-300"
