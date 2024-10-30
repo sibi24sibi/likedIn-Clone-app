@@ -5,6 +5,7 @@ import UploadPost from "../Components/UploadPost";
 import PostModel from "../Components/PostModel";
 import { listenToUsers } from "../Api/UploadApi";
 import { defaultProfile } from "../assets/assets";
+import { useAuth } from "../Api/AuthApi";
 
 const POSTS_LIMIT = 7; 
 
@@ -15,6 +16,7 @@ function Home() {
   const [lastVisible, setLastVisible] = useState(null);
   const postMode = false;
   const [users, setUsers] = useState([]);
+  const {userData} = useAuth()
 
   // Load users only once on component mount
   useEffect(() => {
@@ -127,7 +129,7 @@ function Home() {
           <UploadPost />
         </div>
         <div className="mx-4">
-          <PostModel postData={posts} loadings={loading} postMode={postMode} />
+          <PostModel postData={posts} userData={userData} loadings={loading} postMode={postMode} />
           {loadingMore && 
           <>
 

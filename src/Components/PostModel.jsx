@@ -85,6 +85,8 @@ function PostModel({
   };
 
 
+  console.log(postData.userProfileImage)
+
 
   return (
     <>
@@ -118,7 +120,7 @@ function PostModel({
                   <div className="w-12 h-12  m-2">
                     <img
                       className="w-full h-full rounded-full object-cover"
-                      src={post.userProfileImage}
+                      src={  post.userProfileImage || userData.profilePic }
                       alt="Profile"
                     />
                   </div>
