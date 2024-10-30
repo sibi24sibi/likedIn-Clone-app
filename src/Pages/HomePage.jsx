@@ -6,7 +6,7 @@ import PostModel from "../Components/PostModel";
 import { listenToUsers } from "../Api/UploadApi";
 import { defaultProfile } from "../assets/assets";
 
-const POSTS_LIMIT = 10; // Number of posts to load each time
+const POSTS_LIMIT = 7; 
 
 function Home() {
   const [posts, setPosts] = useState([]);
@@ -21,6 +21,8 @@ function Home() {
     const unsubscribeUsers = listenToUsers(setUsers);
     return () => unsubscribeUsers();
   }, []);
+
+
 
   // Fetch posts and attach user data
   useEffect(() => {
@@ -100,7 +102,7 @@ function Home() {
     <div className="skeleton-wrapper">
       <div className="skeleton-profile">
         <div className="skeleton-circle" />
-        <div className="skeleton-info">
+        <div className="skeleton-info ">
           <div className="skeleton-line skeleton-short" />
           <div className="skeleton-line skeleton-long" />
         </div>
