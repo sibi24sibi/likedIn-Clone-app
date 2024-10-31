@@ -20,106 +20,96 @@ const SignupForm = () => {
     }
   };
 
+  const handleGoogleSignup = () => {
+    signInWithGoogle();
+  };
+
   return (
-    <div className="bg-gray-100 font-['Roboto'] min-h-screen flex flex-col items-center justify-center ">
-      <div className="w-full max-w-md bg-white shadow-lg rounded-lg p-8 my-20">
-        <h2 className="text-3xl font-bold mb-6 text-gray-800 text-center">Create an Account</h2>
-        <p className="mb-6 text-gray-500 text-lg text-center">Stay updated on your professional world</p>
+    <div className="bg-gray-100">
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md  my-20 ">
+          <h1 className="text-2xl font-semibold text-center text-blue-700 mb-6">Sign Up for LinkedIn</h1>
 
-        {error && (
-          <div className="mb-4 text-red-600 bg-red-100 border border-red-400 rounded p-2">
-            {error}
-          </div>
-        )}
-        {successMessage && (
-          <div className="mb-4 text-green-600 bg-green-100 border border-green-400 rounded p-2">
-            {successMessage}
-          </div>
-        )}
+          {error && <p className="text-red-500 text-center">{error}</p>}
+          {successMessage && <p className="text-green-500 text-center">{successMessage}</p>}
 
-        <form className="space-y-4" onSubmit={handleSignup}>
-          <div>
-            <label htmlFor="name" className="block text-sm text-gray-600 mb-2">Name</label>
-            <input
-              type="text"
-              id="name"
-              className="w-full px-3 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              required
-            />
-          </div>
+          <form className="space-y-4" onSubmit={handleSignup}>
+            <div>
+              <label htmlFor="name" className="block text-sm font-medium text-gray-700">Name</label>
+              <input
+                type="text"
+                id="name"
+                placeholder="Your name"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                className="w-full px-4 py-2 mt-1 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                required
+              />
+            </div>
 
-          <div>
-            <label htmlFor="email" className="block text-sm text-gray-600 mb-2">Email</label>
-            <input
-              type="email"
-              id="email"
-              className="w-full px-3 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-            />
-          </div>
+            <div>
+              <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email</label>
+              <input
+                type="email"
+                id="email"
+                placeholder="Your email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="w-full px-4 py-2 mt-1 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                required
+              />
+            </div>
 
-          <div>
-            <label htmlFor="password" className="block text-sm text-gray-600 mb-2">Password (6+ characters)</label>
-            <input
-              type="password"
-              id="password"
-              className="w-full px-3 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
-          </div>
+            <div>
+              <label htmlFor="password" className="block text-sm font-medium text-gray-700">Password</label>
+              <input
+                type="password"
+                id="password"
+                placeholder="Password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="w-full px-4 py-2 mt-1 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                required
+              />
+            </div>
 
-          <div>
-            <label htmlFor="confPassword" className="block text-sm text-gray-600 mb-2">Confirm Password</label>
-            <input
-              type="password"
-              id="confPassword"
-              className="w-full px-3 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-              value={confPassword}
-              onChange={(e) => setConfPassword(e.target.value)}
-              required
-            />
-          </div>
+            <div>
+              <label htmlFor="confirm-password" className="block text-sm font-medium text-gray-700">Confirm Password</label>
+              <input
+                type="password"
+                id="confirm-password"
+                placeholder="Confirm password"
+                value={confPassword}
+                onChange={(e) => setConfPassword(e.target.value)}
+                className="w-full px-4 py-2 mt-1 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                required
+              />
+            </div>
 
-          <button
-            type="submit"
-            className="w-full bg-blue-600 text-white font-semibold py-3 rounded-lg hover:bg-blue-700 mb-4"
-          >
-            Sign Up
-          </button>
+            <button
+              type="submit"
+              className="w-full py-2 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            >
+              Agree & Join
+            </button>
+          </form>
 
           <div className="flex items-center my-6">
-            <hr className="flex-grow border-t border-gray-300" />
-            <span className="mx-2 text-gray-400 text-sm">or</span>
-            <hr className="flex-grow border-t border-gray-300" />
+            <div className="w-full border-t border-gray-300"></div>
+            <span className="px-2 text-sm text-gray-500">or</span>
+            <div className="w-full border-t border-gray-300"></div>
           </div>
 
           <button
-            onClick={signInWithGoogle}
-            type="button"
-            className="w-full flex items-center justify-center bg-white border border-gray-300 text-gray-600 font-semibold py-3 rounded-lg hover:bg-gray-100"
+            onClick={handleGoogleSignup}
+            className="flex items-center justify-center w-full py-2 border border-gray-300 rounded-lg hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
           >
-            <FontAwesomeIcon icon={faGoogle} className="text-lg mr-2" />
-            Continue with Google
+            <FontAwesomeIcon icon={faGoogle} className="mr-2" />
+            <span className="text-gray-700 font-medium">Continue with Google</span>
           </button>
-        </form>
 
-        <div className="text-center mt-8">
-          <p className="text-gray-600 text-sm">
-            Already have an account?{" "}
-            <Link to="/signin" className="text-blue-600 font-semibold hover:underline">
-              Sign in
-            </Link>
-          </p>
-          <p className="text-sm font-light mt-3">
-            <Link to="/forgot" className="text-blue-600 font-semibold hover:underline">
-              Forgot Password?
-            </Link>
+          <p className="text-center text-sm text-gray-500 mt-6">
+            Already have an account? <Link to="/signin" className="text-blue-600 font-medium hover:underline">Sign in</Link>
           </p>
         </div>
       </div>
