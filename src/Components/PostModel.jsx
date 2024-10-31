@@ -126,7 +126,7 @@ function PostModel({
                   </div>
                   <div>
                     <h3 className="font-semibold text-gray-900">
-                      {post.userName}
+                      {post.userName ||  userData.name}
                     </h3>
                     <p className="text-xs text-gray-600">
                       {post.userRole || "unknown"}
