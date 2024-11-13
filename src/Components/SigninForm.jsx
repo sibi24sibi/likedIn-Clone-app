@@ -32,7 +32,7 @@ const SigninForm = () => {
   return (
     <div className="bg-gray-100">
       <div className="flex items-center justify-center min-h-screen">
-        <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
+        <div className="bg-white p-8 rounded-lg shadow-lg w-5/6 max-w-md">
           {/* LinkedIn Logo */}
           <h1 className="text-2xl font-semibold text-center text-blue-700 mb-6">Sign In to LinkedIn</h1>
 

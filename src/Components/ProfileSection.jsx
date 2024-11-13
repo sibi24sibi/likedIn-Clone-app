@@ -10,10 +10,13 @@ import { useAuth } from "../Api/AuthApi";
 import { ProfileFormModal } from "./Modals/ProfileFormModal";
 import { firestore } from "../Firebase"; // Ensure Firestore is imported
 import { doc, getDoc } from "firebase/firestore";
+import { ModalForm } from "./Modals/Modal";
+import ProfileForm from "./ProfileForm";
 
 function ProfileSection({ profileData, isOwnProfile }) {
   const [open, setOpen] = useState(false);
   const { userData } = useAuth();
+
 
   isOwnProfile;
 
@@ -103,11 +106,13 @@ function ProfileSection({ profileData, isOwnProfile }) {
         </div>
       </div>
 
-      <ProfileFormModal
+      <ModalForm
         setOpen={setOpen}
         open={open}
-        initialData={profileData}
-        userId={userData?.userID}
+        onClose={() => setOpen(false)}
+        modelTitle='Edit Profile'
+        showFooter={false}
+        modelDesc={<ProfileForm onClose={() => setOpen(false)} userId={userData?.userID} initialData={profileData} />}
       />
     </>
   );

@@ -27,7 +27,7 @@ const SignupForm = () => {
   return (
     <div className="bg-gray-100">
       <div className="flex items-center justify-center min-h-screen">
-        <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md  my-20 ">
+        <div className="bg-white p-8 rounded-lg shadow-lg w-5/6  max-w-md  my-20 ">
           <h1 className="text-2xl font-semibold text-center text-blue-700 mb-6">Sign Up for LinkedIn</h1>
 
           {error && <p className="text-red-500 text-center">{error}</p>}

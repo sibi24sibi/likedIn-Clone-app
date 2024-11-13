@@ -1,12 +1,14 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import ProfileSection from "../Components/ProfileSection";
 import PostModel from "../Components/PostModel";
 import { useAuth } from "../Api/AuthApi";
-import { DeleconfModal } from "../Components/Modals/DeleconfModal";
+import { ModalForm } from "../Components/Modals/Modal";
 import { handleDeletePost, listenToSingleUser } from "../Api/UploadApi";
-import { ProfileFormModal } from "../Components/Modals/ProfileFormModal";
 import { listenToSinglePost } from "../Api/UploadApi";
 import { useParams } from "react-router-dom";
+
+import { ProfileFormModal } from './../Components/Modals/ProfileFormModal';
+import { Button } from "flowbite-react";
 
 export const ProfilePage = () => {
   const [posts, setPosts] = useState([]);
@@ -71,12 +73,24 @@ export const ProfilePage = () => {
           onDelete={openDeleteModal}
           isOwnProfile={isOwnProfile}
         />
-        <DeleconfModal
+        <ModalForm
           open={openModal}
           onClose={closeDeleteModal}
-          onConfirm={confirmDelete}
+          modelTitle='Delete Post'
+          modelDesc='Are you sure you want to delete this post?'
+          modelFooter={<>
+            <Button onClick={confirmDelete} color='red'>
+              Delete
+            </Button>
+            <Button color="gray" onClick={closeDeleteModal}>cancel</Button>
+          </>}
+
         />
-        <ProfileFormModal setOpen={setOpen} open={open} />
+
+
+
+
+
       </div>
     </div>
   );

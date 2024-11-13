@@ -56,7 +56,7 @@ export const AuthProvider = ({ children }) => {
       if (user) {
         setUser(user);
         await fetchUserData(user.uid); // Fetch user data after authentication
-      
+
       } else {
         setUser(null);
         setUserData(null);
@@ -92,7 +92,7 @@ export const AuthProvider = ({ children }) => {
       await setDoc(doc(firestore, "users", user.uid), {
         name: displayName,
         email: email,
-        userID: user.uid, // Use Firebase-generated uid
+        userID: user.uid,
         profilePic: randomProfilePic || defaultProfile,
       });
 
@@ -137,7 +137,7 @@ export const AuthProvider = ({ children }) => {
     try {
       await signOut(auth);
       setSuccessMessage("Logged out successfully!");
-      navigate("/"); 
+      navigate("/");
       clearMessages();
     } catch (err) {
       setError(err.message || "Logout failed.");
