@@ -94,9 +94,9 @@ function MainApp() {
                 <Route path="/signup" element={<SignupForm />} />
                 <Route path="/signin" element={<SigninForm />} />
                 <Route path="/error" element={<ErorPage />} />
-                <Route path="*" element={<Navigate to="/error" />} />
                 <Route path="/" element={<Navigate to="/signin" />} />
                 <Route path="/forgot" element={<ForgotPasswordForm/>} />
+                <Route path="*" element={<Navigate to="/error" />} />
               </>
             )}
           </Routes>

@@ -5,6 +5,7 @@ import { firestore } from "../Firebase";
 import { collection, getDocs } from "firebase/firestore";
 import { defaultProfile } from "../assets/assets";
 import { listenToUsers } from "../Api/UploadApi";
+import { useAuth } from "../Api/AuthApi";
 
 function SearchComponent() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -12,11 +13,12 @@ function SearchComponent() {
   const [filteredUsers, setFilteredUsers] = useState([]);
   const [dropdownVisible, setDropdownVisible] = useState(false);
 
+  const { user } = useAuth()
 
 
-  
 
-   useEffect(() => {
+
+  useEffect(() => {
     const unsubscribe = listenToUsers(setUsers);
     return () => unsubscribe();
   }, []);
@@ -26,8 +28,9 @@ function SearchComponent() {
   // Filter users based on the search term
   useEffect(() => {
     const filtered = users.filter((user) =>
-      user.name.toLowerCase().includes(searchTerm.toLowerCase())
+      user.name && user.name.toLowerCase().includes(searchTerm.toLowerCase())
     );
+
     setFilteredUsers(filtered);
     setDropdownVisible(filtered.length > 0 && searchTerm !== "");
   }, [searchTerm, users]);
@@ -36,13 +39,14 @@ function SearchComponent() {
   useEffect(() => {
     if (searchTerm) {
       const filtered = users.filter((user) =>
-        user.name.toLowerCase().includes(searchTerm.toLowerCase())
+        (user.name || "").toLowerCase().includes(searchTerm.toLowerCase())
       );
+
       setFilteredUsers(filtered);
       setDropdownVisible(filtered.length > 0);
     } else {
       setFilteredUsers([]);
-      
+
       setDropdownVisible(false);
     }
   }, [searchTerm, users]);
@@ -53,32 +57,40 @@ function SearchComponent() {
   };
 
   const handleInputBlur = () => {
-    setTimeout(() => setDropdownVisible(false), 100); 
+    setTimeout(() => setDropdownVisible(false), 100);
     setSearchTerm('')
   };
+
+  console.log(user)
 
 
   return (
     <div className="relative">
       {/* Search Input */}
-      <form className="max-w-md mx-auto">
-        <label htmlFor="default-search" className="sr-only">Search</label>
-        <div className="relative">
-          <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-            <FontAwesomeIcon icon={faMagnifyingGlass} />
-          </div>
-          <input
-            type="search"
-            id="default-search"
-            className="block w-full pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
-            placeholder="Search for users..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            onFocus={() => setDropdownVisible(filteredUsers.length > 0)}
-            onBlur={handleInputBlur}
-            required
-          />
+      <form className={`${user ? "" : "hidden"} max-w-md mx-auto`}>
+        <label
+          htmlFor="default-search"
+          className="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white"
+        >
+          Search
+        </label>
+
+
+        <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+          <FontAwesomeIcon icon={faMagnifyingGlass} />
         </div>
+        <input
+          type="search"
+          id="default-search"
+          className="block w-full pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
+          placeholder="Search for users..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          onFocus={() => setDropdownVisible(filteredUsers.length > 0)}
+          onBlur={handleInputBlur}
+          required
+        />
+
       </form>
 
       {/* Dropdown of filtered users */}
