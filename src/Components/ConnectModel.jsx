@@ -1,4 +1,3 @@
-// ConnectModel.js
 import React, { useState, useEffect, useCallback } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUserPlus } from "@fortawesome/free-solid-svg-icons";
@@ -6,11 +5,13 @@ import { defaultCoverImage, defaultProfile } from "../assets/assets";
 import { useAuth } from "../Api/AuthApi";
 import { checkConnectionStatus, toggleConnectionStatus } from "../Api/UploadApi";
 import { useNavigate } from "react-router-dom";
+import { ModalForm } from './Modals/Modal';
 
 function ConnectModel({ user }) {
   const { userData } = useAuth();
   const [connected, setConnected] = useState(false);
-  const navigate = useNavigate()
+  const [open, setOpen] = useState(false);  // Track the modal open state
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (user.userID && userData.userID) {
@@ -19,14 +20,19 @@ function ConnectModel({ user }) {
   }, [user.userID, userData.userID]);
 
   const handleConnect = useCallback(() => {
-    toggleConnectionStatus(connected, userData.userID, user.userID, setConnected);
-  }, [connected, userData.userID, user.userID]);
+    // Open the modal before toggling the connection status
+    setOpen(true);
+  }, []);
 
+  const handleConfirmConnection = () => {
+    // Toggle connection status when confirmed in the modal
+    toggleConnectionStatus(connected, userData.userID, user.userID, setConnected);
+    setOpen(false); // Close the modal after confirming
+  };
 
   const handleViewProfile = () => {
-    navigate(`/profilepage/${user.id}`)
-  }
-
+    navigate(`/profilepage/${user.id}`);
+  };
 
   return (
     <div
@@ -48,17 +54,52 @@ function ConnectModel({ user }) {
         </div>
 
         <div className="font-thin my-3 text-[0.8rem] leading-4 line-clamp-2 text-center">Based on your profile</div>
-
       </div>
+
       <div className="bottom px-2">
         <button
           onClick={handleConnect}
-          className={`${connected ? ' bg-teal-700 hover:bg-teal-900 text-slate-100 ' : ' text-[#0a66c2]'} border-[#0a66c2] border-[1.5px] border-solid rounded-[1rem] w-full py-[1px] font-semibold hover:bg-[#e7e7e7] hover:border-[2px] transition-all duration-100 ease-linear h-[30px]`}
+          className={`${connected ? 'bg-teal-700 hover:bg-teal-900 text-slate-100' : 'text-[#0a66c2]'} border-[#0a66c2] border-[1.5px] border-solid rounded-[1rem] w-full py-[1px] font-semibold hover:bg-[#e7e7e7] hover:border-[2px] transition-all duration-100 ease-linear h-[30px]`}
         >
           <FontAwesomeIcon icon={faUserPlus} className="w-4 h-4 mr-1" />
           {connected ? "Connected" : "Connect"}
         </button>
       </div>
+
+      {/* Modal Form */}
+      <ModalForm
+        open={open}
+        onClose={() => setOpen(false)}
+        modelTitle="Connect Request"
+        modelDesc={`Are you sure you want to '${connected ? 'Disconnect' : 'Connect'}`}
+        modelFooter={<ModalForm
+          open={open}
+          onClose={() => setOpen(false)}
+          modelTitle="Connect Request"
+          modelDesc={`Are you sure you want to '${connected ? 'Disconnect' : 'Connect'}`}
+          modelFooter={
+            <div className="flex space-x-4">
+              {/* Yes Button */}
+              <button
+                className={`px-4 py-2 text-white font-semibold rounded-md transition-all duration-300 ${connected ? 'bg-emerald-500 hover:bg-emerald-600 active:bg-emerald-700' : 'bg-green-500 hover:bg-green-600 active:bg-green-700'}`}
+                onClick={handleConfirmConnection} // Confirm connection or disconnection
+              >
+                {connected ? 'Disconnect' : 'Connect'}
+              </button>
+
+              {/* Cancel Button */}
+              <button
+                className="px-4 py-2 text-gray-600 font-semibold rounded-md border border-gray-300 hover:bg-gray-100 focus:outline-none"
+                onClick={() => setOpen(false)} // Close modal without action
+              >
+                Cancel
+              </button>
+
+            </div>
+          }
+        />
+        }
+      />
     </div>
   );
 }
