@@ -2,10 +2,13 @@ import { AiFillLike } from "react-icons/ai";
 import { SlLike } from "react-icons/sl";
 import { FaRegComment } from "react-icons/fa";
 import React, { useEffect, useState } from "react";
-import { defaultProfile, NoPost } from "../assets/assets";
+import { defaultProfile, NoPost, postImageError } from "../assets/assets";
 import { useAuth } from "../Api/AuthApi";
 import { Button, Modal } from "flowbite-react";
+import { AsyncImage } from 'loadable-image'
+import { Blur } from 'transitions-kit'
 import { formatTimestamp } from "../assets/assets";
+
 import { handleLikePost, handleCommentPost } from "../Api/UploadApi"; // import your new like and comment functions
 
 import "./Skeleton.css";
@@ -31,7 +34,7 @@ function PostModel({
     });
     setLikedPosts(initialLikedPosts);
 
- 
+
 
   }, [postData, userData.name]);
 
@@ -85,7 +88,7 @@ function PostModel({
   };
 
 
-  console.log(postData.userProfileImage)
+
 
 
   return (
@@ -109,24 +112,24 @@ function PostModel({
         postData.map((post) => (
           <div
             key={post.id}
-            className={`bg-white ${
-              postMode ? "max-w-[640px]" : "max-w-[640px]"
-            } rounded-lg shadow-md mx-auto mt-16 mb-5 w-full
+            className={`bg-white ${postMode ? "max-w-[640px]" : "max-w-[640px]"
+              } rounded-lg shadow-md mx-auto mt-16 mb-5 w-full
              md:w-10/12`}
           >
             <div className="p-4">
               <div className="flex justify-between items-start mb-4">
                 <div className="flex items-start">
                   <div className="w-12 h-12  m-2">
+
                     <img
                       className="w-full h-full rounded-full object-cover"
-                      src={  post.userProfileImage || userData.profilePic }
+                      src={post.userProfileImage}
                       alt="Profile"
                     />
                   </div>
                   <div>
                     <h3 className="font-semibold text-gray-900">
-                      {post.userName ||  userData.name}
+                      {post.userName || userData.name}
                     </h3>
                     <p className="text-xs text-gray-600">
                       {post.userRole || "unknown"}
@@ -137,15 +140,15 @@ function PostModel({
                   </div>
                 </div>
                 <div>
-  {isOwnProfile && (
-    <button
-      onClick={() => onDelete(post.id)}
-      className="text-red-600 font-medium hover:bg-red-100 px-3 py-1 rounded transition duration-300"
-    >
-      Delete
-    </button>
-  )}
-</div>
+                  {isOwnProfile && (
+                    <button
+                      onClick={() => onDelete(post.id)}
+                      className="text-red-600 font-medium hover:bg-red-100 px-3 py-1 rounded transition duration-300"
+                    >
+                      Delete
+                    </button>
+                  )}
+                </div>
 
               </div>
 
@@ -154,10 +157,13 @@ function PostModel({
               </p>
               {post.imageUrl && (
                 <div className="mb-4 flex justify-center">
-                  <img
+                  <AsyncImage
                     src={post.imageUrl}
                     alt="Post content"
-                    className="max-w-full h-auto rounded-lg"
+                    style={{ width: "100%", height: "auto", aspectRatio: 4 / 5 }}
+                    loader={<div className="skeleton-image" />}
+                    error={<img src={postImageError} alt='error' />}
+                    Transition={props => <Blur radius={45} imeout={100}  {...props} />}
                   />
                 </div>
               )}
@@ -169,9 +175,8 @@ function PostModel({
               <div className="flex justify-around pt-2">
                 <button
                   onClick={() => handleLike(post.id)}
-                  className={`flex items-center ${
-                    likedPosts.has(post.id) ? "text-blue-600" : "text-gray-600"
-                  } hover:bg-gray-100 px-3 justify-center w-full py-2 rounded transition duration-300`}
+                  className={`flex items-center ${likedPosts.has(post.id) ? "text-blue-600" : "text-gray-600"
+                    } hover:bg-gray-100 px-3 justify-center w-full py-2 rounded transition duration-300`}
                 >
                   {likedPosts.has(post.id) ? <AiFillLike /> : <SlLike />}
                   <span className="mx-3"> Like </span>

@@ -67,42 +67,42 @@ function MainApp() {
 
   return (
     <div className=" min-w-full  ">
-        <Header />
-        <div className="App  min-h-screen   ">
-          <Routes>
-            {user ? (
-              <>
-                {/* Authenticated Routes */}
-                <Route path="/" element={<HomePage />} />
-                <Route path="/home" element={<HomePage />} />
-                <Route path="/profile" element={<ProfilePage />} />
-                <Route path="/connect/:profileId" element={<ProfilePage />} />
-                <Route path="/jobs" element={<JobPage />} />
-                <Route
-                  path="/jobs/:id"
-                  element={isMobile ? <JobDetail /> : <JobPage />}
-                />
-                <Route path="/postJob" element={<JobForm />} />
-                <Route path="/connect" element={<NetworkPage />} />
-                <Route path="/error" element={<ErorPage />} />
-                <Route path="*" element={<Navigate to="/error" />} />
+      <Header />
+      <div className="App  min-h-screen   ">
+        <Routes>
+          {user ? (
+            <>
+              {/* Authenticated Routes */}
+              <Route path="/" element={<HomePage />} />
+              <Route path="/home" element={<HomePage />} />
+              <Route path="/profile" element={<ProfilePage />} />
+              <Route path="/profilepage/:profileId" element={<ProfilePage />} />
+              <Route path="/jobs" element={<JobPage />} />
+              <Route
+                path="/jobs/:id"
+                element={isMobile ? <JobDetail /> : <JobPage />}
+              />
+              <Route path="/postJob" element={<JobForm />} />
+              <Route path="/connect" element={<NetworkPage />} />
+              <Route path="/error" element={<ErorPage />} />
+              <Route path="*" element={<Navigate to="/error" />} />
 
-              </>
-            ) : (
-              <>
-                {/* Unauthenticated Routes */}
-                <Route path="/signup" element={<SignupForm />} />
-                <Route path="/signin" element={<SigninForm />} />
-                <Route path="/error" element={<ErorPage />} />
-                <Route path="/" element={<Navigate to="/signin" />} />
-                <Route path="/forgot" element={<ForgotPasswordForm/>} />
-                <Route path="*" element={<Navigate to="/error" />} />
-              </>
-            )}
-          </Routes>
-        </div>
-        <Footer />
-  
+            </>
+          ) : (
+            <>
+              {/* Unauthenticated Routes */}
+              <Route path="/signup" element={<SignupForm />} />
+              <Route path="/signin" element={<SigninForm />} />
+              <Route path="/error" element={<ErorPage />} />
+              <Route path="/" element={<Navigate to="/signin" />} />
+              <Route path="/forgot" element={<ForgotPasswordForm />} />
+              <Route path="*" element={<Navigate to="/error" />} />
+            </>
+          )}
+        </Routes>
+      </div>
+      <Footer />
+
     </div>
   );
 }

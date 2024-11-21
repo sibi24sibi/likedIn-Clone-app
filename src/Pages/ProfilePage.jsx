@@ -7,7 +7,7 @@ import { handleDeletePost, listenToSingleUser } from "../Api/UploadApi";
 import { listenToSinglePost } from "../Api/UploadApi";
 import { useParams } from "react-router-dom";
 
-import { ProfileFormModal } from './../Components/Modals/ProfileFormModal';
+// import { ProfileFormModal } from './../Components/Modals/ProfileFormModal';
 import { Button } from "flowbite-react";
 
 export const ProfilePage = () => {

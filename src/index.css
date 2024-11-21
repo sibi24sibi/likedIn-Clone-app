@@ -2,3 +2,8 @@
 @tailwind components;
 @tailwind utilities;
 
+.my-custom-class {
+  max-width: 100%;
+  height: auto;
+  border-radius: 0.5rem; /* 8px, equivalent to Tailwind's rounded-lg */
+}

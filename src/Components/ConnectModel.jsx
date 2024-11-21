@@ -5,7 +5,7 @@ import { faUserPlus } from "@fortawesome/free-solid-svg-icons";
 import { defaultCoverImage, defaultProfile } from "../assets/assets";
 import { useAuth } from "../Api/AuthApi";
 import { checkConnectionStatus, toggleConnectionStatus } from "../Api/UploadApi";
-import { useNavigate} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 function ConnectModel({ user }) {
   const { userData } = useAuth();
@@ -24,7 +24,7 @@ function ConnectModel({ user }) {
 
 
   const handleViewProfile = () => {
-    navigate(`/connect/${user.id}`)
+    navigate(`/profilepage/${user.id}`)
   }
 
 
@@ -33,23 +33,23 @@ function ConnectModel({ user }) {
       key={user.id}
       className="md:min-w-[184px] md:max-w-[184px] h-72 rounded-md shadow-sm hover:shadow-[0px_3px_4px_1px_#b6b6b6] relative border-[1px] border-gray-300 border-opacity-90 transition-shadow ease-in duration-100"
     >
-     <div onClick={handleViewProfile}>
-     <div className="banner-image">
-        <img src={defaultCoverImage} alt="Banner" className="w-full h-16 object-cover rounded-t-md" />
-      </div>
-      <div className="avatar flex justify-center items-center">
-        <img src={user.profilePic || defaultProfile} alt={user.name || "User"} className="rounded-full w-24 absolute" />
-      </div>
-      <div className="names mt-14 px-2 flex items-center justify-center flex-col">
-        <h3 className="font-semibold">{user.name}</h3>
-        <div className="font-thin text-center min-h-11 overflow-hidden line-clamp-2 break-words leading-5">
-          {user.role || 'unknown'}
+      <div onClick={handleViewProfile}>
+        <div className="banner-image">
+          <img src={defaultCoverImage} alt="Banner" className="w-full h-16 object-cover rounded-t-md" />
         </div>
-      </div>
+        <div className="avatar flex justify-center items-center">
+          <img src={user.profilePic || defaultProfile} alt={user.name || "User"} className="rounded-full w-24 absolute" />
+        </div>
+        <div className="names mt-14 px-2 flex items-center justify-center flex-col">
+          <h3 className="font-semibold">{user.name}</h3>
+          <div className="font-thin text-center min-h-11 overflow-hidden line-clamp-2 break-words leading-5">
+            {user.role || 'unknown'}
+          </div>
+        </div>
 
         <div className="font-thin my-3 text-[0.8rem] leading-4 line-clamp-2 text-center">Based on your profile</div>
 
-     </div>
+      </div>
       <div className="bottom px-2">
         <button
           onClick={handleConnect}

@@ -7,7 +7,7 @@ import { MdVerifiedUser } from "react-icons/md";
 import { FiPlusCircle } from "react-icons/fi";
 import { defaultCoverImage, defaultProfile } from "../assets/assets";
 import { useAuth } from "../Api/AuthApi";
-import { ProfileFormModal } from "./Modals/ProfileFormModal";
+// import { ProfileFormModal } from "./Modals/ProfileFormModal";
 import { firestore } from "../Firebase"; // Ensure Firestore is imported
 import { doc, getDoc } from "firebase/firestore";
 import { ModalForm } from "./Modals/Modal";

@@ -2,9 +2,10 @@ import linkedinSmallLogo from "./images/logo.png";
 import linkedinBigLogo from "./images/LinkedIn-Logo.png";
 import defaultProfile from "./images/image.jpg";
 import defaultCoverImage from "./images/cover2.webp";
-import errorImg from '../assets/images/Likedin-error-image.png'
-import NoPost from '../assets/images/Screenshot 2024-10-14 221043.png'
-import jobLogoPic from '../../src/assets/images/logo.avif'
+import errorImg from "../assets/images/Likedin-error-image.png";
+import NoPost from "../assets/images/Screenshot 2024-10-14 221043.png";
+import jobLogoPic from "../../src/assets/images/logo.avif";
+import postImageError from "../../src/assets/images/error-image-signature.png";
 
 import profilePic_King from "../assets/images/profilePic/Monkey_Profile (1).jpg";
 import profilePic_BlueFunky from "../assets/images/profilePic/Monkey_Profile (2).jpg";
@@ -37,10 +38,6 @@ export const formatTimestamp = (timestamp) => {
   return `${days} day${days !== 1 ? "s" : ""} ago`;
 };
 
-
-
-
-
 export const allDefaultProfilePics = [
   profilePic_King,
   profilePic_BlueFunky,
@@ -59,8 +56,6 @@ export const allDefaultProfilePics = [
   profilePic_luffy,
 ];
 
-
-
 // Named exports
 export {
   linkedinSmallLogo,
@@ -69,5 +64,6 @@ export {
   defaultCoverImage,
   errorImg,
   NoPost,
-  jobLogoPic
+  jobLogoPic,
+  postImageError,
 };
