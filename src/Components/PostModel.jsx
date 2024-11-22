@@ -100,7 +100,7 @@ function PostModel({
     navigate(`/profilepage/${postDataUserID}`);
   };
 
-
+  console.log(userData)
   return (
     <>
       {loadings ? (
@@ -133,7 +133,7 @@ function PostModel({
 
                     <img
                       className="w-full h-full rounded-full object-cover"
-                      src={isOwnProfile ? userData.name : userDetail?.profilePic || defaultProfile}
+                      src={isOwnProfile ? userData.name : userDetail?.profilePic}
                       alt="Profile"
                     />
                   </div>

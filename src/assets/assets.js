@@ -7,20 +7,20 @@ import NoPost from "@assets/images/Screenshot 2024-10-14 221043.png";
 import jobLogoPic from "@assets/images/logo.avif";
 import postImageError from "@assets/images/error-image-signature.png";
 
-import profilePic_King from "@assets/images/profilePic/Monkey_Profile (1).jpg";
-import profilePic_BlueFunky from "@assets/images/profilePic/Monkey_Profile (2).jpg";
-import profilePic_BrownSkele from "@assets/images/profilePic/Monkey_Profile (3).jpg";
-import profilePic_SquareCap from "@assets/images/profilePic/Monkey_Profile (5).jpg";
-import profilePic_RedCheckeShirt from "@assets/images/profilePic/Monkey_Profile (6).jpg";
-import profilePic_Leopard from "@assets/images/profilePic/Monkey_Profile (7).jpg";
-import profilePic_Royal from "@assets/images/profilePic/Monkey_Profile (8).jpg";
-import profilePic_Devil from "@assets/images/profilePic/Monkey_Profile (9).jpg";
-import profilePic_FunnyHatBatch from "@assets/images/profilePic/Monkey_Profile (10).jpg";
-import profilePic_BasketBallAthelete from "@assets/images/profilePic/Monkey_Profile (11).jpg";
-import profilePic_Normal from "@assets/images/profilePic/Monkey_Profile (12).jpg";
-import profilePic_superman from "@assets/images/profilePic/Monkey_Profile (13).jpg";
-import profilePic_cigar from "@assets/images/profilePic/Monkey_Profile (14).jpg";
-import profilePic_luffy from "@assets/images/profilePic/Monkey_Profile (16).jpg";
+import profilePic_King from "@assets/images/Monkey_Profile (1).jpg";
+import profilePic_BlueFunky from "@assets/images/Monkey_Profile (2).jpg";
+import profilePic_BrownSkele from "@assets/images/Monkey_Profile (3).jpg";
+import profilePic_SquareCap from "@assets/images/Monkey_Profile (5).jpg";
+import profilePic_RedCheckeShirt from "@assets/images/Monkey_Profile (6).jpg";
+import profilePic_Leopard from "@assets/images/Monkey_Profile (7).jpg";
+import profilePic_Royal from "@assets/images/Monkey_Profile (8).jpg";
+import profilePic_Devil from "@assets/images/Monkey_Profile (9).jpg";
+import profilePic_FunnyHatBatch from "@assets/images/Monkey_Profile (10).jpg";
+import profilePic_BasketBallAthelete from "@assets/images/Monkey_Profile (11).jpg";
+import profilePic_Normal from "@assets/images/Monkey_Profile (12).jpg";
+import profilePic_superman from "@assets/images/Monkey_Profile (13).jpg";
+import profilePic_cigar from "@assets/images/Monkey_Profile (14).jpg";
+import profilePic_luffy from "@assets/images/Monkey_Profile (16).jpg";
 // Function to format the timestamp
 export const formatTimestamp = (timestamp) => {
   const now = new Date();
