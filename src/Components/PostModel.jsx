@@ -133,7 +133,7 @@ function PostModel({
 
                     <img
                       className="w-full h-full rounded-full object-cover"
-                      src={isOwnProfile ? userData.name : userDetail?.profilePic || defaultProfile}
+                      src={isOwnProfile ? userData.profilePic : userDetail?.profilePic || defaultProfile}
                       alt="Profile"
                     />
                   </div>
@@ -142,7 +142,7 @@ function PostModel({
                       {isOwnProfile ? userData.name : userDetail?.name || post.userName}
                     </h3>
                     <p className="text-xs text-gray-600">
-                      {isOwnProfile ? userData.name : userDetail?.role || "unknown"}
+                      {isOwnProfile ? userData.role : userDetail?.role || "unknown"}
                     </p>
                     <p className="text-xs text-gray-500">
                       Posted {formatTimestamp(post.createdAt)}
