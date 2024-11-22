@@ -1,108 +1,50 @@
-import React, { useEffect, useState } from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Watch } from "react-loader-spinner";
-import {
-  Route,
-
-  Routes,
-  Navigate,
-} from "react-router-dom";
-
+import { Route, Routes, Navigate } from "react-router-dom";
 import Header from "./Components/Header";
 import Footer from "./Components/Footer";
-import PostModel from "./Components/PostModel";
-import ConnectModel from "./Components/ConnectModel";
-import SigninForm from "./Components/SigninForm";
-import SignupForm from "./Components/SignupForm";
-import HomePage from "./Pages/HomePage";
-import ProfileSection from "./Components/ProfileSection";
-import JobModel from "./Components/JobModel";
-import JobForm from "./Components/JobForm";
-import JobPage from "./Pages/JobPage";
-import { ErorPage } from "./Pages/ErorPage";
-import { AuthProvider, useAuth } from "./Api/AuthApi";
-import { NetworkPage } from "./Pages/NetworkPage";
-import { ProfilePage } from "./Pages/ProfilePage";
-import JobDetail from "./Components/JobDetail";
-import ForgotPasswordForm from "./Components/ForgotPasswordForm";
+import { useAuth } from "./Api/AuthApi";
+import { routes } from "./Routes/route";
 
-// Initialize Firebase Authentication
 function App() {
-  return (
-    <AuthProvider>
-      <MainApp />
-    </AuthProvider>
-  );
-}
+  const { user, loading, isMobile } = useAuth();
 
-function MainApp() {
-  const { user, loading } = useAuth();
 
-  const [isMobile, setIsMobile] = useState(window.innerWidth < 768); // Adjust breakpoint as needed
 
-  useEffect(() => {
-    const handleResize = () => {
-      setIsMobile(window.innerWidth < 768);
-    };
 
-    window.addEventListener("resize", handleResize);
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
-  }, []);
+  const renderRoute = ({ path, element, protected: isProtected }) => {
+    if (isProtected && !user) {
 
-  // Show a loading spinner while authentication state is being determined
+      return <Route key={path} path={path} element={<Navigate to="/signin" />} />;
+    }
+
+
+    return (
+      <Route
+        key={path}
+        path={path}
+        element={typeof element === "function" ? element({ isMobile }) : element}
+      />
+    );
+  };
+
+  // Handle loading state
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-screen min-h-screen  max-h-screen">
-        <Watch
-          visible={true}
-          width="200"
-          color="#4fa94d"
-          ariaLabel="infinity-spin-loading"
-        />
+      <div className="flex items-center justify-center h-screen">
+        <Watch visible={true} width="200" color="#4fa94d" />
       </div>
     );
   }
 
   return (
-    <div className=" min-w-full  ">
+    <div className="min-w-full">
       <Header />
-      <div className="App  min-h-screen   ">
+      <div className="App min-h-screen">
         <Routes>
-          {user ? (
-            <>
-              {/* Authenticated Routes */}
-              <Route path="/" element={<HomePage />} />
-              <Route path="/home" element={<HomePage />} />
-              <Route path="/profile" element={<ProfilePage />} />
-              <Route path="/profilepage/:profileId" element={<ProfilePage />} />
-              <Route path="/jobs" element={<JobPage />} />
-              <Route
-                path="/jobs/:id"
-                element={isMobile ? <JobDetail /> : <JobPage />}
-              />
-              <Route path="/postJob" element={<JobForm />} />
-              <Route path="/connect" element={<NetworkPage />} />
-              <Route path="/error" element={<ErorPage />} />
-              <Route path="*" element={<Navigate to="/error" />} />
-
-            </>
-          ) : (
-            <>
-              {/* Unauthenticated Routes */}
-              <Route path="/signup" element={<SignupForm />} />
-              <Route path="/signin" element={<SigninForm />} />
-              <Route path="/error" element={<ErorPage />} />
-              <Route path="/" element={<Navigate to="/signin" />} />
-              <Route path="/forgot" element={<ForgotPasswordForm />} />
-              <Route path="*" element={<Navigate to="/error" />} />
-            </>
-          )}
+          {routes.map(renderRoute)}
         </Routes>
       </div>
       <Footer />
-
     </div>
   );
 }

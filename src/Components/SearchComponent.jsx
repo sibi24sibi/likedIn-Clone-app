@@ -62,7 +62,7 @@ function SearchComponent() {
     setSearchTerm('')
   };
 
-  console.log(user)
+
 
 
   return (

@@ -4,11 +4,14 @@ import App from "./App.jsx";
 import "./index.css";
 import "flowbite";
 import { BrowserRouter } from "react-router-dom";
+import { AuthProvider } from "./Api/AuthApi";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <BrowserRouter>
-      <App />
+      <AuthProvider>
+        <App />
+      </AuthProvider>
     </BrowserRouter>
   </StrictMode>
 

@@ -76,21 +76,20 @@ function ConnectModel({ user }) {
           open={open}
           onClose={() => setOpen(false)}
           modelTitle="Connect Request"
-          modelDesc={`Are you sure you want to '${connected ? 'Disconnect' : 'Connect'}`}
+          modelDesc={`Are you sure you want to ${connected ? 'Disconnect' : 'Connect'} with ${user.name}`}
           modelFooter={
             <div className="flex space-x-4">
-              {/* Yes Button */}
+
               <button
                 className={`px-4 py-2 text-white font-semibold rounded-md transition-all duration-300 ${connected ? 'bg-emerald-500 hover:bg-emerald-600 active:bg-emerald-700' : 'bg-green-500 hover:bg-green-600 active:bg-green-700'}`}
-                onClick={handleConfirmConnection} // Confirm connection or disconnection
+                onClick={handleConfirmConnection}
               >
                 {connected ? 'Disconnect' : 'Connect'}
               </button>
 
-              {/* Cancel Button */}
               <button
                 className="px-4 py-2 text-gray-600 font-semibold rounded-md border border-gray-300 hover:bg-gray-100 focus:outline-none"
-                onClick={() => setOpen(false)} // Close modal without action
+                onClick={() => setOpen(false)}
               >
                 Cancel
               </button>

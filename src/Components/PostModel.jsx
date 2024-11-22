@@ -160,7 +160,7 @@ function PostModel({
                   <AsyncImage
                     src={post.imageUrl}
                     alt="Post content"
-                    style={{ width: "100%", height: "auto", aspectRatio: 4 / 5 }}
+                    style={{ width: "100%", height: "auto", aspectRatio: 4 / 5, borderRadius: "10px" }}
                     loader={<div className="skeleton-image" />}
                     error={<img src={postImageError} alt='error' />}
                     Transition={props => <Blur radius={45} imeout={100}  {...props} />}

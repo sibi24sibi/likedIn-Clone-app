@@ -157,6 +157,20 @@ export const AuthProvider = ({ children }) => {
   };
 
 
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 768); // Adjust breakpoint as needed
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
+
   return (
     <AuthContext.Provider
       value={{
@@ -172,6 +186,7 @@ export const AuthProvider = ({ children }) => {
         resetMessage,
         sendPasswordResetEmail,
         userData,
+        isMobile
       }}
     >
       {children}
