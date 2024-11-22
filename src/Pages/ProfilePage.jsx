@@ -58,6 +58,8 @@ export const ProfilePage = () => {
     }
   };
 
+  console.log(otherUser)
+
   return (
     <div>
       <div className="flex justify-center">
@@ -66,6 +68,7 @@ export const ProfilePage = () => {
       <div className="flex flex-col mx-4">
         <PostModel
           postData={isOwnProfile ? posts : otherUserPosts}
+          userDetail={otherUser}
           loadings={loading}
           postMode={isOwnProfile ? posts.length > 0 : otherUserPosts.length > 0}
           onDelete={openDeleteModal}

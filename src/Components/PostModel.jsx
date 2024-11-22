@@ -19,7 +19,8 @@ function PostModel({
   postData = [],
   postMode,
   onDelete,
-  isOwnProfile
+  isOwnProfile,
+  userDetail,
 }) {
   const { userData } = useAuth();
   const [likedPosts, setLikedPosts] = useState(new Set());
@@ -43,6 +44,7 @@ function PostModel({
   }, [postData, userData.name]);
 
 
+  console.log(isOwnProfile)
 
   const LoadingComponent = () => (
     <div className="skeleton-wrapper">
@@ -131,16 +133,16 @@ function PostModel({
 
                     <img
                       className="w-full h-full rounded-full object-cover"
-                      src={post.userProfileImage}
+                      src={isOwnProfile ? userData.name : userDetail?.profilePic || defaultProfile}
                       alt="Profile"
                     />
                   </div>
                   <div>
                     <h3 className="font-semibold text-gray-900">
-                      {post.userName || userData.name}
+                      {isOwnProfile ? userData.name : userDetail?.name || post.userName}
                     </h3>
                     <p className="text-xs text-gray-600">
-                      {post.userRole || "unknown"}
+                      {isOwnProfile ? userData.name : userDetail?.role || "unknown"}
                     </p>
                     <p className="text-xs text-gray-500">
                       Posted {formatTimestamp(post.createdAt)}
