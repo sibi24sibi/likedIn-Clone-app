@@ -44,7 +44,7 @@ function PostModel({
   }, [postData, userData.name]);
 
 
-  console.log(isOwnProfile)
+
 
   const LoadingComponent = () => (
     <div className="skeleton-wrapper">

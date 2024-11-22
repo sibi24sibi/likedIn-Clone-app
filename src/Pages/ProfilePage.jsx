@@ -58,7 +58,7 @@ export const ProfilePage = () => {
     }
   };
 
-  console.log(otherUser)
+
 
   return (
     <div>
