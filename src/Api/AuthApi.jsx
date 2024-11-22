@@ -55,7 +55,7 @@ export const AuthProvider = ({ children }) => {
       setLoading(true);
       if (user) {
         setUser(user);
-        await fetchUserData(user.uid); // Fetch user data after authentication
+        await fetchUserData(user.uid);
 
       } else {
         setUser(null);
@@ -72,7 +72,7 @@ export const AuthProvider = ({ children }) => {
     try {
       await signInWithEmailAndPassword(auth, email, password);
       setSuccessMessage("Logged in successfully!");
-      navigate("/home"); // Navigate to home page after login
+      navigate("/home");
       clearMessages();
     } catch (err) {
       setError(err.message || "Login failed.");
@@ -85,10 +85,10 @@ export const AuthProvider = ({ children }) => {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
 
-      // Assign a random profile picture
+
       const randomProfilePic = allDefaultProfilePics[Math.floor(Math.random() * allDefaultProfilePics.length)];
 
-      // Add user data to Firestore
+
       await setDoc(doc(firestore, "users", user.uid), {
         name: displayName,
         email: email,
@@ -97,7 +97,7 @@ export const AuthProvider = ({ children }) => {
       });
 
       setSuccessMessage("Account created successfully!");
-      navigate("/home"); // Navigate to welcome page after signup
+      navigate("/home");
       clearMessages();
     } catch (err) {
       setError(err.message || "Signup failed.");
@@ -111,7 +111,7 @@ export const AuthProvider = ({ children }) => {
       const result = await signInWithPopup(auth, provider);
       const user = result.user;
 
-      // Check if user data exists, if not, create a new entry in Firestore
+
       const userDoc = await getDoc(doc(firestore, "users", user.uid));
       if (!userDoc.exists()) {
         const randomProfilePic = allDefaultProfilePics[Math.floor(Math.random() * allDefaultProfilePics.length)];
@@ -125,7 +125,7 @@ export const AuthProvider = ({ children }) => {
       }
 
       setSuccessMessage("Logged in with Google successfully!");
-      navigate("/home"); // Navigate to dashboard after Google login
+      navigate("/home");
       clearMessages();
     } catch (err) {
       setError(err.message || "Google login failed.");
@@ -157,7 +157,7 @@ export const AuthProvider = ({ children }) => {
   };
 
 
-  const [isMobile, setIsMobile] = useState(window.innerWidth < 768); // Adjust breakpoint as needed
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
 
   useEffect(() => {
     const handleResize = () => {

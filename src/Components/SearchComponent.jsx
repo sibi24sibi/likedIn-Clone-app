@@ -1,30 +1,24 @@
 import React, { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
-import { firestore } from "../Firebase";
-import { collection, getDocs } from "firebase/firestore";
 import { defaultProfile } from "../assets/assets";
 import { listenToUsers } from "../Api/UploadApi";
 import { useAuth } from "../Api/AuthApi";
+import { useNavigate } from "react-router-dom";
 
 function SearchComponent() {
   const [searchTerm, setSearchTerm] = useState("");
   const [users, setUsers] = useState([]);
   const [filteredUsers, setFilteredUsers] = useState([]);
   const [dropdownVisible, setDropdownVisible] = useState(false);
+  const navigate = useNavigate();
 
-  const { user } = useAuth()
-
-
-
-
+  const { user } = useAuth();
 
   useEffect(() => {
     const unsubscribe = listenToUsers(setUsers);
     return () => unsubscribe();
   }, []);
-
-
 
   // Filter users based on the search term
   useEffect(() => {
@@ -36,34 +30,15 @@ function SearchComponent() {
     setDropdownVisible(filtered.length > 0 && searchTerm !== "");
   }, [searchTerm, users]);
 
-
-  useEffect(() => {
-    if (searchTerm) {
-      const filtered = users.filter((user) =>
-        (user.name || "").toLowerCase().includes(searchTerm.toLowerCase())
-      );
-
-      setFilteredUsers(filtered);
-      setDropdownVisible(filtered.length > 0);
-    } else {
-      setFilteredUsers([]);
-
-      setDropdownVisible(false);
-    }
-  }, [searchTerm, users]);
-
-  const handleDropdownItemClick = (userName) => {
+  const handleDropdownItemClick = (userName, userID) => {
     setSearchTerm(userName);
     setDropdownVisible(false);
+    navigate(`/profilepage/${userID}`);
   };
 
   const handleInputBlur = () => {
-    setTimeout(() => setDropdownVisible(false), 100);
-    setSearchTerm('')
+    setTimeout(() => setDropdownVisible(false), 100); // Delay hiding to allow clicking on dropdown items
   };
-
-
-
 
   return (
     <div className="relative">
@@ -75,7 +50,6 @@ function SearchComponent() {
         >
           Search
         </label>
-
 
         <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
           <FontAwesomeIcon icon={faMagnifyingGlass} />
@@ -91,7 +65,6 @@ function SearchComponent() {
           onBlur={handleInputBlur}
           required
         />
-
       </form>
 
       {/* Dropdown of filtered users */}
@@ -102,11 +75,15 @@ function SearchComponent() {
               <li
                 key={user.id}
                 className="px-4 py-2 cursor-pointer hover:bg-gray-200 flex items-center gap-4"
-                onClick={() => handleDropdownItemClick(user.name)}
+                onClick={() => handleDropdownItemClick(user.name, user.id)} // Use the name from the user object
                 role="option"
                 aria-selected="false"
               >
-                <img src={user.profilePic || defaultProfile} className="w-7 h-7 rounded-full" alt={`${user.name}'s profile`} />
+                <img
+                  src={user.profilePic || defaultProfile}
+                  className="w-7 h-7 rounded-full"
+                  alt={`${user.name}'s profile`}
+                />
                 <span>{user.name}</span>
               </li>
             ))}

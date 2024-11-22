@@ -12,18 +12,22 @@ import { formatTimestamp } from "../assets/assets";
 import { handleLikePost, handleCommentPost } from "../Api/UploadApi"; // import your new like and comment functions
 
 import "./Skeleton.css";
+import { useNavigate } from "react-router-dom";
 
 function PostModel({
   loadings,
   postData = [],
   postMode,
   onDelete,
-  isOwnProfile,
+  isOwnProfile
 }) {
   const { userData } = useAuth();
   const [likedPosts, setLikedPosts] = useState(new Set());
   const [visibleComments, setVisibleComments] = useState({});
   const [newComment, setNewComment] = useState({});
+
+
+  const navigate = useNavigate()
 
   useEffect(() => {
     const initialLikedPosts = new Set();
@@ -37,6 +41,8 @@ function PostModel({
 
 
   }, [postData, userData.name]);
+
+
 
   const LoadingComponent = () => (
     <div className="skeleton-wrapper">
@@ -88,7 +94,9 @@ function PostModel({
   };
 
 
-
+  const handleViewProfile = (postDataUserID) => {
+    navigate(`/profilepage/${postDataUserID}`);
+  };
 
 
   return (
@@ -117,7 +125,7 @@ function PostModel({
              md:w-10/12`}
           >
             <div className="p-4">
-              <div className="flex justify-between items-start mb-4">
+              <div onClick={() => handleViewProfile(post.userID)} className="flex justify-between items-start mb-4">
                 <div className="flex items-start">
                   <div className="w-12 h-12  m-2">
 

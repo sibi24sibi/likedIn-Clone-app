@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback, useMemo } from "react";
 import { firestore } from "../Firebase";
 import { collection, onSnapshot, orderBy, query, limit, startAfter } from "firebase/firestore";
 import UploadPost from "../Components/UploadPost";
@@ -7,7 +7,7 @@ import { listenToUsers } from "../Api/UploadApi";
 import { defaultProfile } from "../assets/assets";
 import { useAuth } from "../Api/AuthApi";
 
-const POSTS_LIMIT = 7; 
+const POSTS_LIMIT = 7;
 
 function Home() {
   const [posts, setPosts] = useState([]);
@@ -16,7 +16,9 @@ function Home() {
   const [lastVisible, setLastVisible] = useState(null);
   const postMode = false;
   const [users, setUsers] = useState([]);
-  const {userData} = useAuth()
+  const { userData } = useAuth();
+
+
 
   // Load users only once on component mount
   useEffect(() => {
@@ -24,16 +26,17 @@ function Home() {
     return () => unsubscribeUsers();
   }, []);
 
-
-
-  // Fetch posts and attach user data
-  useEffect(() => {
-    const postsQuery = query(
+  // Memoize the posts query to avoid unnecessary recalculation
+  const postsQuery = useMemo(() => {
+    return query(
       collection(firestore, "posts"),
       orderBy("createdAt", "desc"),
       limit(POSTS_LIMIT)
     );
+  }, []);
 
+  // Fetch posts and attach user data
+  useEffect(() => {
     const unsubscribePosts = onSnapshot(postsQuery, (snapshot) => {
       const postsData = snapshot.docs.map((doc) => {
         const post = doc.data();
@@ -52,10 +55,10 @@ function Home() {
     });
 
     return () => unsubscribePosts();
-  }, [users]);
+  }, [users, postsQuery]);
 
-  // Load more posts when scrolling
-  const loadMorePosts = () => {
+  // Memoize the loadMorePosts function using useCallback
+  const loadMorePosts = useCallback(() => {
     if (loadingMore || !lastVisible) return; // Prevent loading if already loading or no more posts
 
     setLoadingMore(true);
@@ -84,21 +87,22 @@ function Home() {
       setLastVisible(snapshot.docs[snapshot.docs.length - 1]); // Update last visible post
       setLoadingMore(false);
     });
-  };
+  }, [loadingMore, lastVisible, users]);
 
-  // Handle scroll event
-  const handleScroll = () => {
+  // Memoize the handleScroll function using useCallback
+  const handleScroll = useCallback(() => {
     if (window.innerHeight + document.documentElement.scrollTop + 1 >= document.documentElement.offsetHeight) {
       loadMorePosts();
     }
-  };
+  }, [loadMorePosts]);
 
+  // Set up scroll listener once on mount and remove it on unmount
   useEffect(() => {
     window.addEventListener("scroll", handleScroll);
     return () => {
       window.removeEventListener("scroll", handleScroll);
     };
-  }, [lastVisible, loadingMore]);
+  }, [handleScroll]);
 
   const LoadingComponent = () => (
     <div className="skeleton-wrapper">
@@ -130,14 +134,13 @@ function Home() {
         </div>
         <div className="mx-4">
           <PostModel postData={posts} userData={userData} loadings={loading} postMode={postMode} />
-          {loadingMore && 
-          <>
-
-          <LoadingComponent/>
-          <LoadingComponent/>
-          <LoadingComponent/>
-          </>
-          } 
+          {loadingMore &&
+            <>
+              <LoadingComponent />
+              <LoadingComponent />
+              <LoadingComponent />
+            </>
+          }
         </div>
       </div>
     </div>

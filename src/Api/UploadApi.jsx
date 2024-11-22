@@ -1,10 +1,12 @@
 import { firestore } from "../Firebase";
-import { collection, addDoc  , deleteDoc,
-  doc, updateDoc,arrayRemove ,arrayUnion ,setDoc ,onSnapshot,
+import {
+  collection, addDoc, deleteDoc,
+  doc, updateDoc, arrayRemove, arrayUnion, setDoc, onSnapshot,
   where,
   query,
   getDoc,
-  getDocs} from "firebase/firestore";
+  getDocs
+} from "firebase/firestore";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 import uuid from "react-uuid";
@@ -16,7 +18,7 @@ const uploadImage = async (file) => {
   const storageRef = ref(storage, `images/${file.name}`);
   await uploadBytes(storageRef, file);
   const downloadURL = await getDownloadURL(storageRef);
-  
+
   return downloadURL;
 };
 
@@ -29,10 +31,10 @@ export const listenToUsers = (setUsers) => {
       id: doc.id,
       ...doc.data(),
     }));
-    setUsers(usersList); 
+    setUsers(usersList);
   });
 
-  return unsubscribe; 
+  return unsubscribe;
 };
 
 export const listenToAllPosts = (setAllPosts) => {
@@ -42,10 +44,10 @@ export const listenToAllPosts = (setAllPosts) => {
       id: doc.id,
       ...doc.data(),
     }));
-    setAllPosts(usersList); 
+    setAllPosts(usersList);
   });
 
-  return unsubscribe; 
+  return unsubscribe;
 };
 
 
@@ -72,7 +74,7 @@ export const listenToSinglePost = (setAllPosts, userID) => {
 
   const PostsQuery = query(
     collection(firestore, "posts"),
-    where("userID", "==", userID) 
+    where("userID", "==", userID)
   );
 
 
@@ -84,7 +86,7 @@ export const listenToSinglePost = (setAllPosts, userID) => {
     setAllPosts(postsList);
   });
 
-  return unsubscribe; 
+  return unsubscribe;
 };
 
 
@@ -114,7 +116,7 @@ export const addPost = async (postData, imageFile) => {
 // Function to handle post deletion
 export const handleDeletePost = async (postId) => {
   try {
-    
+
     await deleteDoc(doc(firestore, "posts", postId)); // Delete the post from Firestore
   } catch (error) {
     console.error("Error deleting post: ", error);
@@ -122,7 +124,7 @@ export const handleDeletePost = async (postId) => {
 };
 
 
-export const handlePostSubmit = async  (postContent,selectedFile,user,closeModal,setLoading) => {
+export const handlePostSubmit = async (postContent, selectedFile, user, closeModal, setLoading) => {
   if (postContent.trim() === "") return; // Prevent empty posts
 
   setLoading(true); // Start loading when posting
@@ -153,7 +155,7 @@ export const handlePostSubmit = async  (postContent,selectedFile,user,closeModal
 
 export const handleLikePost = async (postId, username, like) => {
   const postRef = doc(firestore, "posts", postId);
-  
+
   // Update likes based on like parameter
   try {
     await updateDoc(postRef, {
@@ -170,21 +172,21 @@ export const handleLikePost = async (postId, username, like) => {
 export const handleCommentPost = async (postId, username, commentText) => {
   const postRef = doc(firestore, "posts", postId);
   await updateDoc(postRef, {
-      comments: arrayUnion({ username, text: commentText, createdAt: new Date() }) // Add comment object to the comments array
+    comments: arrayUnion({ username, text: commentText, createdAt: new Date() }) // Add comment object to the comments array
   });
 };
 
 
 export const addConnection = async (userId, targetId) => {
   try {
-    const connectionToAdd = doc(collection(firestore,'connections'), `${userId}_${targetId}`);
+    const connectionToAdd = doc(collection(firestore, 'connections'), `${userId}_${targetId}`);
 
     await setDoc(connectionToAdd, { userId, targetId });
 
 
   } catch (err) {
     console.error("Error adding connection:", err);
-  
+
   }
 };
 
