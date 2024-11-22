@@ -133,7 +133,7 @@ function PostModel({
 
                     <img
                       className="w-full h-full rounded-full object-cover"
-                      src={isOwnProfile ? userData.name : userDetail?.profilePic}
+                      src={isOwnProfile ? userData.profilePic : userDetail?.profilePic}
                       alt="Profile"
                     />
                   </div>

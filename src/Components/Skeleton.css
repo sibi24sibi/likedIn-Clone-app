@@ -5,6 +5,8 @@
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   max-width: 640px;
   margin: 20px auto;
+  position: relative;
+  overflow: hidden;
 }
 
 .skeleton-profile {
@@ -19,6 +21,7 @@
   background-color: #e0e0e0;
   border-radius: 50%;
   margin-right: 16px;
+  animation: shimmer 1.5s infinite linear;
 }
 
 .skeleton-info .skeleton-line {
@@ -26,6 +29,7 @@
   background-color: #e0e0e0;
   margin-bottom: 8px;
   border-radius: 4px;
+  animation: shimmer 1.5s infinite linear;
 }
 
 .skeleton-line.skeleton-short {
@@ -41,6 +45,7 @@
   background-color: #e0e0e0;
   margin-bottom: 8px;
   border-radius: 4px;
+  animation: shimmer 1.5s infinite linear;
 }
 
 .skeleton-image {
@@ -49,6 +54,7 @@
   background-color: #e0e0e0;
   border-radius: 10px;
   margin: 16px 0;
+  animation: shimmer 1.5s infinite linear;
 }
 
 .skeleton-actions {
@@ -61,4 +67,26 @@
   height: 32px;
   background-color: #e0e0e0;
   border-radius: 4px;
+  animation: shimmer 1.5s infinite linear;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -100% 0;
+  }
+  50% {
+    background-position: 100% 0;
+  }
+  100% {
+    background-position: -100% 0;
+  }
+}
+
+/* To ensure the shimmer effect is visible */
+.skeleton-circle,
+.skeleton-line,
+.skeleton-image,
+.skeleton-button {
+  background: linear-gradient(to right, #e0e0e0 8%, #f4f4f4 25%, #e0e0e0 50%);
+  background-size: 200% 100%;
 }
