@@ -12,8 +12,7 @@ import { Button } from "flowbite-react";
 
 export const ProfilePage = () => {
   const [posts, setPosts] = useState([]);
-  const [otherUserPosts, setOtherUserPosts] = useState([]);
-  const [otherUser, setOtherUser] = useState(null);
+  const [userDetails, setUserDetails] = useState(null);
   const [loading, setLoading] = useState(true);
   const [openModal, setOpenModal] = useState(false); // For Delete Confirmation
   const [selectedPostId, setSelectedPostId] = useState(null);
@@ -23,23 +22,31 @@ export const ProfilePage = () => {
 
   const isOwnProfile = !profileId;
 
+
+
   // Load either the authenticated user's posts or the specified user's posts
   useEffect(() => {
     setLoading(true);
-    const unsubscribePosts = isOwnProfile
-      ? listenToSinglePost(setPosts, userData?.userID)
-      : listenToSinglePost(setOtherUserPosts, profileId);
+    const userId = profileId || userData?.userID;
 
-    setLoading(false);
-    return () => unsubscribePosts();
-  }, [isOwnProfile, userData?.userID, profileId]);
+    if (userId) {
+      const unsubscribePosts = listenToSinglePost(setPosts, userId);
+      setLoading(false);
+      return () => unsubscribePosts();
+    }
+  }, [profileId, userData?.userID]);
+
 
   useEffect(() => {
-    if (profileId) {
-      const unsubscribeUser = listenToSingleUser(setOtherUser, profileId);
+    // Determine the userID based on the presence of profileId
+    const userId = profileId || userData?.userID;
+
+    if (userId) {
+      const unsubscribeUser = listenToSingleUser(setUserDetails, userId);
       return () => unsubscribeUser();
     }
-  }, [profileId]);
+  }, [profileId, userData?.userID]);
+
 
   const openDeleteModal = (postId) => {
     setSelectedPostId(postId);
@@ -63,14 +70,13 @@ export const ProfilePage = () => {
   return (
     <div>
       <div className="flex justify-center">
-        <ProfileSection profileData={isOwnProfile ? userData : otherUser} isOwnProfile={isOwnProfile} />
+        <ProfileSection profileData={userDetails} isOwnProfile={isOwnProfile} />
       </div>
       <div className="flex flex-col mx-4">
         <PostModel
-          postData={isOwnProfile ? posts : otherUserPosts}
-          userDetail={otherUser}
-          loadings={loading}
-          postMode={isOwnProfile ? posts.length > 0 : otherUserPosts.length > 0}
+          postData={posts}
+          userDetails={userDetails}
+          loading={loading}
           onDelete={openDeleteModal}
           isOwnProfile={isOwnProfile}
         />
@@ -96,3 +102,4 @@ export const ProfilePage = () => {
     </div>
   );
 };
+
