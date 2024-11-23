@@ -9,6 +9,7 @@ import {
   GoogleAuthProvider,
   signInWithPopup,
   sendPasswordResetEmail as firebaseSendPasswordResetEmail,
+  sendEmailVerification,
 } from "firebase/auth";
 import { app, firestore } from "../Firebase";
 import { setDoc, doc, getDoc } from "firebase/firestore";
@@ -23,6 +24,8 @@ export const AuthProvider = ({ children }) => {
   const [successMessage, setSuccessMessage] = useState("");
   const [resetMessage, setResetMessage] = useState("");
   const [userData, setUserData] = useState(null);
+
+  const env = import.meta.env.VITE_APP_PRODUCTION
 
   const auth = getAuth(app);
   const navigate = useNavigate(); // Initialize useNavigate
@@ -68,9 +71,50 @@ export const AuthProvider = ({ children }) => {
     return () => unsubscribe();
   }, [auth]);
 
+
+  const signup = async (email, password, displayName) => {
+    try {
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
+
+      if (env === "production") {
+        // Send email verification only in production
+        await sendEmailVerification(user);
+        setSuccessMessage("Signup successful! A verification email has been sent to your email address.");
+      }
+      // Assign random profile picture
+      const randomProfilePic = allDefaultProfilePics[Math.floor(Math.random() * allDefaultProfilePics.length)];
+
+      // Save user data to Firestore
+      await setDoc(doc(firestore, "users", user.uid), {
+        name: displayName,
+        email: email,
+        userID: user.uid,
+        profilePic: randomProfilePic || defaultProfile,
+      });
+
+      setSuccessMessage("Account created successfully! Please verify your email before logging in.");
+      clearMessages();
+    } catch (err) {
+      setError(err.message || "Signup failed.");
+      clearMessages();
+    }
+  };
+
   const login = async (email, password) => {
     try {
-      await signInWithEmailAndPassword(auth, email, password);
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
+
+      if (env === "production") {
+        // In production, enforce email verification
+        if (!user.emailVerified) {
+          setError("Your email is not verified. Please verify your email before logging in.");
+          clearMessages();
+          return;
+        }
+      }
+
       setSuccessMessage("Logged in successfully!");
       navigate("/home");
       clearMessages();
@@ -80,30 +124,6 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  const signup = async (email, password, displayName) => {
-    try {
-      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-      const user = userCredential.user;
-
-
-      const randomProfilePic = allDefaultProfilePics[Math.floor(Math.random() * allDefaultProfilePics.length)];
-
-
-      await setDoc(doc(firestore, "users", user.uid), {
-        name: displayName,
-        email: email,
-        userID: user.uid,
-        profilePic: randomProfilePic || defaultProfile,
-      });
-
-      setSuccessMessage("Account created successfully!");
-      navigate("/home");
-      clearMessages();
-    } catch (err) {
-      setError(err.message || "Signup failed.");
-      clearMessages();
-    }
-  };
 
   const signInWithGoogle = async () => {
     const provider = new GoogleAuthProvider();
