@@ -80,19 +80,19 @@ export const AuthProvider = ({ children }) => {
       if (env === "production") {
         // Send email verification only in production
         await sendEmailVerification(user);
-        setSuccessMessage("Signup successful! A verification email has been sent to your email address.");
+
+        // Assign random profile picture
+        const randomProfilePic = allDefaultProfilePics[Math.floor(Math.random() * allDefaultProfilePics.length)];
+
+        // Save user data to Firestore
+        await setDoc(doc(firestore, "users", user.uid), {
+          name: displayName,
+          email: email,
+          userID: user.uid,
+          profilePic: randomProfilePic || defaultProfile,
+        });
+
       }
-      // Assign random profile picture
-      const randomProfilePic = allDefaultProfilePics[Math.floor(Math.random() * allDefaultProfilePics.length)];
-
-      // Save user data to Firestore
-      await setDoc(doc(firestore, "users", user.uid), {
-        name: displayName,
-        email: email,
-        userID: user.uid,
-        profilePic: randomProfilePic || defaultProfile,
-      });
-
       setSuccessMessage("Account created successfully! Please verify your email before logging in.");
       clearMessages();
     } catch (err) {
