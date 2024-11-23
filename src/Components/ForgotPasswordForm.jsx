@@ -15,7 +15,7 @@ const ForgotPasswordForm = () => {
   return (
     <section className="min-h-screen flex flex-col items-center justify-center bg-gray-100 dark:bg-gray-900 py-12">
       <div className="flex flex-col items-center mb-8">
-       
+
         <h3 className="text-2xl font-semibold text-gray-800 dark:text-white">Reset Your Password</h3>
       </div>
       <div className="w-full max-w-md bg-white dark:bg-gray-800 p-8 rounded-lg shadow-md">

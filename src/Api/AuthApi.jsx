@@ -19,6 +19,7 @@ const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
+  const [displayName, setDisplayName] = useState('');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
@@ -63,7 +64,7 @@ export const AuthProvider = ({ children }) => {
       } else {
         setUser(null);
         setUserData(null);
-        console.log("User signed out");
+
       }
       setLoading(false);
     });
@@ -75,16 +76,19 @@ export const AuthProvider = ({ children }) => {
   const signup = async (email, password, displayName) => {
     try {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+
       const user = userCredential.user;
 
-      if (env === "production") {
-        // Send email verification only in production
-        await sendEmailVerification(user);
 
-        // Assign random profile picture
+      if (env === "production") {
+
+        await sendEmailVerification(user);
+        setDisplayName(displayName)
+        setSuccessMessage("Signup successful! A verification email has been sent to your email address.");
+      } else {
+
         const randomProfilePic = allDefaultProfilePics[Math.floor(Math.random() * allDefaultProfilePics.length)];
 
-        // Save user data to Firestore
         await setDoc(doc(firestore, "users", user.uid), {
           name: displayName,
           email: email,
@@ -92,8 +96,10 @@ export const AuthProvider = ({ children }) => {
           profilePic: randomProfilePic || defaultProfile,
         });
 
+        setSuccessMessage("Signup successful, and your account has been created.");
+
       }
-      setSuccessMessage("Account created successfully! Please verify your email before logging in.");
+
       clearMessages();
     } catch (err) {
       setError(err.message || "Signup failed.");
@@ -112,6 +118,17 @@ export const AuthProvider = ({ children }) => {
           setError("Your email is not verified. Please verify your email before logging in.");
           clearMessages();
           return;
+        } else {
+
+          const randomProfilePic = allDefaultProfilePics[Math.floor(Math.random() * allDefaultProfilePics.length)];
+
+          await setDoc(doc(firestore, "users", user.uid), {
+            name: displayName,
+            email: email,
+            userID: user.uid,
+            profilePic: randomProfilePic || defaultProfile,
+          });
+
         }
       }
 

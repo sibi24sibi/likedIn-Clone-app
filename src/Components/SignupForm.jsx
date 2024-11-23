@@ -10,13 +10,15 @@ const SignupForm = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confPassword, setConfPassword] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const handleSignup = (e) => {
+    setLoading(true);
     e.preventDefault();
     if (password === confPassword) {
-      signup(email, password, name);
+      signup(email, password, name).finally(() => setLoading(false));
     } else {
-      alert("Passwords do not match!");
+      alert("Passwords do not match!").finally(() => setLoading(false));
     }
   };
 
@@ -30,8 +32,7 @@ const SignupForm = () => {
         <div className="bg-white p-8 rounded-lg shadow-lg w-5/6  max-w-md  my-20 ">
           <h1 className="text-2xl font-semibold text-center text-blue-700 mb-6">Sign Up for LinkedIn</h1>
 
-          {error && <p className="text-red-500 text-center">{error}</p>}
-          {successMessage && <p className="text-green-500 text-center">{successMessage}</p>}
+
 
           <form className="space-y-4" onSubmit={handleSignup}>
             <div>
@@ -90,9 +91,18 @@ const SignupForm = () => {
               type="submit"
               className="w-full py-2 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
             >
-              Agree & Join
+              {loading ? (
+                <div className="flex justify-center">
+                  <div className="w-4 h-4 border-4 border-t-transparent border-blue-500 border-solid rounded-full animate-spin"></div>
+                </div>
+              ) : (
+                "Agree to Join"
+              )}
             </button>
           </form>
+
+          {error && <p className="text-red-500 text-center">{error}</p>}
+          {successMessage && <p className="text-green-500 text-center">{successMessage}</p>}
 
           <div className="flex items-center my-6">
             <div className="w-full border-t border-gray-300"></div>
