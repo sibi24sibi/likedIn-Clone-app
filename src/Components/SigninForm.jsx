@@ -8,15 +8,18 @@ const SigninForm = () => {
   const {
     login,
     signInWithGoogle,
-    loading
+    error,
+    successMessage,
   } = useAuth();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const handleLogin = (e) => {
+    setLoading(true);
     e.preventDefault();
-    login(email, password)
+    login(email, password).finally(() => setLoading(false));
   };
 
 
@@ -71,6 +74,9 @@ const SigninForm = () => {
               )}
             </button>
 
+            {/* Error and Success Messages */}
+            {error && <p className="text-red-500 text-sm text-center">{error}</p>}
+            {successMessage && <p className="text-green-500 text-sm text-center">{successMessage}</p>}
 
             {/* Forgot Password Link */}
             <div className="text-center">

@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom"; // Import useNavigate
+import { useNavigate } from "react-router-dom";
 import {
   getAuth,
   onAuthStateChanged,
@@ -25,13 +25,13 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(false);
   const [resetMessage, setResetMessage] = useState("");
   const [userData, setUserData] = useState(null);
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
 
   const env = import.meta.env.VITE_APP_PRODUCTION
-
   const auth = getAuth(app);
   const navigate = useNavigate();
 
-
+  // Fetch user data from Firestore
   const fetchUserData = async (uid) => {
     try {
       const userDoc = await getDoc(doc(firestore, "users", uid));
@@ -46,133 +46,113 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  // Sync user data with Firestore
+  const syncUserData = async (user) => {
+    const userDoc = await getDoc(doc(firestore, "users", user.uid));
+    if (!userDoc.exists()) {
+      const randomProfilePic = allDefaultProfilePics?.length
+        ? allDefaultProfilePics[Math.floor(Math.random() * allDefaultProfilePics.length)]
+        : defaultProfile;
+
+      await setDoc(doc(firestore, "users", user.uid), {
+        name: user.displayName || "Unknown User",
+        email: user.email,
+        userID: user.uid,
+        profilePic: randomProfilePic,
+      });
+    }
+  };
+
+  // Track authentication state
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
-
       if (user) {
-        if (!user.emailVerified) {
-
+        if (!user.emailVerified && env === "production") {
+          toast.warn("Please verify your email to access the application.");
           setUser(null);
         } else {
           setUser(user);
           await fetchUserData(user.uid);
+          navigate('/')
         }
       } else {
         setUser(null);
         setUserData(null);
-        console.log("User signed out");
       }
-
-
       setMainLoading(false);
     });
 
     return () => unsubscribe();
-  }, [auth]);
+  }, [auth, env]);
 
-
-
+  // Sign up
   const signup = async (email, password, displayName) => {
     setLoading(true);
     try {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-
-      const randomProfilePic = allDefaultProfilePics[Math.floor(Math.random() * allDefaultProfilePics.length)];
-
       const user = userCredential.user;
+
+      const randomProfilePic = allDefaultProfilePics?.length
+        ? allDefaultProfilePics[Math.floor(Math.random() * allDefaultProfilePics.length)]
+        : defaultProfile;
+
+      await updateProfile(user, {
+        displayName: displayName,
+        photoURL: randomProfilePic,
+      });
+
       if (env === "production") {
-
         await sendEmailVerification(user);
-
         toast.success("Signup successful! Please verify your email.");
-
-        await updateProfile(user, {
-          displayName: displayName,
-          photoURL: randomProfilePic,
-        })
-
         setUser(null);
-
       } else {
-
+        await syncUserData(user);
         toast.success("Signup successful!");
-        navigate("/home");
-
+        navigate("/");
       }
-
-
-
     } catch (err) {
-      if (err.code === 'auth/email-already-in-use') {
-        toast.warn("Email already in use. Please verify your email.");
-      } else {
-        toast.error(err.message || "Signup failed.");
-      }
+      toast.error(err.message || "Signup failed.");
     } finally {
       setLoading(false);
+
     }
   };
 
+
+
+  // Login
   const login = async (email, password) => {
     setLoading(true);
     try {
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
-
       const user = userCredential.user;
-
       if (env === "production") {
-        if (!user.emailVerified) {
-          toast.warn("Your email is not verified. Please verify your email before logging in.");
+        await user.reload();
+        if (!auth.currentUser.emailVerified) {
+          toast.warn("Your email is not verified. Please verify it.");
           setLoading(false);
           return;
-        } else {
-          await setDoc(doc(firestore, "users", user.uid), {
-            name: user.displayName,
-            email: email,
-            userID: user.uid,
-            profilePic: user.photoURL,
-          });
-          setLoading(false);
-          navigate("/home");
         }
-      } else {
-        await setDoc(doc(firestore, "users", user.uid), {
-          name: user.displayName,
-          email: email,
-          userID: user.uid,
-          profilePic: user.photoURL,
-        });
-        setLoading(false);
-        navigate("/home");
       }
+      await syncUserData(user);
+      toast.success("Login successful!");
 
     } catch (err) {
       toast.error(err.message || "Login failed.");
     } finally {
       setLoading(false);
+
     }
   };
 
-
+  // Google Sign-In
   const signInWithGoogle = async () => {
     const provider = new GoogleAuthProvider();
     try {
       const result = await signInWithPopup(auth, provider);
       const user = result.user;
 
-
-      const userDoc = await getDoc(doc(firestore, "users", user.uid));
-      if (!userDoc.exists()) {
-        const randomProfilePic = allDefaultProfilePics[Math.floor(Math.random() * allDefaultProfilePics.length)];
-
-        await setDoc(doc(firestore, "users", user.uid), {
-          name: user.displayName || "Unknown User",
-          email: user.email,
-          userID: user.uid,
-          profilePic: randomProfilePic,
-        });
-      }
-
+      await syncUserData(user);
       toast.success("Logged in with Google successfully!");
       navigate("/home");
     } catch (err) {
@@ -180,17 +160,19 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  // Logout
   const logout = async () => {
     try {
       await signOut(auth);
       toast.success("Logged out successfully!");
-      navigate("/");
+      navigate("/", { replace: true });
     } catch (err) {
+      console.error("Logout Error:", err);
       toast.error(err.message || "Logout failed.");
-
     }
   };
 
+  // Send Password Reset Email
   const sendPasswordResetEmail = async (email) => {
     try {
       await firebaseSendPasswordResetEmail(auth, email);
@@ -200,20 +182,18 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-
-  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
-
+  // Handle resizing for `isMobile`
   useEffect(() => {
     const handleResize = () => {
-      setIsMobile(window.innerWidth < 768);
+      clearTimeout(window.resizeTimeout);
+      window.resizeTimeout = setTimeout(() => {
+        setIsMobile(window.innerWidth < 768);
+      }, 200);
     };
 
     window.addEventListener("resize", handleResize);
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
+    return () => window.removeEventListener("resize", handleResize);
   }, []);
-
 
   return (
     <AuthContext.Provider
