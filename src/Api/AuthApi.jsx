@@ -33,9 +33,6 @@ export const AuthProvider = ({ children }) => {
 
 
   const fetchUserData = async (uid) => {
-
-
-
     try {
       const userDoc = await getDoc(doc(firestore, "users", uid));
       if (userDoc.exists()) {
@@ -50,13 +47,12 @@ export const AuthProvider = ({ children }) => {
   };
 
   useEffect(() => {
-
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
+
       if (user) {
         if (!user.emailVerified) {
 
           setUser(null);
-          setUserData(null);
         } else {
           setUser(user);
           await fetchUserData(user.uid);
@@ -64,9 +60,13 @@ export const AuthProvider = ({ children }) => {
       } else {
         setUser(null);
         setUserData(null);
+        console.log("User signed out");
       }
+
+
+      setMainLoading(false);
     });
-    setMainLoading(false);
+
     return () => unsubscribe();
   }, [auth]);
 
@@ -77,36 +77,27 @@ export const AuthProvider = ({ children }) => {
     try {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
 
+      const randomProfilePic = allDefaultProfilePics[Math.floor(Math.random() * allDefaultProfilePics.length)];
+
       const user = userCredential.user;
-
       if (env === "production") {
-
-        const user = userCredential.user;
 
         await sendEmailVerification(user);
 
         toast.success("Signup successful! Please verify your email.");
 
+        await updateProfile(user, {
+          displayName: displayName,
+          photoURL: randomProfilePic,
+        })
+
         setUser(null);
 
       } else {
 
-        await updateProfile(user, {
-          displayName: displayName,
-          photoURL: defaultProfile,
-        })
-
-        const randomProfilePic = allDefaultProfilePics[Math.floor(Math.random() * allDefaultProfilePics.length)];
-
-        await setDoc(doc(firestore, "users", user.uid), {
-          name: user.displayName,
-          email: email,
-          userID: user.uid,
-          profilePic: randomProfilePic || defaultProfile,
-        });
-
         toast.success("Signup successful!");
         navigate("/home");
+
       }
 
 
@@ -132,25 +123,29 @@ export const AuthProvider = ({ children }) => {
       if (env === "production") {
         if (!user.emailVerified) {
           toast.warn("Your email is not verified. Please verify your email before logging in.");
-
-          const randomProfilePic = allDefaultProfilePics[Math.floor(Math.random() * allDefaultProfilePics.length)];
-
+          setLoading(false);
+          return;
+        } else {
           await setDoc(doc(firestore, "users", user.uid), {
             name: user.displayName,
             email: email,
             userID: user.uid,
-            profilePic: randomProfilePic || defaultProfile,
+            profilePic: user.photoURL,
           });
-
           setLoading(false);
-
-          return;
+          navigate("/home");
         }
+      } else {
+        await setDoc(doc(firestore, "users", user.uid), {
+          name: user.displayName,
+          email: email,
+          userID: user.uid,
+          profilePic: user.photoURL,
+        });
+        setLoading(false);
+        navigate("/home");
       }
 
-
-      toast.success("Logged in successfully!");
-      navigate("/home");
     } catch (err) {
       toast.error(err.message || "Login failed.");
     } finally {
