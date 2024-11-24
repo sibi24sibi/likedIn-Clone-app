@@ -3,22 +3,23 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGoogle } from "@fortawesome/free-brands-svg-icons";
 import { useAuth } from "../Api/AuthApi";
 import { Link } from "react-router-dom";
+import { toast } from "react-toastify";
+
 
 const SignupForm = () => {
-  const { signup, signInWithGoogle, error, successMessage } = useAuth();
+  const { signup, signInWithGoogle, loading } = useAuth();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confPassword, setConfPassword] = useState("");
-  const [loading, setLoading] = useState(false);
 
   const handleSignup = (e) => {
-    setLoading(true);
+
     e.preventDefault();
     if (password === confPassword) {
-      signup(email, password, name).finally(() => setLoading(false));
+      signup(email, password, name)
     } else {
-      alert("Passwords do not match!").finally(() => setLoading(false));
+      toast.error("Passwords do not match!")
     }
   };
 
@@ -100,9 +101,6 @@ const SignupForm = () => {
               )}
             </button>
           </form>
-
-          {error && <p className="text-red-500 text-center">{error}</p>}
-          {successMessage && <p className="text-green-500 text-center">{successMessage}</p>}
 
           <div className="flex items-center my-6">
             <div className="w-full border-t border-gray-300"></div>

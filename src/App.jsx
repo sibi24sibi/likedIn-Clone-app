@@ -6,7 +6,7 @@ import { useAuth } from "./Api/AuthApi";
 import { routes } from "./Routes/route";
 
 function App() {
-  const { user, loading, isMobile } = useAuth();
+  const { user, mainLoading, isMobile } = useAuth();
 
 
 
@@ -28,7 +28,7 @@ function App() {
   };
 
   // Handle loading state
-  if (loading) {
+  if (mainLoading) {
     return (
       <div className="flex items-center justify-center h-screen">
         <Watch visible={true} width="200" color="#4fa94d" />

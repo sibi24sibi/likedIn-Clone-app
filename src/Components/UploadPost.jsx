@@ -30,11 +30,11 @@ function UploadPost() {
     setPostContent(""); // Reset post content when closing modal
   };
 
-const handlePosthandle = (e) => {
-  e.preventDefault()
-  handlePostSubmit(postContent,selectedFile,user,closeModal,setLoading)
-  
-}
+  const handlePosthandle = (e) => {
+    e.preventDefault()
+    handlePostSubmit(postContent, selectedFile, user, closeModal, setLoading)
+
+  }
 
   return (
     <div className="flex items-center justify-center">
@@ -43,7 +43,7 @@ const handlePosthandle = (e) => {
           <img
             alt="User avatar"
             className="w-12 h-12 rounded-full hover:bg-gray-100 cursor-pointer transition duration-200"
-            src={userData.profilePic || defaultProfile}
+            src={userData?.profilePic || defaultProfile}
           />
           <input
             className="flex-grow p-2 border md:w-[550px] rounded-full focus:outline-none hover:bg-gray-100 cursor-pointer transition duration-200"
@@ -76,10 +76,10 @@ const handlePosthandle = (e) => {
             <img
               alt="Profile picture of a person"
               className="w-12 h-12 rounded-full"
-              src={userData.profilePic || defaultProfile}
+              src={userData?.profilePic || defaultProfile}
             />
             <div className="flex flex-col items-start">
-              <h2 className="text-xl font-bold mb-1">{userData.name}</h2>
+              <h2 className="text-xl font-bold mb-1">{userData?.name}</h2>
               <h3 className="text-base text-gray-800">Post to anyone</h3>
             </div>
           </div>
@@ -126,11 +126,10 @@ const handlePosthandle = (e) => {
         <Modal.Footer>
           <button
             onClick={handlePosthandle}
-            className={`${
-              loading
-                ? "bg-gray-400 cursor-not-allowed"
-                : "bg-blue-600 hover:bg-blue-700"
-            } text-white font-bold py-2 px-4 rounded flex items-center`}
+            className={`${loading
+              ? "bg-gray-400 cursor-not-allowed"
+              : "bg-blue-600 hover:bg-blue-700"
+              } text-white font-bold py-2 px-4 rounded flex items-center`}
             disabled={loading}
           >
             {loading ? (

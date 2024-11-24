@@ -40,7 +40,7 @@ function PostModel({
 
 
 
-  }, [postData, userData.name]);
+  }, [postData, userData?.name]);
 
 
 
@@ -99,7 +99,7 @@ function PostModel({
     navigate(`/profilepage/${postDataUserID}`);
   };
 
-  console.log()
+
   return (
     <>
       {loading ? (
