@@ -1,4 +1,5 @@
-import linkedinSmallLogo from "/assets/images/logo.png"; // Assuming you have a file for this
+import linkedinSmallLogo from "/assets/images/logo.png";
+import friendzyLogo from "./images/Friendzy_Logo.png";
 import linkedinBigLogo from "/assets/images/LinkedIn-Logo.png";
 import defaultProfile from "/assets/images/image.jpg";
 import defaultCoverImage from "/assets/images/cover2.webp";
@@ -89,6 +90,7 @@ export const allDefaultProfilePics = [
 export {
   linkedinSmallLogo,
   linkedinBigLogo,
+  friendzyLogo,
   defaultProfile,
   defaultCoverImage,
   errorImg,

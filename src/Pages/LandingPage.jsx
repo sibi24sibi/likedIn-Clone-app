@@ -7,8 +7,13 @@ import { IoMdPhotos } from 'react-icons/io'
 import { MdGroups, MdTrendingUp, MdExplore } from 'react-icons/md'
 import { NavLink } from 'react-router-dom'
 import { welcomeMainImage } from '../assets/assets'
+import { useAuth } from '../Api/AuthApi'
 
 export default function LandingPage() {
+
+  const { user } = useAuth();
+
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white pt-10 lg:px-auto px-4">
 
@@ -22,20 +27,27 @@ export default function LandingPage() {
                 Connect, Share, <span className="text-blue-600">Thrive</span> Together
               </h2>
               <p className="text-lg text-gray-600 mb-8">
-                Join millions of people who use Social Network to share moments, build relationships, and create meaningful connections in a vibrant online community.
+                Join millions of people who use Friendzy to share moments, build relationships, and create meaningful connections in a vibrant online community.
               </p>
               <div className="flex gap-4">
-                <NavLink to="/signup">
 
-                  <button className="px-8 py-3 bg-blue-600 text-white rounded-full hover:bg-blue-700 transition text-lg">
-                    Get Started Free
-                  </button>
-                </NavLink>
-                {/* 
-                <button className="px-8 py-3 border-2 border-blue-600 text-blue-600 rounded-full hover:bg-blue-50 transition text-lg">
-                  Watch Demo
-                </button> 
-                */}
+                {user ?
+                  <NavLink to="/home">
+                    <button className="px-8 py-3 border-2 border-blue-600 text-blue-600 rounded-full hover:bg-blue-50 transition text-lg">
+                      Explore Now
+                    </button>
+                  </NavLink>
+                  :
+                  <NavLink to="/signup">
+                    <button className="px-8 py-3 bg-blue-600 text-white rounded-full hover:bg-blue-700 transition text-lg">
+                      Get Started Free
+                    </button>
+                  </NavLink>
+                }
+
+
+
+
               </div>
             </div>
             <div className="relative">
@@ -155,7 +167,7 @@ export default function LandingPage() {
           {/* How It Works */}
           <section className="py-16 bg-gray-50 my-6 lg:my-32">
             <div className="container mx-auto px-4">
-              <h2 className="text-3xl md:text-4xl font-bold text-center mb-16">How Social Network Works</h2>
+              <h2 className="text-3xl md:text-4xl font-bold text-center mb-16">How Friendzy Works</h2>
               <div className="grid md:grid-cols-3 gap-8">
                 <div className="text-center">
                   <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-6">
@@ -249,7 +261,7 @@ export default function LandingPage() {
                 </div>
               </div>
               <p className="text-gray-600">
-                "Social Network has transformed how I connect with my audience. The engagement features are incredible!"
+                "Friendzy has transformed how I connect with my audience. The engagement features are incredible!"
               </p>
             </div>
             <div className="bg-white p-6 rounded-xl shadow-sm">
@@ -292,7 +304,7 @@ export default function LandingPage() {
         <div className="container mx-auto px-4">
           <div className="grid md:grid-cols-2 gap-12 items-center">
             <div>
-              <h2 className="text-3xl md:text-4xl font-bold mb-6">Take Social Network Everywhere</h2>
+              <h2 className="text-3xl md:text-4xl font-bold mb-6">Take Friendzy Everywhere</h2>
               <p className="text-lg text-gray-600 mb-8">
                 Stay connected on the go with our mobile app. Available for iOS and Android devices.
               </p>

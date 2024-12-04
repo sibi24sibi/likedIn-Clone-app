@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect } from "react";
+import  { createContext, useContext, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   getAuth,
@@ -15,7 +15,9 @@ import {
 import { app, firestore } from "../Firebase";
 import { setDoc, doc, getDoc } from "firebase/firestore";
 import { allDefaultProfilePics, defaultProfile } from "../assets/assets";
-import { toast } from "react-toastify";
+import toast from "react-hot-toast";
+// import { toast } from "react-toastify";
+
 
 const AuthContext = createContext();
 
@@ -41,7 +43,6 @@ export const AuthProvider = ({ children }) => {
         toast.error("User data not found.");
       }
     } catch (err) {
-      console.error("Error fetching user data:", err);
       toast.error("Failed to load user data.");
     }
   };
@@ -68,7 +69,9 @@ export const AuthProvider = ({ children }) => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (user) {
         if (!user.emailVerified && env === "production") {
-          toast.warn("Please verify your email to access the application.");
+          toast.error("Please verify your email to access the application.", {
+            icon: 'ℹ️',
+          });
           setUser(null);
         } else {
           setUser(user);
@@ -111,7 +114,7 @@ export const AuthProvider = ({ children }) => {
         navigate("/home");
       }
     } catch (err) {
-      toast.error(err.message || "Signup failed.");
+      toast.error( "Signup failed.");
     } finally {
       setLoading(false);
 
@@ -129,7 +132,9 @@ export const AuthProvider = ({ children }) => {
       if (env === "production") {
         await user.reload();
         if (!auth.currentUser.emailVerified) {
-          toast.warn("Your email is not verified. Please verify it.");
+          toast.error("Your email is not verified. Please verify it.", {
+            icon: 'ℹ️',
+          });
           setLoading(false);
           return;
         }
@@ -138,7 +143,8 @@ export const AuthProvider = ({ children }) => {
       toast.success("Login successful!");
 
     } catch (err) {
-      toast.error(err.message || "Login failed.");
+      toast.error( "Login failed.");
+      
     } finally {
       setLoading(false);
 
@@ -156,7 +162,7 @@ export const AuthProvider = ({ children }) => {
       toast.success("Logged in with Google successfully!");
       navigate("/home");
     } catch (err) {
-      toast.error(err.message || "Google login failed.");
+      toast.error( "Google login failed.");
     }
   };
 
@@ -167,8 +173,7 @@ export const AuthProvider = ({ children }) => {
       toast.success("Logged out successfully!");
       navigate("/", { replace: true });
     } catch (err) {
-      console.error("Logout Error:", err);
-      toast.error(err.message || "Logout failed.");
+      toast.error( "Logout failed.");
     }
   };
 
@@ -178,7 +183,7 @@ export const AuthProvider = ({ children }) => {
       await firebaseSendPasswordResetEmail(auth, email);
       setResetMessage("Password reset email sent successfully!");
     } catch (err) {
-      toast.error(err.message || "Failed to send password reset email.");
+      toast.error( "Failed to send password reset email.");
     }
   };
 

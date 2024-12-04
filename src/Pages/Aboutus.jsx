@@ -4,18 +4,18 @@ import { welcomeMainImage } from '../assets/assets';
 
 const AboutUs = () => {
     return (
-        <div className="bg-gray-100 min-h-screen py-12  pt-28 lg:px-auto px-4">
+        <div className="bg-gray-100 min-h-screen py-12  pt-36 lg:pt-28  lg:px-auto px-4">
             <div className="container mx-auto px-4">
-                {/* <h1 className="text-4xl font-bold text-center text-blue-900 mb-12">About Social Network</h1> */}
+                {/* <h1 className="text-4xl font-bold text-center text-blue-900 mb-12">About Friendzy</h1> */}
 
                 <div className="grid md:grid-cols-2 gap-12 items-center mb-16">
                     <div >
-                        <img src={welcomeMainImage[2]} alt="About Social Network" className=" mx-auto h-80 " />
+                        <img src={welcomeMainImage[2]} alt="About Friendzy" className=" mx-auto h-80 " />
                     </div>
                     <div>
                         <h2 className="text-3xl font-semibold text-blue-800 mb-4">Our Mission</h2>
                         <p className="text-gray-700 mb-6">
-                            At Social Network, we're on a mission to bring people together in meaningful ways. We believe in the power of connections to transform lives, spark innovation, and create positive change in the world.
+                            At Friendzy, we're on a mission to bring people together in meaningful ways. We believe in the power of connections to transform lives, spark innovation, and create positive change in the world.
                         </p>
                         <button className="bg-blue-600 text-white px-6 py-2 rounded-full hover:bg-blue-700 transition duration-300">
                             Join Our Community
@@ -40,7 +40,7 @@ const AboutUs = () => {
                 <div className="text-center">
                     <h2 className="text-3xl font-semibold text-blue-800 mb-4">Join Us Today</h2>
                     <p className="text-gray-700 mb-6 max-w-2xl mx-auto">
-                        Be part of a vibrant community that's shaping the future of social connections. Your journey with Social Network starts here.
+                        Be part of a vibrant community that's shaping the future of social connections. Your journey with Friendzy starts here.
                     </p>
                     <button className="bg-blue-600 text-white px-8 py-3 rounded-full hover:bg-blue-700 transition duration-300 text-lg font-semibold">
                         Get Started

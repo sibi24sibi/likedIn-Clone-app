@@ -22,7 +22,7 @@ const ContactUs = () => {
     };
 
     return (
-        <div className="bg-gray-100 min-h-screen py-12 pt-28 lg:px-auto px-4">
+        <div className="bg-gray-100 min-h-screen py-12 pt-36 lg:pt-28 lg:px-auto px-4">
             <div className="container mx-auto px-4">
                 <h1 className="text-4xl font-bold text-center text-blue-900 mb-12">Contact Us</h1>
 
@@ -43,7 +43,7 @@ const ContactUs = () => {
                         <div className="space-y-4">
                             <div className="flex items-center">
                                 <FaEnvelope className="text-blue-600 mr-4 text-xl" />
-                                <span className="text-gray-700">support@SocialNetwork.com</span>
+                                <span className="text-gray-700">support@friendzy.com</span>
                             </div>
                             <div className="flex items-center">
                                 <FaPhone className="text-blue-600 mr-4 text-xl" />

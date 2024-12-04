@@ -18,7 +18,6 @@ import ContactUs from "../Pages/Contactus";
 export const routes = [
 
   // Private Route
-
   { path: "/home", element: <HomePage />, protected: true },
   { path: "/profile", element: <ProfilePage />, protected: true },
   {
@@ -38,8 +37,7 @@ export const routes = [
 
 
   //Public Route
-  { path: "/", element: < Navigate to="/welcomepage" />, protected: false },
-  { path: "/welcomepage", element: <LandingPage />, protected: false },
+  { path: "/", element: <LandingPage />, protected: false },
   { path: "/about", element: <AboutUs />, protected: false },
   { path: "/contact", element: <ContactUs />, protected: false },
   { path: "/signup", element: <SignupForm />, protected: false },

@@ -1,5 +1,5 @@
 import React from "react";
-import { linkedinBigLogo } from "../assets/assets.js";
+import { friendzyLogo, linkedinBigLogo } from "../assets/assets.js";
 import { useAuth } from "../Api/AuthApi.jsx";
 import { FaGlobe } from "react-icons/fa";
 
@@ -9,7 +9,7 @@ import { FaGlobe } from "react-icons/fa";
 function Footer() {
 
 
-  const welcomePaths = ['/welcomepage', '/about', '/contact'];
+  const welcomePaths = ['/', '/about', '/contact'];
 
   if (welcomePaths.includes(location.pathname)) {
     return (
@@ -17,7 +17,7 @@ function Footer() {
         <div className="container mx-auto px-4">
           <div className="grid md:grid-cols-4 gap-8 mb-8">
             <div>
-              <h3 className="text-lg font-semibold mb-4">ConnectHub</h3>
+              <h3 className="text-lg font-semibold mb-4">Friendzy</h3>
               <p className="text-gray-600 mb-4">
                 Connecting people, sharing moments, building communities.
               </p>
@@ -52,7 +52,7 @@ function Footer() {
           </div>
           <div className="border-t pt-8">
             <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-              <p className="text-gray-600">© 2024 Social Network. All rights reserved.</p>
+              <p className="text-gray-600">© 2024 Friendzy. All rights reserved.</p>
               <div className="flex gap-6">
 
               </div>
@@ -76,8 +76,8 @@ function Footer() {
 
             <div className="flex flex-col items-start space-y-3  ">
               <img
-                src={linkedinBigLogo}
-                alt="LinkedIn Logo"
+                src={friendzyLogo}
+                alt="Logo"
                 className="h-20 w-auto"
               />
             </div>
