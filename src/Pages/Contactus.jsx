@@ -22,7 +22,7 @@ const ContactUs = () => {
     };
 
     return (
-        <div className="bg-gray-100 min-h-screen py-12 pt-28">
+        <div className="bg-gray-100 min-h-screen py-12 pt-28 lg:px-auto px-4">
             <div className="container mx-auto px-4">
                 <h1 className="text-4xl font-bold text-center text-blue-900 mb-12">Contact Us</h1>
 
@@ -31,7 +31,7 @@ const ContactUs = () => {
                         <img
                             src={welcomeMainImage[5]}
                             alt="Placeholder"
-                            className=" mx-auto md:w-auto w-1/2"
+                            className=" mx-auto    md:w-auto w-1/2"
                         />
                     </div>
 

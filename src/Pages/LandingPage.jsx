@@ -10,11 +10,11 @@ import { welcomeMainImage } from '../assets/assets'
 
 export default function LandingPage() {
   return (
-    <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white pt-10">
+    <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white pt-10 lg:px-auto px-4">
 
 
       {/* Hero Section */}
-      <section className="pt-32 pb-16 md:pt-20 md:pb-24">
+      <section className="pt-12 pb-16 lg:pt-16 md:pb-24">
         <div className="container mx-auto px-4">
           <div className="grid md:grid-cols-2 gap-12 items-center">
             <div>
@@ -321,7 +321,8 @@ export default function LandingPage() {
             </div>
             <div>
               <img
-                src={welcomeMainImage[2]}
+                src={welcomeMainImage[0]}
+
                 alt="Mobile App"
                 className="rounded-2xl "
               />

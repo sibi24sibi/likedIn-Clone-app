@@ -31,7 +31,7 @@ function Header() {
       <header className="fixed top-0 left-0 right-0 bg-white/90 backdrop-blur-lg z-50 shadow-sm">
         <div className="container mx-auto px-4 py-3">
           <nav className="flex items-center justify-between">
-            <NavLink to="/" className="text-2xl font-bold text-blue-900 hover:text-blue-700 transition">
+            <NavLink to="/" className="lg:text-2xl text-lg font-bold text-blue-900 hover:text-blue-700 transition">
               Social Network
             </NavLink>
             <div className="flex items-center gap-6">
@@ -42,7 +42,7 @@ function Header() {
                 Contact Us
               </NavLink>
               <NavLink to="/signup">
-                <button className="px-6 py-2 text-xs md:text-base bg-blue-600 text-white rounded-full hover:bg-blue-700 transition">
+                <button className="lg:px-6 lg:py-2 text-xs md:text-base text-blue-600 lg:bg-blue-600 lg:text-white lg:rounded-full hover:bg-blue-700 transition">
                   Sign Up
                 </button>
               </NavLink>

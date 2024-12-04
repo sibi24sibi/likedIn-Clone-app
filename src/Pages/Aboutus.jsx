@@ -4,13 +4,13 @@ import { welcomeMainImage } from '../assets/assets';
 
 const AboutUs = () => {
     return (
-        <div className="bg-gray-100 min-h-screen py-12  pt-28">
+        <div className="bg-gray-100 min-h-screen py-12  pt-28 lg:px-auto px-4">
             <div className="container mx-auto px-4">
                 {/* <h1 className="text-4xl font-bold text-center text-blue-900 mb-12">About Social Network</h1> */}
 
                 <div className="grid md:grid-cols-2 gap-12 items-center mb-16">
-                    <div>
-                        <img src={welcomeMainImage[0]} alt="About Social Network" className="" />
+                    <div >
+                        <img src={welcomeMainImage[2]} alt="About Social Network" className=" mx-auto h-80 " />
                     </div>
                     <div>
                         <h2 className="text-3xl font-semibold text-blue-800 mb-4">Our Mission</h2>
