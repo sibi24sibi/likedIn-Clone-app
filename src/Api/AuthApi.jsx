@@ -73,7 +73,7 @@ export const AuthProvider = ({ children }) => {
         } else {
           setUser(user);
           await fetchUserData(user.uid);
-          navigate('/')
+          navigate('/home')
         }
       } else {
         setUser(null);
@@ -108,7 +108,7 @@ export const AuthProvider = ({ children }) => {
       } else {
         await syncUserData(user);
         toast.success("Signup successful!");
-        navigate("/");
+        navigate("/home");
       }
     } catch (err) {
       toast.error(err.message || "Signup failed.");

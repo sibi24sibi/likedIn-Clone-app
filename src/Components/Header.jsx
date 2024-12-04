@@ -24,6 +24,36 @@ import SearchComponent from "./SearchComponent.jsx";
 function Header() {
   const { user, logout } = useAuth();
 
+  const welcomePaths = ['/welcomepage', '/about', '/contact'];
+
+  if (welcomePaths.includes(location.pathname)) {
+    return (
+      <header className="fixed top-0 left-0 right-0 bg-white/90 backdrop-blur-lg z-50 shadow-sm">
+        <div className="container mx-auto px-4 py-3">
+          <nav className="flex items-center justify-between">
+            <NavLink to="/" className="text-2xl font-bold text-blue-900 hover:text-blue-700 transition">
+              Social Network
+            </NavLink>
+            <div className="flex items-center gap-6">
+              <NavLink to="/about" className="text-blue-600  whitespace-nowrap text-xs md:text-base hover:text-blue-800 transition">
+                About Us
+              </NavLink>
+              <NavLink to="/contact" className="text-blue-600 whitespace-nowrap text-xs md:text-base hover:text-blue-800 transition">
+                Contact Us
+              </NavLink>
+              <NavLink to="/signup">
+                <button className="px-6 py-2 text-xs md:text-base bg-blue-600 text-white rounded-full hover:bg-blue-700 transition">
+                  Sign Up
+                </button>
+              </NavLink>
+            </div>
+          </nav>
+        </div>
+      </header>
+    );
+  }
+
+
   const logo = user ? linkedinSmallLogo : linkedinBigLogo;
 
   return (
@@ -33,11 +63,16 @@ function Header() {
       className="bg-white border-gray-200 dark:bg-gray-900 justify-between shadow-lg md:px-10 py-3    "
     >
       <div className=" flex  ">
-        <img
-          src={logo}
-          className={` ${user ? "h-10 mx-3" : "h-20 w-auto my-[-24px]"}`}
-          alt="Logo"
-        />
+        <NavLink
+          to="/home">
+
+          <img
+            src={logo}
+            className={` ${user ? "h-10 mx-3" : "h-20 w-auto my-[-24px]"}`}
+            alt="Logo"
+          />
+
+        </NavLink>
 
 
         <SearchComponent />

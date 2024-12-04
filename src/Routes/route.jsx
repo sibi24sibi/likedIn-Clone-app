@@ -11,14 +11,14 @@ import { NetworkPage } from "../Pages/NetworkPage";
 import { ProfilePage } from "../Pages/ProfilePage";
 import JobDetail from "../Components/JobDetail";
 import ForgotPasswordForm from "../Components/ForgotPasswordForm";
+import LandingPage from "../Pages/LandingPage";
+import AboutUs from "../Pages/Aboutus";
+import ContactUs from "../Pages/Contactus";
 
 export const routes = [
 
+  // Private Route
 
-  //Public Route
-
-
-  { path: "/", element: <HomePage />, protected: true },
   { path: "/home", element: <HomePage />, protected: true },
   { path: "/profile", element: <ProfilePage />, protected: true },
   {
@@ -36,8 +36,12 @@ export const routes = [
   { path: "/connect", element: <NetworkPage />, protected: true },
   { path: "*", element: <Navigate to="/error" />, protected: true },
 
-  // Private Route
 
+  //Public Route
+  { path: "/", element: < Navigate to="/welcomepage" />, protected: false },
+  { path: "/welcomepage", element: <LandingPage />, protected: false },
+  { path: "/about", element: <AboutUs />, protected: false },
+  { path: "/contact", element: <ContactUs />, protected: false },
   { path: "/signup", element: <SignupForm />, protected: false },
   { path: "/signin", element: <SigninForm />, protected: false },
   { path: "/forgot", element: <ForgotPasswordForm />, protected: false },

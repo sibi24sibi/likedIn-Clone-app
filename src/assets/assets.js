@@ -21,6 +21,13 @@ import profilePic_Normal from "/assets/images/Monkey_Profile (12).jpg";
 import profilePic_superman from "/assets/images/Monkey_Profile (13).jpg";
 import profilePic_cigar from "/assets/images/Monkey_Profile (14).jpg";
 import profilePic_luffy from "/assets/images/Monkey_Profile (16).jpg";
+
+import welcomeImg1 from "./images/Welcome_images (5).png";
+import welcomeImg2 from "./images/Welcome_images (1).png";
+import welcomeImg3 from "./images/Welcome_images (2).png";
+import welcomeImg4 from "./images/Welcome_images (4).png";
+import welcomeImg5 from "./images/snapedit_1733303008433.png";
+import welcomeImg6 from "./images/demo-data-analysis-07.png";
 // Function to format the timestamp
 export const formatTimestamp = (timestamp) => {
   const now = new Date();
@@ -50,6 +57,15 @@ export const formatTimestamp = (timestamp) => {
   };
   return date.toLocaleDateString("en-US", options); // You can customize the locale and format as needed
 };
+
+export const welcomeMainImage = [
+  welcomeImg1,
+  welcomeImg2,
+  welcomeImg3,
+  welcomeImg4,
+  welcomeImg5,
+  welcomeImg6,
+];
 
 export const allDefaultProfilePics = [
   profilePic_King,
