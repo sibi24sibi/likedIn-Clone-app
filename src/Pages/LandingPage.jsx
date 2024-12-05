@@ -1,13 +1,16 @@
 import {
-  FaUserFriends, FaComments, FaShare, FaCalendarAlt, FaHeart, FaBell,
-  FaLock, FaGlobe, FaMobile, FaHashtag, FaUserCircle, FaRegSmile,
-  FaCamera, FaVideo, FaChartLine, FaUsers
+  FaUserFriends, FaComments,
+   FaGlobe, FaMobile, FaHashtag, FaUserCircle, FaRegSmile,
+  FaCamera, FaVideo, FaUsers,
+ 
 } from 'react-icons/fa'
 import { IoMdPhotos } from 'react-icons/io'
-import { MdGroups, MdTrendingUp, MdExplore } from 'react-icons/md'
+import { MdGroups, MdExplore } from 'react-icons/md'
 import { NavLink } from 'react-router-dom'
 import { welcomeMainImage } from '../assets/assets'
 import { useAuth } from '../Api/AuthApi'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faAppStoreIos, faGooglePlay } from '@fortawesome/free-brands-svg-icons'
 
 export default function LandingPage() {
 
@@ -322,13 +325,15 @@ export default function LandingPage() {
                   <p className="text-gray-600">Access anywhere, anytime</p>
                 </div>
               </div>
-              <div className="flex gap-4">
-                <button className="px-6 py-3 bg-black text-white rounded-lg hover:bg-gray-800 transition">
-                  Download for iOS
+              <div className="flex gap-4 lg:flex-row flex-col">
+                <button className="lg:px-6 lg:py-3 py-2 px-4  bg-black text-white rounded-lg hover:bg-gray-800 transition">
+                  <FontAwesomeIcon icon={faAppStoreIos} className=' float-left py-1  px-2' />Download for iOS
                 </button>
-                <button className="px-6 py-3 bg-black text-white rounded-lg hover:bg-gray-800 transition">
-                  Download for Android
+                <button className="lg:px-6 lg:py-3 py-2 px-4  bg-black text-white rounded-lg hover:bg-gray-800 transition">
+                  <FontAwesomeIcon icon={faGooglePlay} className='float-left py-1 px-2 ' />  Download for Android
                 </button>
+
+                
               </div>
             </div>
             <div>

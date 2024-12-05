@@ -35,7 +35,7 @@ function Header() {
             <NavLink to="/" className="lg:text-2xl text-lg font-bold text-blue-900 hover:text-blue-700 transition">
               <img
                 src={friendzyLogo}
-                className=' h-20 w-auto my-[-24px]'
+                className='h-14 lg:h-20 w-auto my-[-24px]'
                 alt="Logo"
               />
             </NavLink>
