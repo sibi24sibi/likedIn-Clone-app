@@ -14,7 +14,7 @@ function App() {
   const renderRoute = ({ path, element, protected: isProtected }) => {
     if (isProtected && !user) {
 
-      return <Route key={path} path={path} element={<Navigate to="/" />} />;
+      return <Route key={path} path={path}  />;
     }
 
 
