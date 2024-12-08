@@ -82,7 +82,7 @@ export const AuthProvider = ({ children }) => {
 
 
       
-      const randomNum = Math.floor(Math.random() * 15);
+      const randomNum = Math.floor(Math.random() * 16)+1;
       
       const randomProfilePic = `https://placeholder-image-ry0c.onrender.com/api/avatar?img=${randomNum}`;
 
@@ -113,9 +113,9 @@ export const AuthProvider = ({ children }) => {
       if (!userDoc.exists()) {
         //  const randomProfilePic = allDefaultProfilePics[Math.floor(Math.random() * allDefaultProfilePics.length)];
 
-        const randomNum = Math.floor(Math.random() * 15);
+        const randomNum = Math.floor(Math.random() * 16)+1;
 
-        const randomProfilePic = `https://placeholder-image-ry0c.onrender.com/api/avatar?img=${randomNum+1}`;
+        const randomProfilePic = `https://placeholder-image-ry0c.onrender.com/api/avatar?img=${randomNum}`;
 
 
         await setDoc(doc(firestore, "users", user.uid), {

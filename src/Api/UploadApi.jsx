@@ -8,7 +8,7 @@ import {
   getDocs
 } from "firebase/firestore";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
-import { LazyLoadImage } from 'react-lazy-load-image-component';
+
 import uuid from "react-uuid";
 
 const postsCollection = collection(firestore, "posts");
