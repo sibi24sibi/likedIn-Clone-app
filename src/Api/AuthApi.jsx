@@ -23,7 +23,7 @@ export const AuthProvider = ({ children }) => {
   const [userData, setUserData] = useState(null);
 
   const auth = getAuth(app);
-  const navigate = useNavigate(); // Initialize useNavigate
+  const navigate = useNavigate(); 
 
 
 

@@ -8,7 +8,17 @@ export default defineConfig({
   resolve: {
     alias: {
       "@assets": path.resolve(__dirname, "./src/assets"),
-      "@": path.resolve(__dirname, "./src"),
+      "@components": "/src/new-components",
+      "@pages": "/src/new-pages",
+      "@contexts": "/src/new-contexts",
+    },
+  },
+  server: {
+    warmup: {
+      clientFiles: [
+        "./src/components/BigComponent.vue",
+        "./src/utils/big-utils.js",
+      ],
     },
   },
 });

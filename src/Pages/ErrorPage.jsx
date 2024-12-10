@@ -3,7 +3,7 @@ import { errorImg } from "../assets/assets";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../Api/AuthApi";
 
-export const ErorPage = () => {
+export const ErrorPage = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
 
@@ -38,3 +38,5 @@ export const ErorPage = () => {
     </div>
   );
 };
+
+export default ErrorPage;
