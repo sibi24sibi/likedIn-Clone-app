@@ -14,13 +14,13 @@ import uuid from "react-uuid";
 const postsCollection = collection(firestore, "posts");
 const storage = getStorage();
 
-const uploadImage = async (file) => {
-  const storageRef = ref(storage, `images/${file.name}`);
-  await uploadBytes(storageRef, file);
-  const downloadURL = await getDownloadURL(storageRef);
+// const uploadImage = async (file) => {
+//   const storageRef = ref(storage, `images/${file.name}`);
+//   await uploadBytes(storageRef, file);
+//   const downloadURL = await getDownloadURL(storageRef);
 
-  return downloadURL;
-};
+//   return downloadURL;
+// };
 
 
 
@@ -70,7 +70,7 @@ export const listenToSingleUser = (setUser, userID) => {
 };
 
 
-export const listenToSinglePost = (setAllPosts, userID) => {
+export const listenToSingleUserPost = (setAllPosts, userID) => {
 
   const PostsQuery = query(
     collection(firestore, "posts"),
@@ -91,149 +91,149 @@ export const listenToSinglePost = (setAllPosts, userID) => {
 
 
 
-export const addPost = async (postData, imageFile) => {
-  try {
-    let imageUrl = null;
+// export const addPost = async (postData, imageFile) => {
+//   try {
+//     let imageUrl = null;
 
-    if (imageFile) {
-      imageUrl = await uploadImage(imageFile);
-    }
+//     if (imageFile) {
+//       imageUrl = await uploadImage(imageFile);
+//     }
 
-    const postWithImage = {
-      ...postData,
-      imageUrl,
-    };
+//     const postWithImage = {
+//       ...postData,
+//       imageUrl,
+//     };
 
-    await addDoc(postsCollection, postWithImage);
+//     await addDoc(postsCollection, postWithImage);
 
-    return true; // Indicate success
-  } catch (e) {
-    console.error("Error adding document: ", e);
-    return false; // Indicate failure
-  }
-};
+//     return true; // Indicate success
+//   } catch (e) {
+//     console.error("Error adding document: ", e);
+//     return false; // Indicate failure
+//   }
+// };
 
-// Function to handle post deletion
-export const handleDeletePost = async (postId) => {
-  try {
+// // Function to handle post deletion
+// export const handleDeletePost = async (postId) => {
+//   try {
 
-    await deleteDoc(doc(firestore, "posts", postId)); // Delete the post from Firestore
-  } catch (error) {
-    console.error("Error deleting post: ", error);
-  }
-};
-
-
-export const handlePostSubmit = async (postContent, selectedFile, user, closeModal, setLoading) => {
-  if (postContent.trim() === "") return; // Prevent empty posts
-
-  setLoading(true); // Start loading when posting
-  const postData = {
-    content: postContent,
-    createdAt: new Date(),
-    userID: user.uid,
-    postID: uuid()
-  };
-
-  try {
-    // Get the postID from addPost
-    const returnedPostID = await addPost(postData, selectedFile);
-
-    if (returnedPostID) {
-      console.log("Post created with ID:", returnedPostID); // Use the returned postID as needed
-      closeModal();
-      document.querySelector('input[type="file"]').value = ""; // Reset file input
-    }
-  } catch (error) {
-    console.error("Error creating post:", error); // Log the error
-    // Optionally, set an error state to show a message to the user
-  } finally {
-    setLoading(false); // Stop loading after the process
-  }
-};
+//     await deleteDoc(doc(firestore, "posts", postId)); // Delete the post from Firestore
+//   } catch (error) {
+//     console.error("Error deleting post: ", error);
+//   }
+// };
 
 
-export const handleLikePost = async (postId, username, like) => {
-  const postRef = doc(firestore, "posts", postId);
+// export const handlePostSubmit = async (postContent, selectedFile, user, closeModal, setLoading) => {
+//   if (postContent.trim() === "") return; // Prevent empty posts
 
-  // Update likes based on like parameter
-  try {
-    await updateDoc(postRef, {
-      likes: like
-        ? arrayUnion(username) // Add user ID to likes array
-        : arrayRemove(username) // Remove user ID from likes array
-    });
-  } catch (error) {
-    console.error("Error updating likes: ", error);
-  }
-};
+//   setLoading(true); // Start loading when posting
+//   const postData = {
+//     content: postContent,
+//     createdAt: new Date(),
+//     userID: user.uid,
+//     postID: uuid()
+//   };
 
+//   try {
+//     // Get the postID from addPost
+//     const returnedPostID = await addPost(postData, selectedFile);
 
-export const handleCommentPost = async (postId, username, commentText) => {
-  const postRef = doc(firestore, "posts", postId);
-  await updateDoc(postRef, {
-    comments: arrayUnion({ username, text: commentText, createdAt: new Date() }) // Add comment object to the comments array
-  });
-};
-
-
-export const addConnection = async (userId, targetId) => {
-  try {
-    const connectionToAdd = doc(collection(firestore, 'connections'), `${userId}_${targetId}`);
-
-    await setDoc(connectionToAdd, { userId, targetId });
+//     if (returnedPostID) {
+//       console.log("Post created with ID:", returnedPostID); // Use the returned postID as needed
+//       closeModal();
+//       document.querySelector('input[type="file"]').value = ""; // Reset file input
+//     }
+//   } catch (error) {
+//     console.error("Error creating post:", error); // Log the error
+//     // Optionally, set an error state to show a message to the user
+//   } finally {
+//     setLoading(false); // Stop loading after the process
+//   }
+// };
 
 
-  } catch (err) {
-    console.error("Error adding connection:", err);
+// export const handleLikePost = async (postId, username, like) => {
+//   const postRef = doc(firestore, "posts", postId);
 
-  }
-};
-
-
-
-// this belowe code to be modified
-const connectionsCollection = collection(firestore, "connections");
-
-// Check if a connection exists
-export const checkConnectionStatus = async (userId, targetId) => {
-  const q = query(
-    connectionsCollection,
-    where("userId", "==", userId),
-    where("targetId", "==", targetId)
-  );
-  const querySnapshot = await getDocs(q);
-  return !querySnapshot.empty;
-};
+//   // Update likes based on like parameter
+//   try {
+//     await updateDoc(postRef, {
+//       likes: like
+//         ? arrayUnion(username) // Add user ID to likes array
+//         : arrayRemove(username) // Remove user ID from likes array
+//     });
+//   } catch (error) {
+//     console.error("Error updating likes: ", error);
+//   }
+// };
 
 
-// Toggle connection (add or delete)
-export const toggleConnectionStatus = async (connected, userId, targetId, setConnected) => {
-  const q = query(
-    connectionsCollection,
-    where("userId", "==", userId),
-    where("targetId", "==", targetId)
-  );
+// export const handleCommentPost = async (postId, username, commentText) => {
+//   const postRef = doc(firestore, "posts", postId);
+//   await updateDoc(postRef, {
+//     comments: arrayUnion({ username, text: commentText, createdAt: new Date() }) // Add comment object to the comments array
+//   });
+// };
 
-  try {
-    if (connected) {
-      const querySnapshot = await getDocs(q);
-      if (!querySnapshot.empty) {
-        const connectionDoc = querySnapshot.docs[0];
-        await deleteDoc(doc(firestore, "connections", connectionDoc.id));
-        setConnected(false);
-        console.log(`Disconnected with ${targetId}`);
-      }
-    } else {
-      await addDoc(connectionsCollection, {
-        userId,
-        targetId,
-        connectedAt: new Date(),
-      });
-      setConnected(true);
-      console.log(`Connected with ${targetId}`);
-    }
-  } catch (error) {
-    console.error("Error updating connection status:", error);
-  }
-};
+
+// export const addConnection = async (userId, targetId) => {
+//   try {
+//     const connectionToAdd = doc(collection(firestore, 'connections'), `${userId}_${targetId}`);
+
+//     await setDoc(connectionToAdd, { userId, targetId });
+
+
+//   } catch (err) {
+//     console.error("Error adding connection:", err);
+
+//   }
+// };
+
+
+
+// // this belowe code to be modified
+// const connectionsCollection = collection(firestore, "connections");
+
+// // Check if a connection exists
+// export const checkConnectionStatus = async (userId, targetId) => {
+//   const q = query(
+//     connectionsCollection,
+//     where("userId", "==", userId),
+//     where("targetId", "==", targetId)
+//   );
+//   const querySnapshot = await getDocs(q);
+//   return !querySnapshot.empty;
+// };
+
+
+// // Toggle connection (add or delete)
+// export const toggleConnectionStatus = async (connected, userId, targetId, setConnected) => {
+//   const q = query(
+//     connectionsCollection,
+//     where("userId", "==", userId),
+//     where("targetId", "==", targetId)
+//   );
+
+//   try {
+//     if (connected) {
+//       const querySnapshot = await getDocs(q);
+//       if (!querySnapshot.empty) {
+//         const connectionDoc = querySnapshot.docs[0];
+//         await deleteDoc(doc(firestore, "connections", connectionDoc.id));
+//         setConnected(false);
+//         console.log(`Disconnected with ${targetId}`);
+//       }
+//     } else {
+//       await addDoc(connectionsCollection, {
+//         userId,
+//         targetId,
+//         connectedAt: new Date(),
+//       });
+//       setConnected(true);
+//       console.log(`Connected with ${targetId}`);
+//     }
+//   } catch (error) {
+//     console.error("Error updating connection status:", error);
+//   }
+// };

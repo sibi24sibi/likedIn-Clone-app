@@ -1,14 +1,15 @@
 import { useEffect, useState } from "react";
-import TopNav from "@components/top-nav";
-import Sidebar from "@components/sidebar";
-import SuggestedFriends from "@components/suggested-friends";
-import MobileNavbar from "@components/mobile-navbar";
+import TopNav from "../Components/top-nav";
+import Sidebar from "../Components/sidebar";
+import SuggestedFriends from "../Components/suggested-friends";
+import MobileNavbar from "../Components/mobile-navbar";
 import { Route, Routes, Navigate } from "react-router-dom";
 import FeedPage from "./feed";
 import ProfilePage from "./profile-page";
 import FriendsPage from "./friends-page";
 import MessagesPage from "./app_messages_message-page";
 import NotificationsPage from "./app_notifications_noficiation-page";
+import { listenToAllPosts } from "../Api/UploadApi";
 
 export function Layout() {
   const [isDark, setIsDark] = useState(false);
@@ -21,6 +22,8 @@ export function Layout() {
     }
   }, [isDark]);
 
+
+
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       <TopNav isDark={isDark} setIsDark={setIsDark} />
@@ -29,7 +32,7 @@ export function Layout() {
         <main className="flex-1 max-w-4xl md:mx-auto md:mr-6 mb-16 md:mb-0">
           <Routes>
             <Route path="/" element={<Navigate to="/home" replace />} />
-            <Route path="/home" element={<FeedPage />} />
+            <Route path="/home" element={<FeedPage  />} />
             <Route path="/friends" element={<FriendsPage />} />
             <Route path="/messages" element={<MessagesPage />} />
             <Route path="/notifications" element={<NotificationsPage />} />

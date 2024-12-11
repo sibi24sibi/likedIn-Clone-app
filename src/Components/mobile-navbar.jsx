@@ -1,6 +1,7 @@
 import { Home, User, MessageSquare, Bell, UserPlus } from 'react-feather';
 import { Link } from 'react-router-dom'; // Import Link for routing
 
+
 export default function MobileNavbar() {
   const navigation = [
     { name: 'Home', icon: Home, to: '/home' },
@@ -9,6 +10,8 @@ export default function MobileNavbar() {
     { name: 'Notifications', icon: Bell, to: '/notifications' },
     { name: 'Friends', icon: UserPlus, to: '/friends' },
   ];
+
+
 
   return (
     <nav className="fixed bottom-0 left-0 right-0 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 md:hidden">

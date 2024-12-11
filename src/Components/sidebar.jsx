@@ -1,10 +1,23 @@
 import { useState } from 'react';
 import { Home, User, MessageSquare, Bell, UserPlus } from 'react-feather';
 import { Link } from 'react-router-dom'; // Import Link from react-router-dom
+import { useAuth } from '../Api/AuthApi';
+import { useEffect } from 'react';
+import { listenToSingleUser } from '../Api/UploadApi';
 
 export default function Sidebar({ className }) {
   const [unreadMessages, setUnreadMessages] = useState(3);
   const [unreadNotifications, setUnreadNotifications] = useState(5);
+
+  const { currentUser } = useAuth()
+
+  const [userData, setUserData] = useState()
+
+
+
+  useEffect(() => {
+    listenToSingleUser(setUserData, currentUser.uid);
+  }, [])
 
   const navigation = [
     { name: 'Home', icon: Home, to: '/home', unread: null },
@@ -19,12 +32,12 @@ export default function Sidebar({ className }) {
       <div className="bg-white dark:bg-gray-800 rounded-lg p-4 shadow sticky top-5">
         <div className="text-center mb-6">
           <img
-            src="https://i.pravatar.cc/150?img=3"
+            src={userData?.profilePic}
             alt="Profile"
             className="w-20 h-20 rounded-full mx-auto mb-4"
           />
-          <h2 className="font-semibold text-gray-900 dark:text-white">Robert Fox</h2>
-          <p className="text-gray-500 dark:text-gray-400 text-sm">Software Engineer</p>
+          <h2 className="font-semibold text-gray-900 dark:text-white">{userData?.name}</h2>
+        <p className="text-gray-500 dark:text-gray-400 text-sm">{userData?.role || 'unknown'}</p>
         </div>
 
         <nav className="space-y-1">

@@ -1,33 +1,25 @@
 import { Watch } from "react-loader-spinner";
 import { Route, Routes, Navigate } from "react-router-dom";
-import Header from "./Components/Header";
-import Footer from "./Components/Footer";
+
 import { useAuth } from "./Api/AuthApi";
 
 import LandingPage from "./Pages/LandingPage";
 import AboutUs from "./Pages/AboutUs";
 import ContactUs from "./Pages/ContactUs";
-import SignupForm from "./Components/SignupForm";
-import SigninForm from "./Components/SigninForm";
-import ForgotPasswordForm from "./Components/ForgotPasswordForm";
+import SignupForm from "./Pages/SignupForm";
+import SigninForm from "./Pages/SigninForm";
+import ForgotPasswordForm from "./Pages/ForgotPasswordForm";
 import ErrorPage from "./Pages/ErrorPage";
-import FeedPage from "./new-pages/feed";
-import MobileNavbar from "./New-components/mobile-navbar";
-import TopNav from "./New-components/top-nav";
+
 import { useEffect, useState } from "react";
-import SuggestedFriends from "./New-components/suggested-friends";
-import Sidebar from "./New-components/sidebar";
-import ProfilePage from '@pages/profile-page';
-import FriendsPage from '@pages/friends-page';
-import NotificationsPage from "./new-pages/app_notifications_noficiation-page";
-import MessagesPage from "./new-pages/app_messages_message-page";
-import ChatPage from "./new-pages/app_messages_[id]_sub-message-page";
-import Layout from "./new-pages/layout";
+
+import Layout from "./Pages/layout";
 
 function App() {
-  const { user, mainLoading, } = useAuth();
+  const { currentUser, mainLoading, } = useAuth();
 
-  const [isDark, setIsDark] = useState(false)
+
+  const [isDark] = useState(false)
 
   useEffect(() => {
     if (isDark) {
@@ -56,7 +48,7 @@ function App() {
 
       <Routes>
 
-        {user ? (
+        {currentUser ? (
           <>
             <Route path="*" element={<Layout />} />
           </>

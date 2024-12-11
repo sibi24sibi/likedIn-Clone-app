@@ -18,40 +18,30 @@ import toast from "react-hot-toast";
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(null);
+  const [currentUser, setCurrentUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [userData, setUserData] = useState(null);
 
   const auth = getAuth(app);
   const navigate = useNavigate(); 
 
-
-
-  // Function to fetch user data from Firestore
-  const fetchUserData = async (uid) => {
-    try {
-      const userDoc = await getDoc(doc(firestore, "users", uid));
-      if (userDoc.exists()) {
-        setUserData(userDoc.data());
-      } else {
-        toast.error("User data not found.");
-      }
-    } catch (err) {
-      console.error("Error fetching user data:", err);
-      toast.error("Failed to load user data.");
-    }
-  };
+  const randomNum = Math.floor(Math.random() * 16) + 1;
+  const generateRandomProfilePic = `https://placeholder-image-ry0c.onrender.com/api/avatar?img=${randomNum}`;
+ 
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, async (user) => {
+    const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
       setLoading(true);
-      if (user) {
-        setUser(user);
-        await fetchUserData(user.uid);
-
+      if (currentUser) {
+        setCurrentUser(currentUser);
+       
+        const userDoc = await getDoc(doc(firestore, "users", currentUser.uid));
+        if (userDoc.exists()) {
+          setUserData(userDoc.data());  
+        }
       } else {
-        setUser(null);
-        setUserData(null);
+        setCurrentUser(null);
+        setUserData(null);  
         console.log("User signed out");
       }
       setLoading(false);
@@ -59,6 +49,8 @@ export const AuthProvider = ({ children }) => {
 
     return () => unsubscribe();
   }, [auth]);
+
+
 
   const login = async (email, password) => {
     try {
@@ -68,7 +60,6 @@ export const AuthProvider = ({ children }) => {
 
     } catch (err) {
       toast.error(err.message || "Login failed.");
-
     }
   };
 
@@ -76,21 +67,12 @@ export const AuthProvider = ({ children }) => {
     try {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
-
-
-      // const randomProfilePic = allDefaultProfilePics[Math.floor(Math.random() * allDefaultProfilePics.length)];
-
-
       
-      const randomNum = Math.floor(Math.random() * 16)+1;
-      
-      const randomProfilePic = `https://placeholder-image-ry0c.onrender.com/api/avatar?img=${randomNum}`;
-
       await setDoc(doc(firestore, "users", user.uid), {
         name: displayName,
         email: email,
         userID: user.uid,
-        profilePic: randomProfilePic || defaultProfile,
+        profilePic: generateRandomProfilePic || defaultProfile,
       });
 
       toast.success("Account created successfully!");
@@ -111,18 +93,13 @@ export const AuthProvider = ({ children }) => {
 
       const userDoc = await getDoc(doc(firestore, "users", user.uid));
       if (!userDoc.exists()) {
-        //  const randomProfilePic = allDefaultProfilePics[Math.floor(Math.random() * allDefaultProfilePics.length)];
-
-        const randomNum = Math.floor(Math.random() * 16)+1;
-
-        const randomProfilePic = `https://placeholder-image-ry0c.onrender.com/api/avatar?img=${randomNum}`;
-
-
+        
+        
         await setDoc(doc(firestore, "users", user.uid), {
           name: user.displayName || "Unknown User",
           email: user.email,
           userID: user.uid,
-          profilePic: randomProfilePic,
+          profilePic: generateRandomProfilePic,
         });
       }
 
@@ -157,32 +134,20 @@ export const AuthProvider = ({ children }) => {
   };
 
 
-  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
 
-  useEffect(() => {
-    const handleResize = () => {
-      setIsMobile(window.innerWidth < 768);
-    };
-
-    window.addEventListener("resize", handleResize);
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
-  }, []);
 
 
   return (
     <AuthContext.Provider
       value={{
-        user,
+        currentUser,
+        userData,
         login,
         loading,
         signup,
         signInWithGoogle,
         logout,
         sendPasswordResetEmail,
-        userData,
-        isMobile
       }}
     >
       {children}

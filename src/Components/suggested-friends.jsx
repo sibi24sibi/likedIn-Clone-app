@@ -1,28 +1,17 @@
 import { Plus } from 'react-feather'
+import { listenToUsers } from '../Api/UploadApi'
+import { useEffect, useState } from 'react'
 
 export default function SuggestedFriends({ className }) {
-  const suggestions = [
-    {
-      name: 'Olivia Anderson',
-      role: 'Financial Analyst',
-      image: 'https://i.pravatar.cc/150?img=56'
-    },
-    {
-      name: 'Thomas Baker',
-      role: 'Project Manager',
-      image: 'https://i.pravatar.cc/150?img=32'
-    },
-    {
-      name: 'Lily Lee',
-      role: 'Graphic Designer',
-      image: 'https://i.pravatar.cc/150?img=34'
-    },
-    {
-      name: 'Andrew Harris',
-      role: 'Data Scientist',
-      image: 'https://i.pravatar.cc/150?img=31'
-    }
-  ]
+
+
+  const [suggestionData,setSuggestionData] = useState([])
+
+  useEffect(() =>{
+    listenToUsers(setSuggestionData)
+  },[]);
+
+  console.log(suggestionData?.name)
 
   return (
     <div className={className}>
@@ -31,10 +20,10 @@ export default function SuggestedFriends({ className }) {
           Suggested Friends
         </h3>
         <div className="space-y-4">
-          {suggestions.map((person) => (
+          {suggestionData.slice(0,7).map((person) => (
             <div key={person.name} className="flex items-center gap-3">
               <img
-                src={person.image}
+                src={person.profilePic}
                 alt={person.name}
                 className="w-10 h-10 rounded-full"
               />

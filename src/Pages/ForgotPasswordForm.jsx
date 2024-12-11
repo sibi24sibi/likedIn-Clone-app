@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useAuth } from "../Api/AuthApi";
+import { useAuth } from "../Api/AuthApi.jsx";
 import { Link } from "react-router-dom";
 import { linkedinSmallLogo } from "../assets/assets.js"; // Add logo import
 

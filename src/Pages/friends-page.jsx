@@ -1,36 +1,44 @@
+import { useEffect, useState } from 'react'
 import { UserPlus } from 'react-feather'
+import { listenToUsers } from '../Api/UploadApi';
 
 export default function FriendsPage() {
-  const recommendations = [
-    {
-      name: 'Olivia Anderson',
-      role: 'Financial Analyst',
-      image: 'https://i.pravatar.cc/150?img=16',
-      mutualFriends: 8,
-      profession: 'Finance'
-    },
-    {
-      name: 'Thomas Baker',
-      role: 'Project Manager',
-      image: 'https://i.pravatar.cc/150?img=7',
-      mutualFriends: 15,
-      profession: 'Management'
-    },
-    {
-      name: 'Lily Lee',
-      role: 'Graphic Designer',
-      image: 'https://i.pravatar.cc/150?img=8',
-      mutualFriends: 5,
-      profession: 'Design'
-    },
-    {
-      name: 'Andrew Harris',
-      role: 'Data Scientist',
-      image: 'https://i.pravatar.cc/150?img=9',
-      mutualFriends: 12,
-      profession: 'Data Science'
-    }
-  ]
+  // const recommendations = [
+  //   {
+  //     name: 'Olivia Anderson',
+  //     role: 'Financial Analyst',
+  //     image: 'https://i.pravatar.cc/150?img=16',
+  //     mutualFriends: 8,
+  //     profession: 'Finance'
+  //   },
+  //   {
+  //     name: 'Thomas Baker',
+  //     role: 'Project Manager',
+  //     image: 'https://i.pravatar.cc/150?img=7',
+  //     mutualFriends: 15,
+  //     profession: 'Management'
+  //   },
+  //   {
+  //     name: 'Lily Lee',
+  //     role: 'Graphic Designer',
+  //     image: 'https://i.pravatar.cc/150?img=8',
+  //     mutualFriends: 5,
+  //     profession: 'Design'
+  //   },
+  //   {
+  //     name: 'Andrew Harris',
+  //     role: 'Data Scientist',
+  //     image: 'https://i.pravatar.cc/150?img=9',
+  //     mutualFriends: 12,
+  //     profession: 'Data Science'
+  //   }
+  // ]
+
+  const [recommendations, setRecommendation] = useState([])
+
+  useEffect(() => {
+    listenToUsers(setRecommendation)
+  }, []);
 
   return (
     <div className="space-y-6">
@@ -38,7 +46,7 @@ export default function FriendsPage() {
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
         {recommendations.map((person) => (
           <div key={person.name} className="bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden">
-            <img src={person.image} alt="" className="w-full h-32 object-cover" />
+            <img src={person.profilePic} alt="" className="w-full h-32 object-cover" />
             <div className="p-4 w-max">
               <h3 className="font-semibold text-gray-900 dark:text-white">{person.name}</h3>
               <p className="text-sm text-gray-500 dark:text-gray-400">{person.role}</p>

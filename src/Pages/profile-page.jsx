@@ -1,48 +1,15 @@
-import { useState } from 'react';
-import { MessageCircle, ThumbsUp, Bookmark } from 'react-feather';
+
 import { Link, Navigate, Route, Routes } from 'react-router-dom'; // Use Link for navigation
-import { MyPosts } from './My-posts';
 import { Settingspage } from './Settings-page';
+import { useAuth } from '../Api/AuthApi';
+import { Postcontent } from '../Components/Post-content';
 
 export default function ProfilePage() {
-  // Sample state for notifications and darkMode
-  const [notifications, setNotifications] = useState(true);
-  const [darkMode, setDarkMode] = useState(false);
 
-  // Sample savedPosts data (you should replace this with your actual data)
-  const savedPosts = [
-    {
-      id: 1,
-      author: 'Jane Doe',
-      timestamp: '1 day ago',
-      content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-      profilePic: "https://i.pravatar.cc/150?img=63",
-      likes: 10,
-      comments: 5,
-    },
-    {
-      id: 2,
-      author: 'John Smith',
-      timestamp: '3 hours ago',
-      content: 'Quisque vel erat id nulla interdum.',
-      profilePic: "https://i.pravatar.cc/150?img=23",
-      likes: 15,
-      comments: 3,
-    },
-  ];
 
-  const MyFeedPost = [
 
-    {
-      id: 1,
-      author: 'Robert Fox',
-      timestamp: '3 hours ago',
-      content: 'Quisque vel erat id nulla interdum.',
-      profilePic: "https://i.pravatar.cc/150?img=3",
-      likes: 15,
-      comments: 3,
-    },
-  ];
+  const { userData } = useAuth()
+
 
   return (
     <>
@@ -51,18 +18,18 @@ export default function ProfilePage() {
         <div className="px-8 pb-6">
           <div className="flex flex-col sm:flex-row items-center gap-4 -mt-16">
             <img
-              src="https://i.pravatar.cc/150?img=3"
+              src={userData?.profilePic}
               alt="Robert Fox"
               className="w-32 h-32 rounded-full border-4 border-white dark:border-gray-800"
             />
             <div className="text-center sm:text-left mt-4 sm:mt-16">
               <div className=" gap-2 mb-1">
                 <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
-                  Robert Fox
+                  {userData?.name}
                 </h1>
-                <p className="text-gray-500 dark:text-gray-400">@robert</p>
+                <p className="text-gray-500 dark:text-gray-400">{userData?.userName || '@user_name'}</p>
               </div>
-              <p className="text-gray-500 dark:text-gray-400">Software Engineer</p>
+              <p className="text-gray-500 dark:text-gray-400">{userData?.role}</p>
             </div>
             <div className="flex gap-6 ml-auto mt-4 sm:mt-16">
               <div className="text-center">
@@ -100,8 +67,8 @@ export default function ProfilePage() {
 
         {/* Add Routes to render different components */}
         <Routes>
-          <Route path="" element={<MyPosts posts={MyFeedPost} />} />
-          <Route path="saved-post" element={<MyPosts posts={savedPosts} />} />
+          <Route path="" element={<Postcontent isOwnPost /> } />
+          <Route path="saved-post" element={<Postcontent />} />
           <Route path="settings" element={<Settingspage />} />
           <Route path="*" element={<Navigate to="" replace />} />
         </Routes>
