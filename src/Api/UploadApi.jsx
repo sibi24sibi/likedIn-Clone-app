@@ -9,7 +9,7 @@ import {
 } from "firebase/firestore";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 
-import uuid from "react-uuid";
+// import uuid from "react-uuid";
 
 const postsCollection = collection(firestore, "posts");
 const storage = getStorage();

@@ -8,9 +8,6 @@ export default defineConfig({
   resolve: {
     alias: {
       "@assets": path.resolve(__dirname, "./src/assets"),
-      "@components": "/src/new-components",
-      "@pages": "/src/new-pages",
-      "@contexts": "/src/new-contexts",
     },
   },
   server: {

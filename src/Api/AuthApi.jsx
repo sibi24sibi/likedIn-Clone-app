@@ -19,7 +19,7 @@ const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
   const [userData, setUserData] = useState(null);
 
   const auth = getAuth(app);
@@ -30,8 +30,8 @@ export const AuthProvider = ({ children }) => {
  
 
   useEffect(() => {
+
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
-      setLoading(true);
       if (currentUser) {
         setCurrentUser(currentUser);
        
@@ -44,9 +44,11 @@ export const AuthProvider = ({ children }) => {
         setUserData(null);  
         console.log("User signed out");
       }
-      setLoading(false);
+      setIsLoading(false);
+      
     });
 
+  
     return () => unsubscribe();
   }, [auth]);
 
@@ -143,7 +145,7 @@ export const AuthProvider = ({ children }) => {
         currentUser,
         userData,
         login,
-        loading,
+        isLoading,
         signup,
         signInWithGoogle,
         logout,

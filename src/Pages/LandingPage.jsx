@@ -9,18 +9,19 @@ import { MdGroups, MdExplore } from 'react-icons/md'
 import { NavLink } from 'react-router-dom'
 import { welcomeMainImage } from '../assets/assets'
 import { useAuth } from '../Api/AuthApi'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faAppStoreIos, faGooglePlay } from '@fortawesome/free-brands-svg-icons'
+// import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+// import { faAppStoreIos, faGooglePlay } from '@fortawesome/free-brands-svg-icons'
+import TopNav from '../Components/top-nav'
 
 export default function LandingPage() {
 
-  const { user } = useAuth();
+  const { currentUser } = useAuth();
 
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white pt-10 lg:px-auto px-4">
-
-
+    
+    <TopNav/>
       {/* Hero Section */}
       <section className="pt-12 pb-16 lg:pt-16 md:pb-24">
         <div className="container mx-auto px-4">
@@ -34,7 +35,7 @@ export default function LandingPage() {
               </p>
               <div className="flex gap-4">
 
-                {user ?
+                {currentUser ?
                   <NavLink to="/home">
                     <button className="px-8 py-3 border-2 border-blue-600 text-blue-600 rounded-full hover:bg-blue-50 transition text-lg">
                       Explore Now
@@ -327,10 +328,10 @@ export default function LandingPage() {
               </div>
               <div className="flex gap-4 lg:flex-row flex-col">
                 <button className="lg:px-6 lg:py-3 py-2 px-4  bg-black text-white rounded-lg hover:bg-gray-800 transition">
-                  <FontAwesomeIcon icon={faAppStoreIos} className=' float-left py-1  px-2' />Download for iOS
+                  {/* <FontAwesomeIcon icon={faAppStoreIos} className=' float-left py-1  px-2' />Download for iOS */}
                 </button>
                 <button className="lg:px-6 lg:py-3 py-2 px-4  bg-black text-white rounded-lg hover:bg-gray-800 transition">
-                  <FontAwesomeIcon icon={faGooglePlay} className='float-left py-1 px-2 ' />  Download for Android
+                  {/* <FontAwesomeIcon icon={faGooglePlay} className='float-left py-1 px-2 ' />  Download for Android */}
                 </button>
 
                 

@@ -1,8 +1,9 @@
 import React, { useState } from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faGoogle } from "@fortawesome/free-brands-svg-icons";
+// import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+// import { faGoogle } from "@fortawesome/free-brands-svg-icons";
 import { useAuth } from "../Api/AuthApi";
 import { Link } from "react-router-dom";
+import TopNav from "../Components/top-nav";
 
 const SigninForm = () => {
   const {
@@ -25,7 +26,8 @@ const SigninForm = () => {
 
   return (
     <div className="bg-gray-100">
-      <div className="flex items-center justify-center min-h-screen">
+      <TopNav />
+      <div className="flex items-center justify-center min-h-screen my-12">
         <div className="bg-white p-8 rounded-lg shadow-lg w-5/6 max-w-md">
           {/* LinkedIn Logo */}
           <h1 className="text-2xl font-semibold text-center text-blue-700 mb-6">Sign In to Friendzy</h1>
@@ -103,7 +105,7 @@ const SigninForm = () => {
               className="flex items-center justify-center w-full py-2 border border-gray-300 rounded-lg hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
               onClick={signInWithGoogle}
             >
-              <FontAwesomeIcon icon={faGoogle} className="text-lg mr-2" />
+              {/* <FontAwesomeIcon icon={faGoogle} className="text-lg mr-2" /> */}
               <span className="text-gray-700 font-medium">Sign in with Google</span>
             </button>
 

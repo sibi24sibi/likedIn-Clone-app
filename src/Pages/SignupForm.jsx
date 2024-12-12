@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faGoogle } from "@fortawesome/free-brands-svg-icons";
+// import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+// import { faGoogle } from "@fortawesome/free-brands-svg-icons";
 import { useAuth } from "../Api/AuthApi";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from 'react-hot-toast';
+import TopNav from "../Components/top-nav";
 
 
 const SignupForm = () => {
@@ -32,8 +33,9 @@ const SignupForm = () => {
 
   return (
     <div className="bg-gray-100">
-      <div className="flex items-center justify-center min-h-screen">
-        <div className="bg-white p-8 rounded-lg shadow-lg w-5/6  max-w-md  my-20 ">
+      <div className="flex items-center justify-center min-h-screen ">
+      <TopNav />
+        <div className="bg-white p-8 rounded-lg shadow-lg w-5/6  max-w-md  my-28 ">
           <h1 className="text-2xl font-semibold text-center text-blue-700 mb-6">Sign Up for Friendzy</h1>
 
 
@@ -115,7 +117,7 @@ const SignupForm = () => {
             onClick={handleGoogleSignup}
             className="flex items-center justify-center w-full py-2 border border-gray-300 rounded-lg hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
           >
-            <FontAwesomeIcon icon={faGoogle} className="mr-2" />
+            {/* <FontAwesomeIcon icon={faGoogle} className="mr-2" /> */}
             <span className="text-gray-700 font-medium">Continue with Google</span>
           </button>
 

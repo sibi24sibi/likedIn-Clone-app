@@ -3,6 +3,7 @@ import { ThumbsUp, MessageCircle, MoreHorizontal } from 'react-feather';
 import moment from 'moment';
 import { useAuth } from '../Api/AuthApi';
 import { listenToAllPosts, listenToSingleUser, listenToSingleUserPost, listenToUsers } from '../Api/UploadApi';
+import PostLoading from '../loading-componets/PostLoading';
 
 export const Postcontent = ({ isOwnPost, isPublicPost }) => {
 
@@ -11,11 +12,13 @@ export const Postcontent = ({ isOwnPost, isPublicPost }) => {
 
     const [userPost, setUserPost] = useState([]);
     const [otherUser, setOtherUser] = useState([]);
+    const [isLoading, setIsLoading] = useState(false);
 
     const userData = isOwnPost ? currentUser : otherUser;
 
     useEffect(() => {
-        
+        setIsLoading(true);
+
         if (isOwnPost && currentUser?.userID) {
             listenToSingleUserPost(setUserPost, currentUser.userID);
         } else if (!isOwnPost && otherUser?.userID) {
@@ -48,6 +51,7 @@ export const Postcontent = ({ isOwnPost, isPublicPost }) => {
                 console.log(userData);
             });
         }
+        setIsLoading(false); // Set loading state to false once all data is fetched
     }, [isPublicPost, userPost]);
 
 
@@ -57,6 +61,12 @@ export const Postcontent = ({ isOwnPost, isPublicPost }) => {
 
     if (!userData) {
         return <div className="text-center text-gray-500 dark:text-gray-400 py-8">No user data available.</div>;
+    }
+
+    if (isLoading) {
+        return (
+            <PostLoading />
+        );
     }
 
     return (
@@ -99,13 +109,13 @@ export const Postcontent = ({ isOwnPost, isPublicPost }) => {
                                 </p>
 
                                 {/* Post Image */}
-                            {post.imageUrl && 
+                                {post.imageUrl &&
                                     <img
                                         src={post.imageUrl || 'https://placehold.co/600x400'} // Fallback image
                                         alt="Post"
                                         className="w-full h-64 object-cover rounded-lg mb-4"
                                     />
-                            }
+                                }
 
                                 {/* Post Actions */}
                                 <div className="flex items-center gap-4">

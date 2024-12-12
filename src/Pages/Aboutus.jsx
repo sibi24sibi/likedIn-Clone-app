@@ -1,10 +1,17 @@
 import React from 'react';
 import { FaUsers, FaLightbulb, FaHeart } from 'react-icons/fa';
 import { welcomeMainImage } from '../assets/assets';
+import { NavLink } from 'react-router-dom';
+import { useAuth } from '../Api/AuthApi';
+import TopNav from '../Components/top-nav';
 
 const AboutUs = () => {
+
+    const { currentUser } = useAuth();
+
     return (
         <div className="bg-gray-100 min-h-screen py-12  pt-36 lg:pt-28  lg:px-auto px-4">
+            <TopNav />
             <div className="container mx-auto px-4">
                 {/* <h1 className="text-4xl font-bold text-center text-blue-900 mb-12">About Friendzy</h1> */}
 
