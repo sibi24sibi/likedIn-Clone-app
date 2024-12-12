@@ -4,7 +4,7 @@ import { Route, Routes, Navigate } from "react-router-dom";
 import { useAuth } from "./Api/AuthApi";
 
 import LandingPage from "./Pages/LandingPage";
-import AboutUs from "./Pages/AboutUs";
+import AboutUs from "./Pages/Aboutus";
 import ContactUs from "./Pages/Contactus";
 import SignupForm from "./Pages/SignupForm";
 import SigninForm from "./Pages/SigninForm";
@@ -14,7 +14,7 @@ import ErrorPage from "./Pages/ErrorPage";
 import { useEffect, useState } from "react";
 
 import Layout from "./Pages/layout";
-import MainLoader from "./loading-componets/mainLoading";
+import MainLoader from "./loading-componets/MainLoading";
 
 function App() {
   const { currentUser ,isLoading } = useAuth();
