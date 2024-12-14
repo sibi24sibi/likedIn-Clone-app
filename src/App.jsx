@@ -14,7 +14,9 @@ import ErrorPage from "./Pages/ErrorPage";
 import { useEffect, useState } from "react";
 
 import Layout from "./Pages/layout";
-import MainLoader from "./loading-componets/MainLoading";
+import MainLoading from "./Components/LoadingComponents/mainLoading";
+
+
 
 function App() {
   const { currentUser ,isLoading } = useAuth();
@@ -26,7 +28,7 @@ function App() {
   if (isLoading) {
     return (
       <div className="flex items-center justify-center h-screen">
-        <MainLoader/>
+        <MainLoading/>
       </div>
     );
   }

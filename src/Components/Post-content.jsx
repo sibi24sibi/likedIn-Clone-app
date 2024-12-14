@@ -1,80 +1,93 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ThumbsUp, MessageCircle, MoreHorizontal } from 'react-feather';
 import moment from 'moment';
 import { useAuth } from '../Api/AuthApi';
-import { listenToAllPosts, listenToSingleUser, listenToSingleUserPost, listenToUsers } from '../Api/UploadApi';
-import PostLoading from '../loading-componets/PostLoading';
+import { listenToAllPosts, listenToUsers } from '../Api/UploadApi';
+import PostLoading from './LoadingComponents/PostLoading';
+import { Menu, MenuButton, MenuItems, MenuItem } from '@headlessui/react';
+import DeleteButtonModal from './Modal/DeleteButtonModal';
+import { CommentsComponent } from './CommentsComponent';
+import { PostActions } from './PostActions';
 
-export const Postcontent = ({ isOwnPost, isPublicPost }) => {
-
-    const { userData: currentUser } = useAuth();
-
+export const Postcontent = ({ userProfileData , savedPost , isOwnPost}) => {
 
     const [userPost, setUserPost] = useState([]);
-    const [otherUser, setOtherUser] = useState([]);
-    const [isLoading, setIsLoading] = useState(false);
-
-    const userData = isOwnPost ? currentUser : otherUser;
-
-    useEffect(() => {
-        setIsLoading(true);
-
-        if (isOwnPost && currentUser?.userID) {
-            listenToSingleUserPost(setUserPost, currentUser.userID);
-        } else if (!isOwnPost && otherUser?.userID) {
-            listenToSingleUserPost(setUserPost, otherUser.userID);
-        } else if (isPublicPost) {
-            listenToAllPosts(setUserPost);
-        }
-
-    }, [isOwnPost, isPublicPost, currentUser?.userID, otherUser?.userID]);
-
-
+    const [usersData, setUsersData] = useState([]);
+    const [isLoadingPosts, setIsLoadingPosts] = useState(true);
+    const [isLoadingUsers, setIsLoadingUsers] = useState(true);
+    const [selectedPostId, setSelectedPostId] = useState(null);
+    const [ setOpenComments] = useState(false);
+    const [openCommentsPostId, setOpenCommentsPostId] = useState(null);
 
     useEffect(() => {
-        if (isPublicPost && userPost.length > 0) {
-            const userIDs = userPost.map(post => post.userID);
-            const uniqueUserIDs = [...new Set(userIDs)]; // To make sure we only have unique userIDs
+        // Fetch posts and users simultaneously
+        const unsubscribePosts = listenToAllPosts((posts) => {
+            setUserPost(posts);
+            setIsLoadingPosts(false);
+        });
 
-            // Fetch user data for each userID in the list
-            listenToUsers((usersData) => {
-                const users = usersData.filter(user => uniqueUserIDs.includes(user.userID));
+        const unsubscribeUsers = listenToUsers((users) => {
+            setUsersData(users);
+            setIsLoadingUsers(false);
+        });
 
-                // Accumulate the user data based on the posts' userIDs
-                const usersDataForPost = users.map(user => ({
-                    userID: user.userID,
-                    name: user.name,
-                    profilePic: user.profilePic
-                }));
+        // Cleanup function
+        return () => {
+            unsubscribePosts();
+            unsubscribeUsers();
+        };
+    }, []);
 
-                setOtherUser(usersDataForPost); // Set the user data once all is collected
-                console.log(userData);
-            });
+    // Filter posts for the given user
+    const postDatas = userPost.map((post) => {
+        const postUser = usersData.find((user) => user.userID === post.userID)
+
+        return {
+            ...post,
+            user: postUser,
+        };
+    });
+
+    const postData = userProfileData
+        ? postDatas.filter((post) => post.userID === userProfileData)
+        : postDatas;
+
+    // Check if either posts or users are still loading
+    if (isLoadingPosts || isLoadingUsers) {
+        return <PostLoading />;
+    }
+
+    const handleDeletePost = (postId) => {
+        setSelectedPostId(postId);
+    };
+
+    const toggleComments = (postId) => {
+        // If the clicked post already has its comments open, close it (set to null)
+        if (openCommentsPostId === postId) {
+            setOpenCommentsPostId(null);
+        } else {
+            // Otherwise, open the clicked post's comments and close others
+            setOpenCommentsPostId(postId);
         }
-        setIsLoading(false); // Set loading state to false once all data is fetched
-    }, [isPublicPost, userPost]);
+    };
 
-
-    if (!userPost) {
-        return <div className="text-center text-gray-500 dark:text-gray-400 py-8">No posts available.</div>;
-    }
-
-    if (!userData) {
-        return <div className="text-center text-gray-500 dark:text-gray-400 py-8">No user data available.</div>;
-    }
-
-    if (isLoading) {
+    if(savedPost){ //no saved post yet
         return (
-            <PostLoading />
+            <div className="text-center p-20">
+               
+                <h2 className="mt-2 text-xl font-medium text-gray-900 dark:text-white">No saved posts yet</h2>
+                <p className="mt-2 text-gray-500 dark:text-gray-400">You haven't saved any posts yet. To save a post, click on the heart icon next to the post.</p>
+            </div>
+           
+           
         );
     }
 
     return (
-        <div>
-            {userPost.map((post) => {
-                const postUser = otherUser.find(user => user.userID === post.userID) || userData;
-                return (
-                    <div key={post.postID} className="post-content">
+        <>
+            <div>
+                {postData.map((post) => (
+                    <div key={post.id} className="post-content">
                         {/* Post Card */}
                         <div className="bg-white dark:bg-gray-800 rounded-lg shadow">
                             <div className="p-4">
@@ -82,111 +95,79 @@ export const Postcontent = ({ isOwnPost, isPublicPost }) => {
                                 <div className="flex items-center justify-between mb-4">
                                     <div className="flex items-center gap-3">
                                         <img
-                                            src={postUser?.profilePic || 'https://placehold.co/100x100'} // Fallback for missing image
-                                            alt={postUser?.name || 'User'}
+                                            src={post.user.profilePic || 'https://placehold.co/100x100'}
+                                            alt={post.user.name || 'User'}
                                             className="w-10 h-10 rounded-full"
                                         />
                                         <div>
                                             <div className="items-center gap-2">
                                                 <span className="font-medium text-gray-900 dark:text-white">
-                                                    {postUser?.name || 'Unknown User'}
+                                                    {post.user.name || 'User'}
                                                 </span>
                                                 <div className="text-sm text-gray-500 dark:text-gray-400">
-                                                    {/* Format createdAt if it's an object */}
                                                     {moment(post.createdAt.seconds * 1000).fromNow()}
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                    <button className="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300">
-                                        <MoreHorizontal className="w-5 h-5" />
-                                    </button>
+                                    <Menu as="div" className="relative">
+                                        <MenuButton className="p-2 rounded-full dark:text-slate-200 dark:hover:bg-gray-600 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                            <MoreHorizontal className='w-5 h-5' />
+                                        </MenuButton>
+                                        <MenuItems
+                                            className="absolute mt-2 w-48 bg-white dark:bg-black rounded-lg shadow-lg z-10 border dark:border-gray-800 border-gray-300 -translate-x-40"
+                                        >
+                                            {isOwnPost && <MenuItem>
+                                                <a
+                                                    onClick={() => handleDeletePost(post.id)}
+                                                    className="block px-4 py-2 text-sm  dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-gray-200 text-gray-700 hover:bg-blue-100 focus:bg-blue-100 focus:outline-none"
+                                                >
+                                                    Delete the post
+                                                </a>
+                                            </MenuItem>}
+                                            <MenuItem>
+                                                <a
+                                                    className="block px-4 py-2 text-sm  dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-gray-200 text-gray-700 hover:bg-blue-100 focus:bg-blue-100 focus:outline-none"
+                                                >
+                                                    More
+                                                </a>
+                                            </MenuItem>
+                                        </MenuItems>
+                                    </Menu>
                                 </div>
 
                                 {/* Post Content */}
                                 <p className="text-gray-900 dark:text-white mb-4">
-                                    {post.content || 'No content available.'}
+                                    {post.content}
                                 </p>
 
                                 {/* Post Image */}
-                                {post.imageUrl &&
+                                {post.imageUrl && (
                                     <img
-                                        src={post.imageUrl || 'https://placehold.co/600x400'} // Fallback image
+                                        src={post.imageUrl || 'https://placehold.co/600x400'}
                                         alt="Post"
-                                        className="w-full h-64 object-cover rounded-lg mb-4"
+                                        className="w-full h-auto object-cover rounded-lg mb-4"
                                     />
-                                }
+                                )}
 
                                 {/* Post Actions */}
-                                <div className="flex items-center gap-4">
-                                    <button className="flex items-center gap-2 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300">
-                                        <ThumbsUp className="w-5 h-5" />
-                                        <span>Like</span>
-                                    </button>
-                                    <button className="flex items-center gap-2 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300">
-                                        <MessageCircle className="w-5 h-5" />
-                                        <span>Comment</span>
-                                    </button>
-                                </div>
+                                <PostActions postId={post.id} postData={userPost} setOpenComments={setOpenComments} toggleComments={toggleComments} />
                             </div>
                         </div>
+                        {openCommentsPostId === post.id && <CommentsComponent postId={post.id} /> }
 
-                        {/* Comments Section */}
-                        <div className="border-t border-gray-200 dark:border-gray-700">
-                            <div className="p-4 bg-gray-50 dark:bg-gray-900">
-                                {/* Comment Input */}
-                                <div className="flex gap-3 mb-4">
-                                    <img
-                                        src={currentUser?.profilePic}
-                                        alt="Your profile"
-                                        className="w-8 h-8 rounded-full"
-                                    />
-                                    <input
-                                        type="text"
-                                        placeholder="Share your thoughts here..."
-                                        className="flex-1 px-4 py-2 bg-white dark:bg-gray-800 rounded-lg text-gray-900 dark:text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                    />
-                                </div>
 
-                                {/* Comments List */}
-                                <div className="space-y-4">
-                                    <div className="flex gap-3">
-                                        <img
-                                            src="https://i.pravatar.cc/150?img=19"
-                                            alt="Daniel Brown"
-                                            className="w-8 h-8 rounded-full"
-                                        />
-                                        <div className="flex-1">
-                                            <div className="bg-white dark:bg-gray-800 rounded-lg p-3">
-                                                <div className="flex items-center gap-2 mb-1">
-                                                    <span className="font-medium text-gray-900 dark:text-white">
-                                                        Daniel Brown
-                                                    </span>
-                                                    <span className="text-sm text-gray-500 dark:text-gray-400">
-                                                        Digital Marketer
-                                                    </span>
-                                                </div>
-                                                <p className="text-gray-900 dark:text-white text-sm">
-                                                    Fantastic post! Your content always brings a smile to my face. Keep up the great work! 👏
-                                                </p>
-                                            </div>
-                                            <div className="flex items-center gap-4 mt-2 ml-3">
-                                                <button className="text-sm text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300">
-                                                    Reply
-                                                </button>
-                                                <span className="text-sm text-gray-500 dark:text-gray-400">
-                                                    2 hours ago
-                                                </span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        {/* Modal for deleting post */}
+                        {selectedPostId && (
+                            <DeleteButtonModal
+                                isOpen={true}
+                                setIsOpen={() => setSelectedPostId(null)}
+                                postId={selectedPostId}
+                            />
+                        )}
                     </div>
-                )
-            }
-            )}
-        </div>
+                ))}
+            </div>
+        </>
     );
 };

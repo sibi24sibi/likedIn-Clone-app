@@ -5,22 +5,25 @@ import {
   where,
   query,
   getDoc,
-  getDocs
+  getDocs,
+  Timestamp
 } from "firebase/firestore";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import toast from "react-hot-toast";
 
 // import uuid from "react-uuid";
 
 const postsCollection = collection(firestore, "posts");
+
 const storage = getStorage();
 
-// const uploadImage = async (file) => {
-//   const storageRef = ref(storage, `images/${file.name}`);
-//   await uploadBytes(storageRef, file);
-//   const downloadURL = await getDownloadURL(storageRef);
+const uploadImage = async (file) => {
+  const storageRef = ref(storage, `images/${file.name}`);
+  await uploadBytes(storageRef, file);
+  const downloadURL = await getDownloadURL(storageRef);
 
-//   return downloadURL;
-// };
+  return downloadURL;
+};
 
 
 
@@ -91,82 +94,52 @@ export const listenToSingleUserPost = (setAllPosts, userID) => {
 
 
 
-// export const addPost = async (postData, imageFile) => {
-//   try {
-//     let imageUrl = null;
+export const addPost = async (postData, imageFile, userId, postId) => {
 
-//     if (imageFile) {
-//       imageUrl = await uploadImage(imageFile);
-//     }
+  let imageUrl = null;
 
-//     const postWithImage = {
-//       ...postData,
-//       imageUrl,
-//     };
+  if (imageFile) {
+    imageUrl = await uploadImage(imageFile);
+  }
 
-//     await addDoc(postsCollection, postWithImage);
+  const postWithImage = {
+    content: postData,
+    imageUrl: imageUrl,
+    createdAt: Timestamp.now(),
+    userID: userId,
+    postID: postId,
+  };
 
-//     return true; // Indicate success
-//   } catch (e) {
-//     console.error("Error adding document: ", e);
-//     return false; // Indicate failure
-//   }
-// };
+  await addDoc(postsCollection, postWithImage);
+  toast.success('post added successfully');
+
+  return true;
+
+};
 
 // // Function to handle post deletion
-// export const handleDeletePost = async (postId) => {
-//   try {
-
-//     await deleteDoc(doc(firestore, "posts", postId)); // Delete the post from Firestore
-//   } catch (error) {
-//     console.error("Error deleting post: ", error);
-//   }
-// };
+export const handleDeletePost = async (postId) => {
+  const postRef = doc(firestore, 'posts', postId);
+  await deleteDoc(postRef); // Delete the post from Firestore
+  toast.success('post deleted successfully');
+};
 
 
-// export const handlePostSubmit = async (postContent, selectedFile, user, closeModal, setLoading) => {
-//   if (postContent.trim() === "") return; // Prevent empty posts
-
-//   setLoading(true); // Start loading when posting
-//   const postData = {
-//     content: postContent,
-//     createdAt: new Date(),
-//     userID: user.uid,
-//     postID: uuid()
-//   };
-
-//   try {
-//     // Get the postID from addPost
-//     const returnedPostID = await addPost(postData, selectedFile);
-
-//     if (returnedPostID) {
-//       console.log("Post created with ID:", returnedPostID); // Use the returned postID as needed
-//       closeModal();
-//       document.querySelector('input[type="file"]').value = ""; // Reset file input
-//     }
-//   } catch (error) {
-//     console.error("Error creating post:", error); // Log the error
-//     // Optionally, set an error state to show a message to the user
-//   } finally {
-//     setLoading(false); // Stop loading after the process
-//   }
-// };
 
 
-// export const handleLikePost = async (postId, username, like) => {
-//   const postRef = doc(firestore, "posts", postId);
 
-//   // Update likes based on like parameter
-//   try {
-//     await updateDoc(postRef, {
-//       likes: like
-//         ? arrayUnion(username) // Add user ID to likes array
-//         : arrayRemove(username) // Remove user ID from likes array
-//     });
-//   } catch (error) {
-//     console.error("Error updating likes: ", error);
-//   }
-// };
+export const handleLikePost = async (postId, username, like) => {
+  const postRef = doc(firestore, "posts", postId);
+
+  // Update likes based on like parameter
+
+  await updateDoc(postRef, {
+    likes: like
+      ? arrayUnion(username) // Add user ID to likes array
+      : arrayRemove(username) // Remove user ID from likes array
+  });
+
+};
 
 
 // export const handleCommentPost = async (postId, username, commentText) => {

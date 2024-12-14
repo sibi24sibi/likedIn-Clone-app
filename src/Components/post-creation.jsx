@@ -2,34 +2,43 @@ import React, { useEffect, useState } from 'react'
 import { Image } from 'react-feather'
 import { useAuth } from '../Api/AuthApi'
 import { listenToSingleUser } from '../Api/UploadApi'
-import { PostCreationModal } from '../Modal/PostCreationModal';
+import { PostCreationModal } from './Modal/PostCreationModal';
 
 
 export const PostCreation = () => {
 
     const { currentUser } = useAuth()
 
-    const [userData,setUserData] = useState()
+    const [userData, setUserData] = useState()
     const [isModalOpen, setIsModalOpen] = useState(false)
 
 
 
     useEffect(() => {
-        listenToSingleUser(setUserData, currentUser.uid);
-    },[])
+        if (currentUser?.uid) {
+            const unsubscribe = listenToSingleUser(setUserData, currentUser.uid);
+            return () => {
+                unsubscribe();
+            };
 
-   
-    
-    
+        }
+    }, [])
+
+
+
+
     return (
 
         <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-4">
             <div className="flex gap-3">
-                <img
-                    src={userData?.profilePic}
-                    alt="Your profile"
-                    className="w-10 h-10 rounded-full"
-                />
+                <div className="skeleton-circle h-10 w-10 ">
+                    <img
+                        src={userData?.profilePic}
+
+                        className="w-10 h-10  object-cover rounded-full"
+                    />
+
+                </div>
                 <div className="flex-1">
                     <input
                         type="text"

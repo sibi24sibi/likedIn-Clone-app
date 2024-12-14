@@ -5,11 +5,11 @@ import { useEffect, useState } from 'react'
 export default function SuggestedFriends({ className }) {
 
 
-  const [suggestionData,setSuggestionData] = useState([])
+  const [suggestionData, setSuggestionData] = useState([])
 
-  useEffect(() =>{
+  useEffect(() => {
     listenToUsers(setSuggestionData)
-  },[]);
+  }, []);
 
   console.log(suggestionData?.name)
 
@@ -20,13 +20,15 @@ export default function SuggestedFriends({ className }) {
           Suggested Friends
         </h3>
         <div className="space-y-4">
-          {suggestionData.slice(0,7).map((person) => (
+          {suggestionData.slice(0, 7).map((person) => (
             <div key={person.name} className="flex items-center gap-3">
-              <img
-                src={person.profilePic}
-                alt={person.name}
-                className="w-10 h-10 rounded-full"
-              />
+              <div className="skeleton-circle h-10 w-10">
+                <img
+                  src={person.profilePic}
+
+                  className="w-full h-full p-[1px] object-cover rounded-full"
+                />
+              </div>
               <div className="flex-1 min-w-0">
                 <p className="text-sm font-medium text-gray-900 dark:text-white truncate">
                   {person.name}

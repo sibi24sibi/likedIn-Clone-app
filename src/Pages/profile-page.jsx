@@ -17,11 +17,14 @@ export default function ProfilePage() {
         <div className="h-32 bg-gray-200 dark:bg-gray-700 rounded-t-lg" />
         <div className="px-8 pb-6">
           <div className="flex flex-col sm:flex-row items-center gap-4 -mt-16">
+            <div className="skeleton-circle w-32 h-32">
+
             <img
               src={userData?.profilePic}
-              alt="Robert Fox"
-              className="w-32 h-32 rounded-full border-4 border-white dark:border-gray-800"
+              
+              className=" rounded-full h-full w-full p-[1px] object-cover border-4 border-white dark:border-gray-800"
             />
+            </div>
             <div className="text-center sm:text-left mt-4 sm:mt-16">
               <div className=" gap-2 mb-1">
                 <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
@@ -67,8 +70,8 @@ export default function ProfilePage() {
 
         {/* Add Routes to render different components */}
         <Routes>
-          <Route path="" element={<Postcontent isOwnPost /> } />
-          <Route path="saved-post" element={<Postcontent />} />
+          <Route path="" element={<Postcontent userProfileData={userData.userID} isOwnPost /> } />
+          <Route path="saved-post" element={<Postcontent savedPost />} />
           <Route path="settings" element={<Settingspage />} />
           <Route path="*" element={<Navigate to="" replace />} />
         </Routes>

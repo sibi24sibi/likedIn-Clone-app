@@ -4,6 +4,8 @@ import { Link } from 'react-router-dom'; // Import Link from react-router-dom
 import { useAuth } from '../Api/AuthApi';
 import { useEffect } from 'react';
 import { listenToSingleUser } from '../Api/UploadApi';
+import { LazyLoadImage } from 'react-lazy-load-image-component';
+
 
 export default function Sidebar({ className }) {
   const [unreadMessages, setUnreadMessages] = useState(3);
@@ -19,6 +21,8 @@ export default function Sidebar({ className }) {
     listenToSingleUser(setUserData, currentUser.uid);
   }, [])
 
+
+
   const navigation = [
     { name: 'Home', icon: Home, to: '/home', unread: null },
     { name: 'Profile', icon: User, to: '/profile', unread: null },
@@ -30,14 +34,19 @@ export default function Sidebar({ className }) {
   return (
     <div className={className}>
       <div className="bg-white dark:bg-gray-800 rounded-lg p-4 shadow sticky top-5">
-        <div className="text-center mb-6">
-          <img
-            src={userData?.profilePic}
-            alt="Profile"
-            className="w-20 h-20 rounded-full mx-auto mb-4"
-          />
+        <div className="text-center mb-6 w-full ">
+          <div className="skeleton-circle h-20 w-20  mb-4 mx-20" >
+
+            <img
+              src={userData?.profilePic}
+              className="w-full h-full p-[1px] object-cover rounded-full"
+            />
+
+          </div>
+
+
           <h2 className="font-semibold text-gray-900 dark:text-white">{userData?.name}</h2>
-        <p className="text-gray-500 dark:text-gray-400 text-sm">{userData?.role || 'unknown'}</p>
+          <p className="text-gray-500 dark:text-gray-400 text-sm">{userData?.role || 'unknown'}</p>
         </div>
 
         <nav className="space-y-1">

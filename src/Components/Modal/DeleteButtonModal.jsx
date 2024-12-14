@@ -1,7 +1,27 @@
 import { Dialog, DialogPanel, DialogTitle } from "@headlessui/react";
 import { useState } from "react";
+import { handleDeletePost } from "../../Api/UploadApi";
+import toast from "react-hot-toast";
 
-function DeleteButtonModal({ isOpen, setIsOpen, customTitle, customDescription, customActionButton }) {
+function DeleteButtonModal({ isOpen, setIsOpen, postId }) {
+
+
+    const onHandleDeletePost = async () => {
+        try {
+            await handleDeletePost(postId);
+            setIsOpen(false);
+        }catch (e) {
+            console.error("Failed to delete post: ", e);
+            toast.error('Failed to delete post');
+        }
+    }
+
+
+    const customTitle = "Confirm Deletion"
+    const customDescription = "Are you sure you want to delete this post? This action cannot be undone."
+    const customActionButton = "Yes, delete it"
+
+
     return (
         <Dialog open={isOpen} onClose={() => setIsOpen(false)} className="relative z-50">
             <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center p-4">
@@ -51,10 +71,7 @@ function DeleteButtonModal({ isOpen, setIsOpen, customTitle, customDescription, 
                             <button
                                 type="button"
                                 className="py-2.5 px-5 text-sm font-medium text-white bg-red-600 rounded-lg hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800"
-                                onClick={() => {
-                                    // Add your delete logic here
-                                    setIsOpen(false);
-                                }}
+                                onClick={onHandleDeletePost}
                             >
                                 {customActionButton || "Yes, I'm sure"}
                             </button>

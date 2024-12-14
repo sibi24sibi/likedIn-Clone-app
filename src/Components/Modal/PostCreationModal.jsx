@@ -1,11 +1,18 @@
 import { useState } from 'react'
-import { X, Upload, Globe, Lock } from 'react-feather'
+import { X, Upload, Globe, Lock, Loader } from 'react-feather'
+import { addPost } from '../../Api/UploadApi'
+import { useAuth } from '../../Api/AuthApi'
+import toast from 'react-hot-toast'
 
 export function PostCreationModal({ isOpen, onClose }) {
+
+    const { userData } = useAuth()
+
     const [isPublic, setIsPublic] = useState(true)
     const [selectedFile, setSelectedFile] = useState(null)
     const [preview, setPreview] = useState(null)
     const [caption, setCaption] = useState('')
+    const [loading, setLoading] = useState(false)
 
     if (!isOpen) return null
 
@@ -26,9 +33,23 @@ export function PostCreationModal({ isOpen, onClose }) {
         setPreview(null);
     };
 
+    const onHandleSumbit = async () => {
+        try {
+            setLoading(true)
+            const randomPostID = crypto.randomUUID();
+            await addPost(caption, selectedFile, userData.userID, randomPostID)
+            setLoading(false)
+            onClose();
+        }
+        catch (err) {
+            console.error(err)
+            toast.error('Error while posting')
+        }
+    }
+
     return (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-            <div className="bg-white dark:bg-gray-800 rounded-lg p-6 w-full max-w-md">
+            <div className="bg-white dark:bg-gray-800 rounded-lg p-6 md:m-0 m-7 w-full max-w-md">
                 <div className="flex justify-between items-center mb-4">
                     <h2 className="text-xl font-semibold text-gray-900 dark:text-white">Create New Post</h2>
                     <button onClick={onClose} className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">
@@ -41,7 +62,7 @@ export function PostCreationModal({ isOpen, onClose }) {
                         <img
                             src={preview}
                             alt="Preview"
-                            className="w-full h-48 object-cover rounded-lg"
+                            className="w-full h-48 object-scale-down rounded-lg"
                         />
                         <button
                             onClick={cancelFileSelection}
@@ -82,8 +103,8 @@ export function PostCreationModal({ isOpen, onClose }) {
                     <button
                         onClick={() => setIsPublic(!isPublic)}
                         className={`px-3 py-1 rounded-full text-sm font-medium transition-colors ${isPublic
-                                ? 'bg-green-100 text-green-800 dark:bg-green-800 dark:text-green-100'
-                                : 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-100'
+                            ? 'bg-green-100 text-green-800 dark:bg-green-800 dark:text-green-100'
+                            : 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-100'
                             }`}
                     >
                         {isPublic ? (
@@ -93,13 +114,21 @@ export function PostCreationModal({ isOpen, onClose }) {
                         )}
                     </button>
                 </div>
-
                 <button
-                    onClick={onClose}
-                    className="w-full px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                    onClick={onHandleSumbit}
+                    disabled={loading}
+                    className={`${loading ? 'bg-gray-300 dark:bg-gray-500 dark:text-slate-300 text-slate-700 hover:bg-blue-400 cursor-not-allowed' : 'hover:bg-blue-600 bg-blue-500 text-white'} w-full px-4 py-2  text-center  rounded-lg  focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 flex items-center justify-center`}
                 >
-                    Share
-                </button>
+                    {loading ? 
+                    <>
+                            <Loader className='mr-2'/>
+                            Posting...
+                    </>
+                    
+                    : 'Share'}
+                    
+                </button>              
+              
             </div>
         </div>
     )

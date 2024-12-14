@@ -1,8 +1,8 @@
 
-import  './style.css'
+import './style.css'
 
 const MainLoading = () => {
-  
+
   return (
     <div className='main-loading'></div>
   )
