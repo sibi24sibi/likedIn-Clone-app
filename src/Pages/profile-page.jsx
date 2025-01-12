@@ -3,12 +3,30 @@ import { Link, Navigate, Route, Routes } from 'react-router-dom'; // Use Link fo
 import { Settingspage } from './Settings-page';
 import { useAuth } from '../Api/AuthApi';
 import { Postcontent } from '../Components/Post-content';
+import { listenToAllPosts } from '../Api/UploadApi';
+import { useEffect, useState } from 'react';
 
 export default function ProfilePage() {
 
 
 
-  const { userData } = useAuth()
+  const { userData } = useAuth();
+
+  const [ownPostCount, setOwnPostCount] = useState(0);
+
+  listenToAllPosts(userData.userID);
+
+  useEffect(() => {
+    // Fetch all posts and calculate own posts count
+    const unsubscribePosts = listenToAllPosts((posts) => {
+      const userPosts = posts.filter((post) => post.userID === userData.userID);
+      setOwnPostCount(userPosts.length); // Update ownPostCount dynamically
+    });
+
+    return () => {
+      unsubscribePosts(); // Cleanup listener
+    };
+  }, [userData.userID]);
 
 
   return (
@@ -36,7 +54,7 @@ export default function ProfilePage() {
             </div>
             <div className="flex gap-6 ml-auto mt-4 sm:mt-16">
               <div className="text-center">
-                <div className="text-xl font-bold text-gray-900 dark:text-white">12</div>
+                <div className="text-xl font-bold text-gray-900 dark:text-white">{ownPostCount}</div>
                 <div className="text-sm text-gray-500 dark:text-gray-400">Posts</div>
               </div>
               <div className="text-center">

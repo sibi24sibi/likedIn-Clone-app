@@ -1,15 +1,32 @@
-import { Plus } from 'react-feather'
-import { listenToUsers } from '../Api/UploadApi'
+import { Check, Plus } from 'react-feather'
+import { listenToUsers, toggleConnectionStatus } from '../Api/UploadApi'
 import { useEffect, useState } from 'react'
+import { useAuth } from '../Api/AuthApi';
 
 export default function SuggestedFriends({ className }) {
 
-
-  const [suggestionData, setSuggestionData] = useState([])
+   const { userData } = useAuth();
+  const [suggestionData, setSuggestionData] = useState([]);
+  const [connections, setConnections] = useState({});
 
   useEffect(() => {
-    listenToUsers(setSuggestionData)
+    listenToUsers((users) => {
+      const filteredRecommendations = users.filter(user => user.userID !== userData.userID);
+      setSuggestionData(filteredRecommendations); 
+    });
   }, []);
+
+  const handleAddConnection = (userId, targetId) => {
+    const currentConnectionStatus = connections[`${userId}-${targetId}`] || false;
+
+    // Toggle the connection status
+    toggleConnectionStatus(currentConnectionStatus, userId, targetId, (newStatus) => {
+      setConnections((prevConnections) => ({
+        ...prevConnections,
+        [`${userId}-${targetId}`]: newStatus, // Update the connection status in the local state
+      }));
+    });
+  };
 
   console.log(suggestionData?.name)
 
@@ -37,8 +54,10 @@ export default function SuggestedFriends({ className }) {
                   {person.role}
                 </p>
               </div>
-              <button className="p-1.5 text-blue-600 dark:text-blue-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-full">
-                <Plus className="w-5 h-5" />
+              <button onClick={() => handleAddConnection(userData.userID, person.userID)}  className="p-1.5 text-blue-600 dark:text-blue-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-full">
+                
+               
+                {connections[`${userData.userID}-${person.userID}`] ? <Plus className="w-5 h-5" /> : <Check className="w-5 h-5" />}
               </button>
             </div>
           ))}

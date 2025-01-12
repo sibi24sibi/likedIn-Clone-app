@@ -9,15 +9,17 @@ import DeleteButtonModal from './Modal/DeleteButtonModal';
 import { CommentsComponent } from './CommentsComponent';
 import { PostActions } from './PostActions';
 
-export const Postcontent = ({ userProfileData , savedPost , isOwnPost}) => {
+export const Postcontent = ({ userProfileData, savedPost, isOwnPost  }) => {
 
+ 
     const [userPost, setUserPost] = useState([]);
     const [usersData, setUsersData] = useState([]);
     const [isLoadingPosts, setIsLoadingPosts] = useState(true);
     const [isLoadingUsers, setIsLoadingUsers] = useState(true);
     const [selectedPostId, setSelectedPostId] = useState(null);
-    const [ setOpenComments] = useState(false);
+    const [setOpenComments] = useState(false);
     const [openCommentsPostId, setOpenCommentsPostId] = useState(null);
+
 
     useEffect(() => {
         // Fetch posts and users simultaneously
@@ -71,17 +73,18 @@ export const Postcontent = ({ userProfileData , savedPost , isOwnPost}) => {
         }
     };
 
-    if(savedPost){ //no saved post yet
+    if (savedPost) { //no saved post yet
         return (
             <div className="text-center p-20">
-               
                 <h2 className="mt-2 text-xl font-medium text-gray-900 dark:text-white">No saved posts yet</h2>
                 <p className="mt-2 text-gray-500 dark:text-gray-400">You haven't saved any posts yet. To save a post, click on the heart icon next to the post.</p>
             </div>
-           
-           
+
+
         );
     }
+
+
 
     return (
         <>
@@ -154,7 +157,7 @@ export const Postcontent = ({ userProfileData , savedPost , isOwnPost}) => {
                                 <PostActions postId={post.id} postData={userPost} setOpenComments={setOpenComments} toggleComments={toggleComments} />
                             </div>
                         </div>
-                        {openCommentsPostId === post.id && <CommentsComponent postId={post.id} /> }
+                        {openCommentsPostId === post.id && <CommentsComponent postId={post.id} commenterN={post.user} />}
 
 
                         {/* Modal for deleting post */}

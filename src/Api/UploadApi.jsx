@@ -142,12 +142,24 @@ export const handleLikePost = async (postId, username, like) => {
 };
 
 
-// export const handleCommentPost = async (postId, username, commentText) => {
-//   const postRef = doc(firestore, "posts", postId);
-//   await updateDoc(postRef, {
-//     comments: arrayUnion({ username, text: commentText, createdAt: new Date() }) // Add comment object to the comments array
-//   });
-// };
+export const handleCommentPost = async (postId, username, commentText) => {
+  const postRef = doc(firestore, "posts", postId);
+  await updateDoc(postRef, {
+    comments: arrayUnion({ commenterId:username, text: commentText, createdAt: new Date() }) // Add comment object to the comments array
+  });
+};
+
+
+
+// Function to fetch comments for a specific post
+export const fetchCommentsForPost = async (postId) => {
+  const postRef = doc(firestore, 'posts', postId);
+  const postSnap = await getDoc(postRef);
+  if (postSnap.exists()) {
+    return postSnap.data().comments || []; // Return comments array or empty if undefined
+  }
+  throw new Error('Post not found');
+};
 
 
 // export const addConnection = async (userId, targetId) => {
@@ -166,47 +178,49 @@ export const handleLikePost = async (postId, username, like) => {
 
 
 // // this belowe code to be modified
-// const connectionsCollection = collection(firestore, "connections");
+const connectionsCollection = collection(firestore, "connections");
 
-// // Check if a connection exists
-// export const checkConnectionStatus = async (userId, targetId) => {
-//   const q = query(
-//     connectionsCollection,
-//     where("userId", "==", userId),
-//     where("targetId", "==", targetId)
-//   );
-//   const querySnapshot = await getDocs(q);
-//   return !querySnapshot.empty;
-// };
+// Check if a connection exists
+export const checkConnectionStatus = async (userId, targetId) => {
+  const q = query(
+    connectionsCollection,
+    where("userId", "==", userId),
+    where("targetId", "==", targetId)
+  );
+  const querySnapshot = await getDocs(q);
+  return !querySnapshot.empty;
+};
 
 
 // // Toggle connection (add or delete)
-// export const toggleConnectionStatus = async (connected, userId, targetId, setConnected) => {
-//   const q = query(
-//     connectionsCollection,
-//     where("userId", "==", userId),
-//     where("targetId", "==", targetId)
-//   );
 
-//   try {
-//     if (connected) {
-//       const querySnapshot = await getDocs(q);
-//       if (!querySnapshot.empty) {
-//         const connectionDoc = querySnapshot.docs[0];
-//         await deleteDoc(doc(firestore, "connections", connectionDoc.id));
-//         setConnected(false);
-//         console.log(`Disconnected with ${targetId}`);
-//       }
-//     } else {
-//       await addDoc(connectionsCollection, {
-//         userId,
-//         targetId,
-//         connectedAt: new Date(),
-//       });
-//       setConnected(true);
-//       console.log(`Connected with ${targetId}`);
-//     }
-//   } catch (error) {
-//     console.error("Error updating connection status:", error);
-//   }
-// };
+
+export const toggleConnectionStatus = async (connected, userId, targetId, setConnected) => {
+  const q = query(
+    connectionsCollection,
+    where("userId", "==", userId),
+    where("targetId", "==", targetId)
+  );
+
+  try {
+    if (connected) {
+      const querySnapshot = await getDocs(q);
+      if (!querySnapshot.empty) {
+        const connectionDoc = querySnapshot.docs[0];
+        await deleteDoc(doc(firestore, "connections", connectionDoc.id));
+        setConnected(false);
+        console.log(`Disconnected with ${targetId}`);
+      }
+    } else {
+      await addDoc(connectionsCollection, {
+        userId,
+        targetId,
+        connectedAt: new Date(),
+      });
+      setConnected(true);
+      console.log(`Connected with ${targetId}`);
+    }
+  } catch (error) {
+    console.error("Error updating connection status:", error);
+  }
+};

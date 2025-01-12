@@ -1,57 +1,66 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react';
 import { ThumbsUp, MessageCircle } from 'react-feather';
-import { handleLikePost } from '../Api/UploadApi';
+import { handleCommentPost, handleLikePost } from '../Api/UploadApi';
 import { useAuth } from '../Api/AuthApi';
 import LikedButtonCheckbox from './ui/LikeButton';
 
 export const PostActions = ({ postId, toggleComments, postData }) => {
-
     const { userData } = useAuth();
 
     const [likedPosts, setLikedPosts] = useState(new Set());
+    const [likesCount, setLikesCount] = useState(0);
 
-    // useEffect(() => {
-    //     const initialLikedPosts = new Set();
-    //     postData.forEach((post) => {
-    //         if (post.likes && post.likes.includes(userData.name)) {
-    //             initialLikedPosts.add(post.id);
-    //         }
-    //     });
-    //     setLikedPosts(initialLikedPosts);
+    useEffect(() => {
+        // Reset the state every time postData or userData changes
+        const initialLikedPosts = new Set();
+        let initialLikesCount = 0;
 
+        // Loop through postData to correctly initialize likedPosts and likesCount
+        postData.forEach((post) => {
+            if (post.id === postId) {
+                if (post.likes && post.likes.includes(userData.name)) {
+                    initialLikedPosts.add(post.id); // Add to likedPosts if user has liked
+                }
+                if (post.likes) {
+                    initialLikesCount = post.likes.length; // Set the like count for the post
+                }
+            }
+        });
 
-
-    // }, [postData, userData?.name]);
+        setLikedPosts(initialLikedPosts);
+        setLikesCount(initialLikesCount); // Set the correct like count for the specific post
+    }, [postData, userData?.name, postId]); // Re-run effect when postData, userData, or postId changes
 
     const handleLike = async (postId) => {
         try {
             const liked = likedPosts.has(postId);
             const newLikedPosts = new Set(likedPosts);
 
+            let newLikesCount = likesCount;
             if (liked) {
                 newLikedPosts.delete(postId); // Unlike
+                newLikesCount--; // Decrease the like count
                 await handleLikePost(postId, userData.name, false); // Update Firestore to unlike
             } else {
                 newLikedPosts.add(postId); // Like
+                newLikesCount++; // Increase the like count
                 await handleLikePost(postId, userData.name, true); // Update Firestore to like
             }
 
             setLikedPosts(newLikedPosts); // Update state
+            setLikesCount(newLikesCount); // Update the like count state
         } catch (error) {
             console.error('Error liking post:', error);
         }
     };
-
 
     return (
         <div>
             {/* Post Actions */}
             <div className="flex items-center gap-4">
                 <button onClick={() => handleLike(postId)} className="flex items-center gap-2 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300">
-
                     <ThumbsUp className={`w-5 h-5 ${likedPosts.has(postId) ? 'fill-blue-500' : ''}`} />
-                    <span>{likedPosts.has(postId) ? 'Unlike' : 'Like'}</span>
-
+                    <span className="ml-2 text-gray-600">{likesCount}</span> {/* Display the like count */}
                 </button>
                 <button onClick={() => toggleComments(postId)} className="flex items-center gap-2 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300">
                     <MessageCircle className="w-5 h-5" />
@@ -59,5 +68,5 @@ export const PostActions = ({ postId, toggleComments, postData }) => {
                 </button>
             </div>
         </div>
-    )
-}
+    );
+};

@@ -12,7 +12,6 @@ createRoot(document.getElementById("root")).render(
     <BrowserRouter>
       <AuthProvider>
         <Toaster />
-      
         <App />
       </AuthProvider>
     </BrowserRouter>

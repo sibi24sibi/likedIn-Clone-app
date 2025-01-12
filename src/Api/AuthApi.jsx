@@ -25,8 +25,8 @@ export const AuthProvider = ({ children }) => {
   const auth = getAuth(app);
   const navigate = useNavigate(); 
 
-  const randomNum = Math.floor(Math.random() * 16) + 1;
-  const generateRandomProfilePic = `https://placeholder-image-ry0c.onrender.com/api/avatar?img=${randomNum}`;
+  const randomNum = Math.floor(Math.random() * 49) + 1;
+  const generateRandomProfilePic = `https://avatar.iran.liara.run/public/${randomNum}`;
  
 
   useEffect(() => {
