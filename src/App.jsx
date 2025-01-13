@@ -14,7 +14,7 @@ import ErrorPage from "./Pages/ErrorPage";
 import { useEffect, useState } from "react";
 
 import Layout from "./Pages/layout";
-import MainLoading from "./Components/LoadingComponents/mainLoading";
+import MainLoading from "./Components/LoadingComponents/MainLoading";
 
 
 

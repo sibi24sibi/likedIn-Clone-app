@@ -3,9 +3,9 @@ import { useState } from "react"
 export const Settingspage = () => {
     const [darkMode, setDarkMode] = useState(false)
     const [notifications, setNotifications] = useState(true)
-    
+
     return (
-   
+
         <div className="space-y-6 m-5 p-5">
             {/* Profile Section */}
             <div className="text-center">
@@ -141,5 +141,5 @@ export const Settingspage = () => {
 
 
 
-  )
+    )
 }
