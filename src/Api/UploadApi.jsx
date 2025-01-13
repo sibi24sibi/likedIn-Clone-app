@@ -10,6 +10,8 @@ import {
 } from "firebase/firestore";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import toast from "react-hot-toast";
+import { ref as dbRef, set, onDisconnect } from 'firebase/database'; // Import from Firebase Realtime Database
+import { database } from '../Firebase'; // Your Firebase initialization file
 
 // import uuid from "react-uuid";
 
@@ -162,22 +164,22 @@ export const fetchCommentsForPost = async (postId) => {
 };
 
 
-// export const addConnection = async (userId, targetId) => {
-//   try {
-//     const connectionToAdd = doc(collection(firestore, 'connections'), `${userId}_${targetId}`);
+export const addConnection = async (userId, targetId) => {
+  try {
+    const connectionToAdd = doc(collection(firestore, 'connections'), `${userId}_${targetId}`);
 
-//     await setDoc(connectionToAdd, { userId, targetId });
-
-
-//   } catch (err) {
-//     console.error("Error adding connection:", err);
-
-//   }
-// };
+    await setDoc(connectionToAdd, { userId, targetId });
 
 
+  } catch (err) {
+    console.error("Error adding connection:", err);
 
-// // this belowe code to be modified
+  }
+};
+
+
+
+// this belowe code to be modified
 const connectionsCollection = collection(firestore, "connections");
 
 // Check if a connection exists
@@ -192,9 +194,7 @@ export const checkConnectionStatus = async (userId, targetId) => {
 };
 
 
-// // Toggle connection (add or delete)
-
-
+// Toggle connection (add or delete)
 export const toggleConnectionStatus = async (connected, userId, targetId, setConnected) => {
   const q = query(
     connectionsCollection,
@@ -222,5 +222,54 @@ export const toggleConnectionStatus = async (connected, userId, targetId, setCon
     }
   } catch (error) {
     console.error("Error updating connection status:", error);
+  }
+};
+
+
+
+export const listenToUserFollowers = async (userID, setFollowersCount) => {
+  const followersQuery = query(
+    collection(firestore, "connections"),
+    where("targetId", "==", userID)
+  );
+
+  try {
+    const querySnapshot = await getDocs(followersQuery);
+    const followersCount = querySnapshot.size; // Get the number of followers
+    setFollowersCount(followersCount);
+  } catch (error) {
+    console.error("Error getting followers count: ", error);
+  }
+};
+
+
+export const listenToUserFollowing = async (userID, setFollowingCount) => {
+  const followingQuery = query(
+    collection(firestore, "connections"),
+    where("userId", "==", userID)
+  );
+
+  try {
+    const querySnapshot = await getDocs(followingQuery);
+    const followingCount = querySnapshot.size; // Get the number of people the user is following
+    setFollowingCount(followingCount);
+  } catch (error) {
+    console.error("Error getting following count: ", error);
+  }
+};
+
+
+export const listenToUserPosts = async (userID, setPostsCount) => {
+  const postsQuery = query(
+    collection(firestore, "posts"),
+    where("userId", "==", userID)
+  );
+
+  try {
+    const querySnapshot = await getDocs(postsQuery);
+    const postsCount = querySnapshot.size; // Get the number of posts for the user
+    setPostsCount(postsCount);
+  } catch (error) {
+    console.error("Error getting posts count: ", error);
   }
 };

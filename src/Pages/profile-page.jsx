@@ -3,7 +3,7 @@ import { Link, Navigate, Route, Routes } from 'react-router-dom'; // Use Link fo
 import { Settingspage } from './Settings-page';
 import { useAuth } from '../Api/AuthApi';
 import { Postcontent } from '../Components/Post-content';
-import { listenToAllPosts } from '../Api/UploadApi';
+import { listenToAllPosts, listenToUserFollowers, listenToUserFollowing, listenToUserPosts } from '../Api/UploadApi';
 import { useEffect, useState } from 'react';
 
 export default function ProfilePage() {
@@ -13,24 +13,18 @@ export default function ProfilePage() {
   const { userData } = useAuth();
 
   const [ownPostCount, setOwnPostCount] = useState(0);
-
-  listenToAllPosts(userData.userID);
+  const [followersCount, setFollowersCount] = useState(0);
+  const [followingCount, setFollowingCount] = useState(0);
 
   useEffect(() => {
-    // Fetch all posts and calculate own posts count
-    const unsubscribePosts = listenToAllPosts((posts) => {
-      const userPosts = posts.filter((post) => post.userID === userData.userID);
-      setOwnPostCount(userPosts.length); // Update ownPostCount dynamically
-    });
-
-    return () => {
-      unsubscribePosts(); // Cleanup listener
-    };
-  }, [userData.userID]);
+    listenToUserPosts(userData.userID, setOwnPostCount);
+    listenToUserFollowers(userData.userID, setFollowersCount);
+    listenToUserFollowing(userData.userID, setFollowingCount);
+  }, []);
 
 
   return (
-    <>
+    <div className=' h-screen'>
       <div className="bg-white dark:bg-gray-800 rounded-lg shadow mb-6">
         <div className="h-32 bg-gray-200 dark:bg-gray-700 rounded-t-lg" />
         <div className="px-8 pb-6">
@@ -48,21 +42,21 @@ export default function ProfilePage() {
                 <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
                   {userData?.name}
                 </h1>
-                <p className="text-gray-500 dark:text-gray-400">{userData?.userName || '@user_name'}</p>
+                <p className="text-gray-500 dark:text-gray-400">{`@ ${userData?.username}` || '@user_name'}</p>
               </div>
               <p className="text-gray-500 dark:text-gray-400">{userData?.role}</p>
             </div>
-            <div className="flex gap-6 ml-auto mt-4 sm:mt-16">
+            <div className="flex gap-6 lg:ml-auto mt-4 sm:mt-16">
               <div className="text-center">
                 <div className="text-xl font-bold text-gray-900 dark:text-white">{ownPostCount}</div>
                 <div className="text-sm text-gray-500 dark:text-gray-400">Posts</div>
               </div>
               <div className="text-center">
-                <div className="text-xl font-bold text-gray-900 dark:text-white">207</div>
+                <div className="text-xl font-bold text-gray-900 dark:text-white">{followersCount}</div>
                 <div className="text-sm text-gray-500 dark:text-gray-400">Followers</div>
               </div>
               <div className="text-center">
-                <div className="text-xl font-bold text-gray-900 dark:text-white">64</div>
+                <div className="text-xl font-bold text-gray-900 dark:text-white">{followingCount}</div>
                 <div className="text-sm text-gray-500 dark:text-gray-400">Following</div>
               </div>
             </div>
@@ -94,6 +88,6 @@ export default function ProfilePage() {
           <Route path="*" element={<Navigate to="" replace />} />
         </Routes>
       </div>
-    </>
+    </div>
   );
 }

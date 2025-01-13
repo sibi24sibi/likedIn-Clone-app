@@ -26,8 +26,12 @@ export default function Sidebar({ className }) {
   const navigation = [
     { name: 'Home', icon: Home, to: '/home', unread: null },
     { name: 'Profile', icon: User, to: '/profile', unread: null },
-    { name: 'Messages', icon: MessageSquare, to: '/messages', unread: unreadMessages },
-    { name: 'Notifications', icon: Bell, to: '/notifications', unread: unreadNotifications },
+    { name: 'Messages', icon: MessageSquare, to: '/messages', 
+      // unread: unreadMessages
+     },
+    { name: 'Notifications', icon: Bell, to: '/notifications', 
+      // unread: unreadNotifications 
+    },
     { name: 'Add Friends', icon: UserPlus, to: '/friends', unread: null },
   ];
 

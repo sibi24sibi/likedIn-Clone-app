@@ -2,8 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { useAuth } from '../Api/AuthApi';
 import { handleCommentPost, fetchCommentsForPost, listenToSingleUser } from '../Api/UploadApi'; // Add a function to fetch comments
 import { Timestamp } from 'firebase/firestore';
+import { createCommentNotification } from '../Api/NotificationApi';
 
-export const CommentsComponent = ({ postId }) => {
+export const CommentsComponent = ({ postId, commenter }) => {
     const { userData } = useAuth(); // Get user data from authentication context
     const [commentInput, setCommentInput] = useState(''); // For new comment input
     const [commentData, setCommentData] = useState({}); 
@@ -56,6 +57,7 @@ export const CommentsComponent = ({ postId }) => {
 
             // Add the new comment temporarily with just userID or fallback data
             setComments((prevComments) => [...prevComments, newComment]);
+            await createCommentNotification(userData.userID,userData.name, postId, commenter.userID, commentInput);
           
         } catch (error) {
             console.error('Error posting comment:', error);
@@ -64,7 +66,7 @@ export const CommentsComponent = ({ postId }) => {
 
 
 
-    console.log(commentData);
+
     return (
         <>
             {/* Comments Section */}
@@ -113,9 +115,9 @@ export const CommentsComponent = ({ postId }) => {
                                                     <span className="font-medium text-gray-900 dark:text-white">
                                                         {commenter?.name || comment.commenterId}
                                                     </span>
-                                                    <span className="text-sm text-gray-500 dark:text-gray-400">
+                                                    {/* <span className="text-sm text-gray-500 dark:text-gray-400">
                                                         {new Date(comment.createdAt.seconds * 1000).toLocaleString()}
-                                                    </span>
+                                                    </span> */}
                                                 </div>
                                                 <p className="text-gray-900 dark:text-white text-sm">
                                                     {comment.text}

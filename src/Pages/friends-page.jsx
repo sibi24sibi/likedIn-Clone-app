@@ -1,9 +1,8 @@
-
-
 import { useEffect, useState } from 'react';
 import { UserPlus } from 'react-feather';
-import { listenToUsers, toggleConnectionStatus } from '../Api/UploadApi';
+import { listenToUsers, toggleConnectionStatus, checkConnectionStatus } from '../Api/UploadApi';
 import { useAuth } from '../Api/AuthApi';
+import { createFollowNotification } from '../Api/NotificationApi';
 
 export default function FriendsPage() {
   const { userData } = useAuth();
@@ -11,13 +10,26 @@ export default function FriendsPage() {
   const [connections, setConnections] = useState({});
 
   useEffect(() => {
-    listenToUsers((users) => {
+  
+    listenToUsers(async (users) => {
       const filteredRecommendations = users.filter(user => user.userID !== userData.userID);
-      setRecommendation(filteredRecommendations); // Update state with filtered users
+      setRecommendation(filteredRecommendations); 
+
+   
+      const initialConnections = {};
+      const checkStatusPromises = filteredRecommendations.map(async (person) => {
+        const status = await checkConnectionStatus(userData.userID, person.userID);
+        initialConnections[`${userData.userID}-${person.userID}`] = status;
+      });
+
+   
+      await Promise.all(checkStatusPromises);
+
+      setConnections(initialConnections);
     });
   }, [userData.userID]);
 
-  const handleAddConnection = (userId, targetId) => {
+  const handleAddConnection = async (userId, targetId) => {
     const currentConnectionStatus = connections[`${userId}-${targetId}`] || false;
 
     // Toggle the connection status
@@ -27,7 +39,11 @@ export default function FriendsPage() {
         [`${userId}-${targetId}`]: newStatus, // Update the connection status in the local state
       }));
     });
+
+    createFollowNotification(userData.userID, userData.name, targetId)
   };
+
+
 
   return (
     <div className="space-y-6">

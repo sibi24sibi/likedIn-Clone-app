@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { ThumbsUp, MessageCircle, MoreHorizontal } from 'react-feather';
 import moment from 'moment';
+// import ProgressiveImage from 'rn-progressive-image'
 import { useAuth } from '../Api/AuthApi';
 import { listenToAllPosts, listenToUsers } from '../Api/UploadApi';
 import PostLoading from './LoadingComponents/PostLoading';
@@ -8,10 +9,12 @@ import { Menu, MenuButton, MenuItems, MenuItem } from '@headlessui/react';
 import DeleteButtonModal from './Modal/DeleteButtonModal';
 import { CommentsComponent } from './CommentsComponent';
 import { PostActions } from './PostActions';
+import { LazyLoadImage } from 'react-lazy-load-image-component';
+import 'react-lazy-load-image-component/src/effects/blur.css';
 
-export const Postcontent = ({ userProfileData, savedPost, isOwnPost  }) => {
+export const Postcontent = ({ userProfileData, savedPost, isOwnPost }) => {
 
- 
+
     const [userPost, setUserPost] = useState([]);
     const [usersData, setUsersData] = useState([]);
     const [isLoadingPosts, setIsLoadingPosts] = useState(true);
@@ -145,19 +148,21 @@ export const Postcontent = ({ userProfileData, savedPost, isOwnPost  }) => {
                                 </p>
 
                                 {/* Post Image */}
-                                {post.imageUrl && (
-                                    <img
-                                        src={post.imageUrl || 'https://placehold.co/600x400'}
-                                        alt="Post"
-                                        className="w-full h-auto object-cover rounded-lg mb-4"
-                                    />
-                                )}
+
+                                <LazyLoadImage
+                                    src={post.imageUrl}
+                                    alt="Post"
+                                    effect="blur"
+                                  
+                                    className="w-full h-auto object-cover rounded-lg mb-4"
+                                />
+
 
                                 {/* Post Actions */}
-                                <PostActions postId={post.id} postData={userPost} setOpenComments={setOpenComments} toggleComments={toggleComments} />
+                                <PostActions postId={post.id} postData={userPost} allPostData={post}  setOpenComments={setOpenComments} toggleComments={toggleComments} />
                             </div>
                         </div>
-                        {openCommentsPostId === post.id && <CommentsComponent postId={post.id} commenterN={post.user} />}
+                        {openCommentsPostId === post.id && <CommentsComponent postId={post.id} commenter={post.user} />}
 
 
                         {/* Modal for deleting post */}
@@ -166,6 +171,7 @@ export const Postcontent = ({ userProfileData, savedPost, isOwnPost  }) => {
                                 isOpen={true}
                                 setIsOpen={() => setSelectedPostId(null)}
                                 postId={selectedPostId}
+
                             />
                         )}
                     </div>
