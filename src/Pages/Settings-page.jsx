@@ -1,4 +1,5 @@
 import { useState } from "react"
+import { Edit, PenTool } from "react-feather"
 
 export const Settingspage = () => {
     const [darkMode, setDarkMode] = useState(false)
@@ -8,7 +9,7 @@ export const Settingspage = () => {
 
         <div className="space-y-6 m-5 p-5">
             {/* Profile Section */}
-            <div className="text-center">
+            <div className="">
                 <h2 className="text-lg font-semibold dark:text-gray-200 text-gray-900 mb-4">Account Information</h2>
                 <div className="space-y-4">
                     <div className="flex justify-center">
@@ -18,8 +19,8 @@ export const Settingspage = () => {
                                 alt="Profile"
                                 className="w-32 h-32 rounded-full object-cover border-4 border-blue-500"
                             />
-                            <label htmlFor="profile-pic" className="absolute bottom-0 right-0 bg-blue-600 text-white rounded-full p-1 cursor-pointer">
-                                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M16 10a6 6 0 11-12 0 6 6 0 0112 0z"></path></svg>
+                            <label htmlFor="profile-pic" className="absolute bottom-0 right-0 bg-blue-600 text-white rounded-full p-2 cursor-pointer">
+                               <Edit size={18}/>
                                 <input
                                     type="file"
                                     id="profile-pic"
