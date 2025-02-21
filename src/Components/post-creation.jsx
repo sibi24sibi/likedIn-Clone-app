@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { Image } from 'react-feather'
 import { useAuth } from '../Api/AuthApi'
-import { listenToSingleUser } from '../Api/UploadApi'
+import { listenToSingleUser } from '../Api/CommanApi'
 import { PostCreationModal } from './Modal/PostCreationModal';
 
 

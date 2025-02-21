@@ -3,7 +3,7 @@ import { ThumbsUp, MessageCircle, MoreHorizontal } from 'react-feather';
 import moment from 'moment';
 // import ProgressiveImage from 'rn-progressive-image'
 import { useAuth } from '../Api/AuthApi';
-import { listenToAllPosts, listenToUsers } from '../Api/UploadApi';
+import { listenToAllPosts, listenToUsers } from '../Api/CommanApi';
 import PostLoading from './LoadingComponents/PostLoading';
 import { Menu, MenuButton, MenuItems, MenuItem } from '@headlessui/react';
 import DeleteButtonModal from './Modal/DeleteButtonModal';
@@ -76,6 +76,18 @@ export const Postcontent = ({ userProfileData, savedPost, isOwnPost }) => {
         }
     };
 
+
+    if (postData.length === 0) {
+        return (
+            <div className="text-center p-20">
+                <h2 className="mt-2 text-xl font-medium text-gray-900 dark:text-white">No posts found</h2>
+                <p className="mt-2 text-gray-500 dark:text-gray-400">
+                    {userProfileData ? 'No posts found for this user.' : 'No posts found in your saved posts.'}
+                </p>
+            </div>
+        );
+    }
+
     if (savedPost) { //no saved post yet
         return (
             <div className="text-center p-20">
@@ -93,7 +105,7 @@ export const Postcontent = ({ userProfileData, savedPost, isOwnPost }) => {
         <>
             <div>
                 {postData.map((post) => (
-                    <div key={post.id} className="post-content">
+                    <div key={post?.id} className="post-content">
                         {/* Post Card */}
                         <div className="bg-white dark:bg-gray-800 rounded-lg shadow">
                             <div className="p-4">
@@ -101,14 +113,14 @@ export const Postcontent = ({ userProfileData, savedPost, isOwnPost }) => {
                                 <div className="flex items-center justify-between mb-4">
                                     <div className="flex items-center gap-3">
                                         <img
-                                            src={post.user.profilePic || 'https://placehold.co/100x100'}
-                                            alt={post.user.name || 'User'}
+                                            src={post.user?.profilePic || 'https://placehold.co/100x100'}
+                                            alt={post.user?.name || 'User'}
                                             className="w-10 h-10 rounded-full"
                                         />
                                         <div>
                                             <div className="items-center gap-2">
                                                 <span className="font-medium text-gray-900 dark:text-white">
-                                                    {post.user.name || 'User'}
+                                                    {post.user?.name || 'User'}
                                                 </span>
                                                 <div className="text-sm text-gray-500 dark:text-gray-400">
                                                     {moment(post.createdAt.seconds * 1000).fromNow()}
@@ -153,13 +165,13 @@ export const Postcontent = ({ userProfileData, savedPost, isOwnPost }) => {
                                     src={post.imageUrl}
                                     alt="Post"
                                     effect="blur"
-                                  
+
                                     className="w-full h-auto object-cover rounded-lg mb-4"
                                 />
 
 
                                 {/* Post Actions */}
-                                <PostActions postId={post.id} postData={userPost} allPostData={post}  setOpenComments={setOpenComments} toggleComments={toggleComments} />
+                                <PostActions postId={post.id} postData={userPost} allPostData={post} setOpenComments={setOpenComments} toggleComments={toggleComments} />
                             </div>
                         </div>
                         {openCommentsPostId === post.id && <CommentsComponent postId={post.id} commenter={post.user} />}

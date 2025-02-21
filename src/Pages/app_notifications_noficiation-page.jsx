@@ -6,11 +6,11 @@ import moment from 'moment';
 
 export default function NotificationsPage() {
 
-  
-  const {userData} = useAuth();
-  const [ notifications,setNotifications ] = useState([]);
 
-  
+  const { userData } = useAuth();
+  const [notifications, setNotifications] = useState([]);
+
+
   // const notifications = [
   //   { id: 1, type: 'like', user: 'Emma Watson', action: 'liked your post', time: '2m ago' },
   //   { id: 2, type: 'comment', user: 'Tom Hardy', action: 'commented on your photo', time: '1h ago' },
@@ -29,14 +29,14 @@ export default function NotificationsPage() {
 
         } catch (error) {
           console.error("Error fetching notifications:", error);
-        } 
+        }
       };
 
       fetchNotifications();
     }
   }, [userData]); // Dependency on userData, runs when userData changes
 
-console.log(notifications); //
+
 
   const getNotificationIcon = (type) => {
     switch (type) {

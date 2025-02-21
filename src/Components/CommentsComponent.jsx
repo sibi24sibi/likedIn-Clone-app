@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { useAuth } from '../Api/AuthApi';
-import { handleCommentPost, fetchCommentsForPost, listenToSingleUser } from '../Api/UploadApi'; // Add a function to fetch comments
+import { handleCommentPost, fetchCommentsForPost, listenToSingleUser } from '../Api/CommanApi'; // Add a function to fetch comments
 import { Timestamp } from 'firebase/firestore';
 import { createCommentNotification } from '../Api/NotificationApi';
 
 export const CommentsComponent = ({ postId, commenter }) => {
     const { userData } = useAuth(); // Get user data from authentication context
     const [commentInput, setCommentInput] = useState(''); // For new comment input
-    const [commentData, setCommentData] = useState({}); 
+    const [commentData, setCommentData] = useState({});
     const [comments, setComments] = useState([]); // List of comments
 
     // Fetch comments when the component mounts or postId changes
@@ -57,8 +57,8 @@ export const CommentsComponent = ({ postId, commenter }) => {
 
             // Add the new comment temporarily with just userID or fallback data
             setComments((prevComments) => [...prevComments, newComment]);
-            await createCommentNotification(userData.userID,userData.name, postId, commenter.userID, commentInput);
-          
+            await createCommentNotification(userData.userID, userData.name, postId, commenter.userID, commentInput);
+
         } catch (error) {
             console.error('Error posting comment:', error);
         }
@@ -98,22 +98,22 @@ export const CommentsComponent = ({ postId, commenter }) => {
                     <div className="space-y-4">
                         {comments.length > 0 ? (
                             comments.map((comment, index) => {
-                               
+
                                 const commenter = commentData[comment.commenterId];
 
-                               
+
                                 return (
                                     <div className="flex gap-3" key={index}>
                                         <img
-                                            src={commenter?.profilePic } // Fallback to pravatar if no profile pic
-                                            alt={commenter?.name }
+                                            src={commenter?.profilePic} // Fallback to pravatar if no profile pic
+                                            alt={commenter?.name}
                                             className="w-8 h-8 rounded-full"
                                         />
                                         <div className="flex-1">
                                             <div className="bg-white dark:bg-gray-800 rounded-lg p-3">
                                                 <div className="flex items-center gap-2 mb-1">
                                                     <span className="font-medium text-gray-900 dark:text-white">
-                                                        {commenter?.name || comment.commenterId}
+                                                        {commenter?.name}
                                                     </span>
                                                     {/* <span className="text-sm text-gray-500 dark:text-gray-400">
                                                         {new Date(comment.createdAt.seconds * 1000).toLocaleString()}

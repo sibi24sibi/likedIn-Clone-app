@@ -2,10 +2,6 @@
 export default {
   mode: "jit",
   darkMode: "class",
-  purge: [
-    "./src/**/*.{js,jsx,ts,tsx}", // your React files
-  ],
-
-
+  content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   plugins: [],
 };

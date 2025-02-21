@@ -1,6 +1,6 @@
 import { Dialog, DialogPanel, DialogTitle } from "@headlessui/react";
 import { useState } from "react";
-import { handleDeletePost } from "../../Api/UploadApi";
+import { handleDeletePost } from "../../Api/CommanApi";
 import toast from "react-hot-toast";
 
 function DeleteButtonModal({ isOpen, setIsOpen, postId }) {
@@ -10,7 +10,7 @@ function DeleteButtonModal({ isOpen, setIsOpen, postId }) {
         try {
             await handleDeletePost(postId);
             setIsOpen(false);
-        }catch (e) {
+        } catch (e) {
             console.error("Failed to delete post: ", e);
             toast.error('Failed to delete post');
         }

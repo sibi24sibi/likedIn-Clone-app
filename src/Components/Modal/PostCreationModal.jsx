@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { X, Upload, Globe, Lock, Loader } from 'react-feather'
-import { addPost } from '../../Api/UploadApi'
+import { addPost } from '../../Api/CommanApi'
 import { useAuth } from '../../Api/AuthApi'
 import toast from 'react-hot-toast'
 
@@ -119,16 +119,16 @@ export function PostCreationModal({ isOpen, onClose }) {
                     disabled={loading}
                     className={`${loading ? 'bg-gray-300 dark:bg-gray-500 dark:text-slate-300 text-slate-700 hover:bg-blue-400 cursor-not-allowed' : 'hover:bg-blue-600 bg-blue-500 text-white'} w-full px-4 py-2  text-center  rounded-lg  focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 flex items-center justify-center`}
                 >
-                    {loading ? 
-                    <>
-                            <Loader className='mr-2'/>
+                    {loading ?
+                        <>
+                            <Loader className='mr-2' />
                             Posting...
-                    </>
-                    
-                    : 'Share'}
-                    
-                </button>              
-              
+                        </>
+
+                        : 'Share'}
+
+                </button>
+
             </div>
         </div>
     )

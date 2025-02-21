@@ -3,7 +3,7 @@ import { Link, Navigate, Route, Routes } from 'react-router-dom'; // Use Link fo
 import { Settingspage } from './Settings-page';
 import { useAuth } from '../Api/AuthApi';
 import { Postcontent } from '../Components/Post-content';
-import { listenToAllPosts, listenToUserFollowers, listenToUserFollowing, listenToUserPosts } from '../Api/UploadApi';
+import { listenToAllPosts, listenToUserFollowers, listenToUserFollowing, listenToUserPosts } from '../Api/CommanApi';
 import { useEffect, useState } from 'react';
 
 export default function ProfilePage() {
@@ -24,18 +24,18 @@ export default function ProfilePage() {
 
 
   return (
-    <div className=' h-screen'>
+    <div className=' min-h-screen'>
       <div className="bg-white dark:bg-gray-800 rounded-lg shadow mb-6">
         <div className="h-32 bg-gray-200 dark:bg-gray-700 rounded-t-lg" />
         <div className="px-8 pb-6">
           <div className="flex flex-col sm:flex-row items-center gap-4 -mt-16">
             <div className="skeleton-circle w-32 h-32">
 
-            <img
-              src={userData?.profilePic}
-              
-              className=" rounded-full h-full w-full p-[1px] object-cover border-4 border-white dark:border-gray-800"
-            />
+              <img
+                src={userData?.profilePic}
+
+                className=" rounded-full h-full w-full p-[1px] object-cover border-4 border-white dark:border-gray-800"
+              />
             </div>
             <div className="text-center sm:text-left mt-4 sm:mt-16">
               <div className=" gap-2 mb-1">
@@ -67,7 +67,7 @@ export default function ProfilePage() {
       <div className="bg-white dark:bg-gray-800 rounded-lg shadow">
         <div className="border-b border-gray-200 dark:border-gray-700">
           <nav className="flex">
-           
+
             <Link to="/profile" className="px-4 py-3 text-sm font-medium text-gray-500 dark:text-blue-400  dark:border-blue-400">
               My Posts
             </Link>
@@ -82,7 +82,7 @@ export default function ProfilePage() {
 
         {/* Add Routes to render different components */}
         <Routes>
-          <Route path="" element={<Postcontent userProfileData={userData.userID} isOwnPost /> } />
+          <Route path="" element={<Postcontent userProfileData={userData.userID} isOwnPost />} />
           <Route path="saved-post" element={<Postcontent savedPost />} />
           <Route path="settings" element={<Settingspage />} />
           <Route path="*" element={<Navigate to="" replace />} />

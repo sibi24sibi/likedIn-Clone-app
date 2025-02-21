@@ -1,16 +1,17 @@
-import { useEffect, useState } from 'react';
-import { MessageCircle, Search } from 'react-feather';
-import { Link } from 'react-router-dom';
-import { listenToUsers } from '../Api/UploadApi';
-import { useAuth } from '../Api/AuthApi';
-import { onValue, ref } from 'firebase/database';
-import moment from 'moment/moment';
-import { database } from '../Firebase';
+import { useEffect, useState } from "react";
+import { MessageCircle, Search } from "react-feather";
+import { Link } from "react-router-dom";
+import { listenToUsers } from "../Api/CommanApi";
+import { useAuth } from "../Api/AuthApi";
+import { listenToUserOnlineStatus } from "../Api/CommanApi"; // Import the function
+import moment from "moment/moment";
+import { encryptID } from "../Hooks/encryption"; // Import the function
+
 
 export default function MessagesPage() {
   const { userData } = useAuth(); // Authenticated user data
   const [followedUser, setFollowedUser] = useState([]); // All users from Firestore
-  const [searchTerm, setSearchTerm] = useState(''); // Current search input
+  const [searchTerm, setSearchTerm] = useState(""); // Current search input
   const [filteredUsers, setFilteredUsers] = useState([]); // Users filtered by searchTerm
   const [userStatus, setUserStatus] = useState({}); // Status of followed users
 
@@ -21,17 +22,13 @@ export default function MessagesPage() {
       setFollowedUser(filtered);
     });
 
-    const statusMap ={};
-
+    // Listen to online status of each followed user
     followedUser.forEach((user) => {
-      const userStatusRef = ref(database, `users/${user.userID}/status`);
-      onValue(userStatusRef, (snapshot) => {
-        const status = snapshot.val();
+      listenToUserOnlineStatus(user.userID, (status) => {
         const lastSeen = status?.lastChanged
           ? moment(status.lastChanged).fromNow() // Format lastChanged timestamp using moment
-          : 'Offline'; // If there's no lastChanged timestamp, consider the user offline
+          : "Offline"; // If there's no lastChanged timestamp, consider the user offline
 
-        statusMap[user.userID] = status?.online || false;
         setUserStatus((prevStatus) => ({
           ...prevStatus,
           [user.userID]: {
@@ -43,10 +40,7 @@ export default function MessagesPage() {
     });
 
     return () => unsubscribe();
-  }, [userData?.userID]);
-
-  console.log(userStatus)
-
+  }, [userData?.userID, followedUser]);
 
   // Filter users based on the search term
   useEffect(() => {
@@ -77,7 +71,7 @@ export default function MessagesPage() {
       </div>
       <div className="space-y-4">
         {filteredUsers.map((user) => (
-          <Link to={`/messages/${user.username}`} key={user.id}>
+          <Link to={`/messages/${encryptID(user.id)}`} key={user.id}>
             <div
               className={`flex items-center p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700`}
             >
@@ -94,7 +88,7 @@ export default function MessagesPage() {
                 </h3>
                 <p className="text-sm text-gray-500 dark:text-gray-400">
                   {userStatus[user.userID]?.online
-                    ? 'Active now'
+                    ? "Online"
                     : userStatus[user.userID]?.lastSeen
                       ? `Last seen ${userStatus[user.userID]?.lastSeen}`
                       : "..."}
@@ -102,13 +96,12 @@ export default function MessagesPage() {
 
               </div>
               <div className="flex-shrink-0 ml-3 text-xs text-gray-500 dark:text-gray-400">
-                {user.time || ''}
+                {user.time || ""}
               </div>
             </div>
           </Link>
         ))}
       </div>
-
     </div>
   );
 }

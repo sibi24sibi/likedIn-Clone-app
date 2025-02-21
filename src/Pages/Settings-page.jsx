@@ -1,31 +1,126 @@
-import { useState } from "react"
-import { Edit, PenTool } from "react-feather"
+import { useState, useEffect } from "react";
+import { Edit } from "react-feather";
+import { fetchUserDetails, updateUserDetails } from "../Api/CommanApi";
+import { useAuth } from "../Api/AuthApi";
+import { uploadProfile } from "../Api/UploadApi"; // Import the uploadProfile function
 
 export const Settingspage = () => {
-    const [darkMode, setDarkMode] = useState(false)
-    const [notifications, setNotifications] = useState(true)
+    const [darkMode, setDarkMode] = useState(false);
+    const [notifications, setNotifications] = useState(true);
+    const [profileLoading, setProfileLoading] = useState(false);
+
+    // User data state
+    const [userData, setUserData] = useState({
+        fullName: "",
+        username: "",
+        bio: "",
+        location: "",
+        phoneNumber: "",
+        email: "",
+        website: "",
+        profilePic: "",
+    });
+
+    const { userData: authUser } = useAuth(); // Get user data from authentication context
+
+    useEffect(() => {
+        const fetchProfileData = async () => {
+            setProfileLoading(true); // Start the loading
+            try {
+                await fetchUserDetails(authUser.userID, (data) => {
+                    setUserData({
+                        fullName: data.name || "",
+                        username: data.username || "",
+                        bio: data.bio || "",
+                        location: data.location || "",
+                        phoneNumber: data.phoneNumber || "",
+                        email: data.email || "",
+                        website: data.website || "",
+                        profilePic: data.profilePic || "",
+                    });
+                });
+            } catch (error) {
+                console.error("Error fetching user details:", error);
+            } finally {
+                setProfileLoading(false); // End the loading
+            }
+        };
+
+        fetchProfileData();
+    }, [authUser.userID]);
+
+
+    const handleInputChange = (field, value) => {
+        setUserData((prev) => ({ ...prev, [field]: value }));
+    };
+
+    const handleProfilePicUpload = async (event) => {
+        const file = event.target.files[0];
+        if (file) {
+            try {
+                const profilePicURL = await uploadProfile(file);
+                setUserData((prev) => ({ ...prev, profilePic: profilePicURL })); // Update the profile pic in the state
+            } catch (error) {
+                console.error("Error uploading profile picture:", error);
+
+            }
+        }
+    };
+
+    const handleSaveChanges = async () => {
+        // Ensure all fields are defined, even if empty
+        const updatedData = {
+            name: userData.fullName || "",
+            username: userData.username || "",
+            bio: userData.bio || "",
+            location: userData.location || "",
+            phoneNumber: userData.phoneNumber || "",
+            email: userData.email || "",
+            website: userData.website || "",
+            profilePic: userData.profilePic || "", // Ensure profilePic is not undefined
+        };
+
+
+
+        try {
+            await updateUserDetails(authUser.userID, updatedData);
+
+        } catch (error) {
+            console.error("Error saving changes:", error);
+
+        }
+    };
+
 
     return (
-
         <div className="space-y-6 m-5 p-5">
             {/* Profile Section */}
-            <div className="">
+            <div>
                 <h2 className="text-lg font-semibold dark:text-gray-200 text-gray-900 mb-4">Account Information</h2>
                 <div className="space-y-4">
                     <div className="flex justify-center">
                         <div className="relative">
                             <img
-                                src="https://avatar.iran.liara.run/public/26"
-                                alt="Profile"
+                                src={userData.profilePic || "https://via.placeholder.com/128"}
+
                                 className="w-32 h-32 rounded-full object-cover border-4 border-blue-500"
                             />
-                            <label htmlFor="profile-pic" className="absolute bottom-0 right-0 bg-blue-600 text-white rounded-full p-2 cursor-pointer">
-                               <Edit size={18}/>
+                            {profileLoading && (
+                                <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 rounded-full">
+                                    <span className="text-white text-sm">loading ...</span>
+                                </div>
+                            )}
+                            <label
+                                htmlFor="profile-pic"
+                                className="absolute bottom-0 right-0 bg-blue-600 text-white rounded-full p-2 cursor-pointer"
+                            >
+                                <Edit size={18} />
                                 <input
                                     type="file"
                                     id="profile-pic"
                                     className="hidden"
                                     accept="image/*"
+                                    onChange={handleProfilePicUpload}
                                 />
                             </label>
                         </div>
@@ -35,7 +130,8 @@ export const Settingspage = () => {
                         <label className="block text-sm dark:text-gray-400 font-medium text-gray-700 mb-1">Full Name</label>
                         <input
                             type="text"
-                            defaultValue="John Doe"
+                            value={userData.fullName}
+                            onChange={(e) => handleInputChange("fullName", e.target.value)}
                             className="w-full px-4 dark:bg-gray-800 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-shadow bg-white text-gray-900 dark:text-white placeholder-gray-500"
                         />
                     </div>
@@ -44,7 +140,8 @@ export const Settingspage = () => {
                         <label className="block text-sm dark:text-gray-400 font-medium text-gray-700 mb-1">Username</label>
                         <input
                             type="text"
-                            defaultValue="johndoe_123"
+                            value={userData.username}
+                            onChange={(e) => handleInputChange("username", e.target.value)}
                             className="w-full px-4 dark:bg-gray-800 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-shadow bg-white text-gray-900 dark:text-white placeholder-gray-500"
                         />
                     </div>
@@ -52,7 +149,8 @@ export const Settingspage = () => {
                     <div>
                         <label className="block text-sm dark:text-gray-400 font-medium text-gray-700 mb-1">Bio</label>
                         <textarea
-                            defaultValue="This is my bio."
+                            value={userData.bio}
+                            onChange={(e) => handleInputChange("bio", e.target.value)}
                             rows="4"
                             className="w-full px-4 dark:bg-gray-800 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-shadow bg-white text-gray-900 dark:text-white placeholder-gray-500"
                         ></textarea>
@@ -62,7 +160,8 @@ export const Settingspage = () => {
                         <label className="block text-sm dark:text-gray-400 font-medium text-gray-700 mb-1">Location</label>
                         <input
                             type="text"
-                            defaultValue="New York, USA"
+                            value={userData.location}
+                            onChange={(e) => handleInputChange("location", e.target.value)}
                             className="w-full px-4 dark:bg-gray-800 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-shadow bg-white text-gray-900 dark:text-white placeholder-gray-500"
                         />
                     </div>
@@ -71,7 +170,8 @@ export const Settingspage = () => {
                         <label className="block text-sm dark:text-gray-400 font-medium text-gray-700 mb-1">Phone Number</label>
                         <input
                             type="tel"
-                            defaultValue="+1 (555) 123-4567"
+                            value={userData.phoneNumber}
+                            onChange={(e) => handleInputChange("phoneNumber", e.target.value)}
                             className="w-full px-4 dark:bg-gray-800 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-shadow bg-white text-gray-900 dark:text-white placeholder-gray-500"
                         />
                     </div>
@@ -80,7 +180,8 @@ export const Settingspage = () => {
                         <label className="block text-sm dark:text-gray-400 font-medium text-gray-700 mb-1">Email</label>
                         <input
                             type="email"
-                            defaultValue="john@example.com"
+                            value={userData.email}
+                            onChange={(e) => handleInputChange("email", e.target.value)}
                             className="w-full px-4 dark:bg-gray-800 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-shadow bg-white text-gray-900 dark:text-white placeholder-gray-500"
                         />
                     </div>
@@ -89,7 +190,8 @@ export const Settingspage = () => {
                         <label className="block text-sm dark:text-gray-400 font-medium text-gray-700 mb-1">Website Link</label>
                         <input
                             type="url"
-                            defaultValue="https://johnswebsite.com"
+                            value={userData.website}
+                            onChange={(e) => handleInputChange("website", e.target.value)}
                             className="w-full px-4 dark:bg-gray-800 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-shadow bg-white text-gray-900 dark:text-white placeholder-gray-500"
                         />
                     </div>
@@ -107,40 +209,37 @@ export const Settingspage = () => {
                         </div>
                         <button
                             onClick={() => setNotifications(!notifications)}
-                            className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors
-                    ${notifications ? 'bg-blue-600' : 'bg-gray-200'}`}
+                            className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${notifications ? "bg-blue-600" : "bg-gray-200"
+                                }`}
                         >
                             <span
-                                className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform
-                        ${notifications ? 'translate-x-6' : 'translate-x-1'}`}
+                                className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${notifications ? "translate-x-6" : "translate-x-1"
+                                    }`}
                             />
                         </button>
                     </div>
                     <div className="flex items-center justify-between">
                         <div>
-                            <h3 className="text-sm font-medium text-gray-700">Dark Mode</h3>
+                            <h3 className="text-sm dark:text-gray-400 font-medium text-gray-700">Dark Mode</h3>
                             <p className="text-sm text-gray-500">Switch to dark theme</p>
                         </div>
                         <button
                             onClick={() => setDarkMode(!darkMode)}
-                            className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors
-                    ${darkMode ? 'bg-blue-600' : 'bg-gray-200'}`}
+                            className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${darkMode ? "bg-blue-600" : "bg-gray-200"
+                                }`}
                         >
                             <span
-                                className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform
-                        ${darkMode ? 'translate-x-6' : 'translate-x-1'}`}
+                                className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${darkMode ? "translate-x-6" : "translate-x-1"
+                                    }`}
                             />
                         </button>
                     </div>
                 </div>
             </div>
 
-            <button className="w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors">
+            <button onClick={handleSaveChanges} className="w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors">
                 Save Changes
             </button>
         </div>
-
-
-
-    )
-}
+    );
+};

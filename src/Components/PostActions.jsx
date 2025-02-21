@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { ThumbsUp, MessageCircle } from 'react-feather';
-import { handleCommentPost, handleLikePost } from '../Api/UploadApi';
+import { handleCommentPost, handleLikePost } from '../Api/CommanApi';
 import { useAuth } from '../Api/AuthApi';
 import LikedButtonCheckbox from './ui/LikeButton';
 import { createLikeNotification } from '../Api/NotificationApi';
 
-export const PostActions = ({ postId, toggleComments, postData ,allPostData }) => {
+export const PostActions = ({ postId, toggleComments, postData, allPostData }) => {
     const { userData } = useAuth();
 
     const [likedPosts, setLikedPosts] = useState(new Set());
@@ -50,13 +50,13 @@ export const PostActions = ({ postId, toggleComments, postData ,allPostData }) =
 
             setLikedPosts(newLikedPosts); // Update state
             setLikesCount(newLikesCount); // Update the like count state
-            await createLikeNotification(userData.userID,userData.name,postId,allPostData.user.id)
+            await createLikeNotification(userData.userID, userData.name, postId, allPostData.user.id)
         } catch (error) {
             console.error('Error liking post:', error);
         }
     };
 
-  
+
 
     return (
         <div>

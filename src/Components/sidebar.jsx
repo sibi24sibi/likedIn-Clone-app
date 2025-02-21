@@ -3,7 +3,7 @@ import { Home, User, MessageSquare, Bell, UserPlus } from 'react-feather';
 import { Link } from 'react-router-dom'; // Import Link from react-router-dom
 import { useAuth } from '../Api/AuthApi';
 import { useEffect } from 'react';
-import { listenToSingleUser } from '../Api/UploadApi';
+import { listenToSingleUser } from '../Api/CommanApi';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 
 
@@ -19,17 +19,19 @@ export default function Sidebar({ className }) {
 
   useEffect(() => {
     listenToSingleUser(setUserData, currentUser.uid);
-  }, [])
+  }, [currentUser])
 
 
 
   const navigation = [
     { name: 'Home', icon: Home, to: '/home', unread: null },
     { name: 'Profile', icon: User, to: '/profile', unread: null },
-    { name: 'Messages', icon: MessageSquare, to: '/messages', 
+    {
+      name: 'Messages', icon: MessageSquare, to: '/messages',
       // unread: unreadMessages
-     },
-    { name: 'Notifications', icon: Bell, to: '/notifications', 
+    },
+    {
+      name: 'Notifications', icon: Bell, to: '/notifications',
       // unread: unreadNotifications 
     },
     { name: 'Add Friends', icon: UserPlus, to: '/friends', unread: null },
